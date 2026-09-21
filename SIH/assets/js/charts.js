@@ -48,5 +48,176 @@ window.NIRMAAN_CHARTS = {
         }).join('')}
       </div>
     `;
+  },
+
+  renderSCurveChart(canvasId, sCurveData) {
+    const canvas = document.getElementById(canvasId);
+    if (!canvas || !window.Chart || !sCurveData) return;
+
+    const ctx = canvas.getContext('2d');
+
+    // Gradient fills
+    const plannedGradient = ctx.createLinearGradient(0, 0, 0, 300);
+    plannedGradient.addColorStop(0, 'rgba(59, 130, 246, 0.15)');
+    plannedGradient.addColorStop(1, 'rgba(59, 130, 246, 0.0)');
+
+    const physicalGradient = ctx.createLinearGradient(0, 0, 0, 300);
+    physicalGradient.addColorStop(0, 'rgba(16, 185, 129, 0.2)');
+    physicalGradient.addColorStop(1, 'rgba(16, 185, 129, 0.0)');
+
+    const financialGradient = ctx.createLinearGradient(0, 0, 0, 300);
+    financialGradient.addColorStop(0, 'rgba(139, 92, 246, 0.2)');
+    financialGradient.addColorStop(1, 'rgba(139, 92, 246, 0.0)');
+
+    new window.Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: sCurveData.labels,
+        datasets: [
+          {
+            label: 'Planned Progress (%)',
+            data: sCurveData.planned,
+            borderColor: '#3b82f6',
+            backgroundColor: plannedGradient,
+            borderWidth: 2.5,
+            borderDash: [6, 4],
+            fill: true,
+            tension: 0.4,
+            pointRadius: 4,
+            pointHoverRadius: 6
+          },
+          {
+            label: 'Actual Physical Progress (%)',
+            data: sCurveData.actualPhysical,
+            borderColor: '#10b981',
+            backgroundColor: physicalGradient,
+            borderWidth: 3,
+            fill: true,
+            tension: 0.4,
+            pointRadius: 5,
+            pointHoverRadius: 7
+          },
+          {
+            label: 'Financial Expenditure (%)',
+            data: sCurveData.financialSpent,
+            borderColor: '#8b5cf6',
+            backgroundColor: financialGradient,
+            borderWidth: 2.5,
+            fill: true,
+            tension: 0.4,
+            pointRadius: 4,
+            pointHoverRadius: 6
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        interaction: {
+          mode: 'index',
+          intersect: false
+        },
+        plugins: {
+          legend: {
+            position: 'top',
+            labels: {
+              font: { family: 'Plus Jakarta Sans', size: 12, weight: '600' },
+              usePointStyle: true,
+              padding: 15
+            }
+          },
+          tooltip: {
+            backgroundColor: '#0f172a',
+            titleFont: { family: 'Plus Jakarta Sans', size: 13, weight: '700' },
+            bodyFont: { family: 'Inter', size: 12 },
+            padding: 12,
+            cornerRadius: 10,
+            callbacks: {
+              label: function(context) {
+                return ` ${context.dataset.label}: ${context.parsed.y}%`;
+              }
+            }
+          }
+        },
+        scales: {
+          x: {
+            grid: { display: false },
+            ticks: { font: { family: 'Inter', size: 11 } }
+          },
+          y: {
+            min: 0,
+            max: 110,
+            grid: { color: '#e2e8f0' },
+            ticks: {
+              font: { family: 'Inter', size: 11 },
+              callback: value => `${value}%`
+            }
+          }
+        }
+      }
+    });
+  },
+
+  renderProjectVelocityChart(canvasId, project) {
+    const canvas = document.getElementById(canvasId);
+    if (!canvas || !window.Chart || !project) return;
+
+    const ctx = canvas.getContext('2d');
+    const quarters = ['Q1 2025', 'Q2 2025', 'Q3 2025', 'Q4 2025', 'Q1 2026', 'Q2 2026'];
+    const plannedCurve = [15, 30, 50, 70, 85, 100];
+
+    // Compute milestone actual curve based on project progress
+    const maxVal = project.progress;
+    const actualCurve = [
+      Math.round(maxVal * 0.15),
+      Math.round(maxVal * 0.35),
+      Math.round(maxVal * 0.6),
+      Math.round(maxVal * 0.8),
+      maxVal,
+      null
+    ];
+
+    new window.Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: quarters,
+        datasets: [
+          {
+            label: 'Planned Schedule Target (%)',
+            data: plannedCurve,
+            borderColor: '#94a3b8',
+            borderWidth: 2,
+            borderDash: [5, 5],
+            fill: false,
+            tension: 0.35
+          },
+          {
+            label: `${project.name} Actual Progress (%)`,
+            data: actualCurve,
+            borderColor: project.riskScore >= 70 ? '#ef4444' : '#10b981',
+            backgroundColor: project.riskScore >= 70 ? 'rgba(239, 68, 68, 0.1)' : 'rgba(16, 185, 129, 0.1)',
+            borderWidth: 3,
+            fill: true,
+            tension: 0.35,
+            pointRadius: 5
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { position: 'top' }
+        },
+        scales: {
+          y: {
+            min: 0,
+            max: 100,
+            ticks: { callback: v => `${v}%` }
+          }
+        }
+      }
+    });
   }
 };
+

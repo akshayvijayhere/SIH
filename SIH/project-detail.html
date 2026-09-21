@@ -125,12 +125,33 @@
               <div><strong style="color: var(--text-muted);">Nodal Agency:</strong> <p id="detail-agency">NHAI</p></div>
             </div>
           </div>
+
+          <!-- Project Milestone Velocity S-Curve Chart -->
+          <div class="dashboard-card" style="background: white; border: 1px solid var(--border-color); border-radius: 16px; padding: 1.25rem; margin-top: 1.25rem;">
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.75rem;">
+              <div style="font-size: 0.95rem; font-weight: 700;">Milestone Velocity S-Curve (Target vs. Actual)</div>
+              <div id="detail-milestone-status" style="font-size: 0.75rem; font-weight: 600; color: var(--text-muted);"></div>
+            </div>
+            <div style="height: 260px; position: relative;">
+              <canvas id="project-velocity-canvas"></canvas>
+            </div>
+          </div>
+
+          <!-- Root Cause Factor Analysis -->
+          <div class="dashboard-card" style="background: white; border: 1px solid var(--border-color); border-radius: 16px; padding: 1.25rem; margin-top: 1.25rem;">
+            <div style="font-size: 0.95rem; font-weight: 700; margin-bottom: 0.5rem;"><i class="fa-solid fa-magnifying-glass-chart"></i> AI Root Cause Analysis & Bottlenecks</div>
+            <div id="detail-cause-analysis" style="font-size: 0.82rem; color: var(--text-muted); line-height: 1.6;"></div>
+          </div>
         </div>
       </div>
     </main>
   </div>
 
+  <!-- Chart.js Library -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
   <script src="assets/js/data.js"></script>
+  <script src="assets/js/charts.js"></script>
   <script src="assets/js/common.js"></script>
   <script>
     document.addEventListener('DOMContentLoaded', () => {
@@ -148,6 +169,20 @@
       document.getElementById('detail-spent-budget').innerText = project.spentBudget;
       document.getElementById('detail-contractor').innerText = project.contractor;
       document.getElementById('detail-agency').innerText = project.agency;
+      document.getElementById('detail-milestone-status').innerText = project.milestone || 'Ongoing milestone inspection';
+
+      // Render Root Cause Analysis
+      const causeBox = document.getElementById('detail-cause-analysis');
+      if (project.causeAnalysis && project.causeAnalysis.length > 0) {
+        causeBox.innerHTML = project.causeAnalysis.map(c => `<p>• <strong>${c.factor}:</strong> ${c.impact}</p>`).join('');
+      } else {
+        causeBox.innerHTML = `<p style="color: #10b981;"><i class="fa-solid fa-circle-check"></i> No critical bottlenecks detected for this project. Progress is on track.</p>`;
+      }
+
+      // Render Velocity Chart
+      if (window.NIRMAAN_CHARTS && window.NIRMAAN_CHARTS.renderProjectVelocityChart) {
+        window.NIRMAAN_CHARTS.renderProjectVelocityChart('project-velocity-canvas', project);
+      }
     });
   </script>
 </body>

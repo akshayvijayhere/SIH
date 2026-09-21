@@ -268,3 +268,56 @@ a {
   overflow-y: auto;
   padding: 1.5rem 1.75rem;
 }
+
+/* ==========================================================================
+   Responsive & Fluid Layout Improvements
+   ========================================================================== */
+@media (max-width: 1280px) {
+  .metrics-summary-grid {
+    grid-template-columns: repeat(3, 1fr) !important;
+  }
+  .dashboard-grid-row {
+    grid-template-columns: repeat(1, 1fr) !important;
+  }
+  .analytics-grid-2col {
+    grid-template-columns: repeat(1, 1fr) !important;
+  }
+}
+
+@media (max-width: 992px) {
+  .dashboard-shell-layout {
+    flex-direction: column !important;
+    height: auto !important;
+    min-height: 100vh !important;
+    overflow-y: auto !important;
+  }
+  body {
+    overflow-y: auto !important;
+  }
+  .app-sidebar {
+    width: 100% !important;
+    height: auto !important;
+  }
+  .sidebar-nav {
+    flex-direction: row !important;
+    overflow-x: auto !important;
+    flex: none !important;
+  }
+  .app-main-content {
+    height: auto !important;
+    overflow: visible !important;
+  }
+  .metrics-summary-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+}
+
+@media (max-width: 576px) {
+  .metrics-summary-grid {
+    grid-template-columns: repeat(1, 1fr) !important;
+  }
+  .topbar-search {
+    width: 150px !important;
+  }
+}
+

@@ -2,7 +2,7 @@
    NIRMAAN AI - Risk Analytics Logic (Screen 5)
 */
 
-function initAnalyticsView() {
+document.addEventListener('DOMContentLoaded', () => {
   const data = window.NIRMAAN_DATA;
   if (!data) return;
 
@@ -13,5 +13,9 @@ function initAnalyticsView() {
       data.riskDistribution.medium.count,
       data.riskDistribution.low.count
     );
+
+    if (data.sCurveData) {
+      window.NIRMAAN_CHARTS.renderSCurveChart('analytics-scurve-canvas', data.sCurveData);
+    }
   }
-}
+});

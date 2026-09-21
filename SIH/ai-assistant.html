@@ -95,38 +95,34 @@
           <div class="ai-assistant-grid">
             <div class="ai-left-column">
               <div class="quick-actions-panel">
-                <div style="font-size: 0.88rem; font-weight: 700; margin-bottom: 0.85rem;">Quick Actions</div>
-                <button class="quick-action-pill-btn prompt-btn" data-prompt="Show high risk projects in Rajasthan">⚠️ Show high risk projects in Rajasthan</button>
-                <button class="quick-action-pill-btn prompt-btn" data-prompt="List all delayed projects">🕒 List all delayed projects</button>
-                <button class="quick-action-pill-btn prompt-btn" data-prompt="Show cost overrun projects">💰 Show cost overrun projects</button>
+                <div style="font-size: 0.88rem; font-weight: 700; margin-bottom: 0.85rem;"><i class="fa-solid fa-bolt"></i> Quick Queries</div>
+                <button class="quick-action-pill-btn prompt-btn" data-prompt="Show high risk projects in Rajasthan">⚠️ High risk projects in Rajasthan</button>
+                <button class="quick-action-pill-btn prompt-btn" data-prompt="List all delayed railway projects">🚂 Delayed Railway projects</button>
+                <button class="quick-action-pill-btn prompt-btn" data-prompt="Show cost overrun projects">💰 Cost overrun projects</button>
+                <button class="quick-action-pill-btn prompt-btn" data-prompt="Show projects in Bihar">📍 Projects in Bihar</button>
+                <button class="quick-action-pill-btn prompt-btn" data-prompt="Show on track energy projects">⚡ On track Energy projects</button>
+                <button class="quick-action-pill-btn prompt-btn" data-prompt="MoSPI national infrastructure summary report">📄 National MoSPI Summary Report</button>
               </div>
             </div>
 
             <div class="ai-chat-column">
               <div class="chat-history-body" id="chat-messages-container">
-                <div class="chat-message-row user">
-                  <div class="chat-avatar user" style="width: 32px; height: 32px; border-radius: 50%; background: #0f172a; color: white; display: flex; align-items: center; justify-content: center;"><i class="fa-solid fa-user"></i></div>
-                  <div>
-                    <div class="chat-bubble">Show high risk projects in Rajasthan</div>
-                    <div style="font-size: 0.68rem; color: var(--text-light); text-align: right; margin-top: 4px;">10:24 AM</div>
-                  </div>
-                </div>
-
                 <div class="chat-message-row bot">
-                  <div class="chat-avatar bot" style="width: 32px; height: 32px; border-radius: 50%; background: linear-gradient(135deg, #1a56db, #00c6ff); color: white; display: flex; align-items: center; justify-content: center;"><i class="fa-solid fa-robot"></i></div>
+                  <div class="chat-avatar bot"><i class="fa-solid fa-robot"></i></div>
                   <div style="flex: 1;">
                     <div class="chat-bubble">
-                      <p><strong>AI Assistant</strong></p>
-                      <p>I found <strong>14 high-risk projects</strong> in Rajasthan. Top project is Highway Expansion Project (84% Risk).</p>
+                      <div style="font-size: 0.8rem; font-weight: 800; color: var(--color-primary); margin-bottom: 6px;"><i class="fa-solid fa-sparkles"></i> NIRMAAN AI Assistant</div>
+                      <p>Welcome, Officer! I am your AI Project Intelligence Assistant.</p>
+                      <p style="margin-top: 6px;">Ask me anything about central sector infrastructure projects ($\ge ₹150\text{ Cr}$), risk scores, physical progress lags, budget overruns, or state-wise project status across India.</p>
                     </div>
-                    <div style="font-size: 0.68rem; color: var(--text-light); margin-top: 4px;">10:25 AM</div>
+                    <div class="chat-timestamp">Just now</div>
                   </div>
                 </div>
               </div>
 
               <form class="chat-input-bar" id="ai-chat-form">
-                <input type="text" id="ai-input-field" class="chat-text-input" placeholder="Type your question about projects...">
-                <button type="submit" style="padding: 0.65rem 1.25rem; background: var(--color-accent); color: white; border-radius: 20px; font-weight: 700;">Send</button>
+                <input type="text" id="ai-input-field" class="chat-text-input" placeholder="Ask a question (e.g. 'Show high risk projects in Bihar')...">
+                <button type="submit" style="padding: 0.65rem 1.25rem; background: var(--color-primary); color: white; border: none; border-radius: 20px; font-weight: 700; cursor: pointer;"><i class="fa-solid fa-paper-plane"></i> Send</button>
               </form>
             </div>
           </div>

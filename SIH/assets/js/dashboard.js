@@ -18,6 +18,11 @@ document.addEventListener('DOMContentLoaded', () => {
     window.NIRMAAN_CHARTS.renderStateBarChart('dashboard-state-barchart', data.stateWiseRisk);
   }
 
+  // Render Interactive GIS Map
+  if (window.NIRMAAN_MAP) {
+    window.NIRMAAN_MAP.initMap('gis-map-container');
+  }
+
   // Render High Risk Table
   const tableBody = document.getElementById('dashboard-high-risk-table-body');
   if (tableBody) {

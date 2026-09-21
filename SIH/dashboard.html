@@ -8,6 +8,9 @@
   <!-- FontAwesome Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   
+  <!-- Leaflet GIS Map CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+
   <!-- Stylesheets -->
   <link rel="stylesheet" href="assets/css/common.css">
   <link rel="stylesheet" href="assets/css/components.css">
@@ -144,6 +147,30 @@
             </div>
           </div>
 
+          <!-- Geospatial GIS Infrastructure Map Section -->
+          <div class="gis-map-card">
+            <div class="gis-header-row">
+              <div class="gis-title-group">
+                <div class="gis-title-icon"><i class="fa-solid fa-map-location-dot"></i></div>
+                <div>
+                  <div class="dashboard-card-title">Geospatial Infrastructure Monitoring (GIS)</div>
+                  <div style="font-size: 0.75rem; color: var(--text-muted);">Real-time project location pinpoints & risk levels across India</div>
+                </div>
+              </div>
+
+              <!-- Interactive Risk Filter Buttons -->
+              <div class="gis-filter-bar-group">
+                <button class="gis-filter-btn active" data-filter="all">All Projects</button>
+                <button class="gis-filter-btn" data-filter="high"><i class="fa-solid fa-circle" style="color:#ef4444; font-size: 0.6rem;"></i> High Risk</button>
+                <button class="gis-filter-btn" data-filter="medium"><i class="fa-solid fa-circle" style="color:#f59e0b; font-size: 0.6rem;"></i> Medium Risk</button>
+                <button class="gis-filter-btn" data-filter="low"><i class="fa-solid fa-circle" style="color:#10b981; font-size: 0.6rem;"></i> Low Risk</button>
+              </div>
+            </div>
+
+            <!-- Leaflet Map Viewport -->
+            <div id="gis-map-container" class="gis-map-viewport"></div>
+          </div>
+
           <!-- Charts Row -->
           <div class="dashboard-grid-row">
             <div class="dashboard-card">
@@ -210,8 +237,13 @@
     </main>
   </div>
 
+  <!-- Leaflet JS Library -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+  <!-- Application Scripts -->
   <script src="assets/js/data.js"></script>
   <script src="assets/js/charts.js"></script>
+  <script src="assets/js/map.js"></script>
   <script src="assets/js/common.js"></script>
   <script src="assets/js/dashboard.js"></script>
 </body>
