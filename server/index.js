@@ -30,16 +30,6 @@ mongoose.connect(MONGO_URI)
   .then(async () => {
     isDbConnected = true;
     console.log('✅ MongoDB Connected Successfully at:', MONGO_URI);
-    
-    // Auto-seed if database is empty
-    const count = await Project.countDocuments();
-    if (count === 0) {
-      console.log('Seeding initial MongoDB dataset...');
-      await Project.insertMany(seedData.projects);
-      await Alert.insertMany(seedData.alerts);
-      await SCurve.create(seedData.sCurveData);
-      console.log('Seeding finished.');
-    }
   })
   .catch(err => {
     isDbConnected = false;
