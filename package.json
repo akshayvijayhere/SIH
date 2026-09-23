@@ -1,0 +1,18 @@
+{
+  "name": "nirmaan-ai-backend",
+  "version": "1.0.0",
+  "description": "Node.js Express REST API Backend with MongoDB for NIRMAAN AI (MoSPI Infrastructure Monitoring - SIH26103)",
+  "main": "server/index.js",
+  "type": "commonjs",
+  "scripts": {
+    "start": "node server/index.js",
+    "dev": "node server/index.js",
+    "seed": "node server/seed.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "mongoose": "^8.4.1"
+  }
+}
