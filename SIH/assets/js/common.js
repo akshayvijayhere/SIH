@@ -7,6 +7,13 @@ document.addEventListener('DOMContentLoaded', () => {
   const savedTheme = localStorage.getItem('nirmaan_theme') || 'light';
   document.documentElement.setAttribute('data-theme', savedTheme);
 
+  // Set Dynamic Current Date across headers
+  const dateElem = document.getElementById('current-live-date');
+  if (dateElem) {
+    const today = new Date();
+    dateElem.innerText = today.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
+  }
+
   // Highlight active page in sidebar navigation
   const currentPath = window.location.pathname.split('/').pop().split('?')[0] || 'login.html';
   

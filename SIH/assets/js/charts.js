@@ -38,11 +38,25 @@ window.NIRMAAN_CHARTS = {
       <div class="state-bar-chart-container">
         ${stateData.map(d => {
           const heightPct = Math.round((d.highRiskCount / maxVal) * 100);
+          const stateShortMap = {
+            'Uttar Pradesh': 'UP',
+            'West Bengal': 'WB',
+            'Andhra Pradesh': 'AP',
+            'Tamil Nadu': 'TN',
+            'Rajasthan': 'Raj',
+            'Gujarat': 'Guj',
+            'Maharashtra': 'Maha',
+            'Delhi': 'Delhi',
+            'Bihar': 'Bihar',
+            'Karnataka': 'Kar',
+            'Assam': 'Assam'
+          };
+          const label = stateShortMap[d.state] || d.state.split(' ')[0];
           return `
             <div class="bar-col">
               <div style="font-size: 0.7rem; font-weight: 700; color: #ef4444;">${d.highRiskCount}</div>
               <div class="bar-stick" style="height: ${heightPct}%;"></div>
-              <div class="bar-label">${d.state.split(' ')[0]}</div>
+              <div class="bar-label" title="${d.state}">${label}</div>
             </div>
           `;
         }).join('')}

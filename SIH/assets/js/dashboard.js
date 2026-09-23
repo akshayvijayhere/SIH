@@ -37,7 +37,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         <td><strong>${p.name}</strong></td>
         <td>${p.state}</td>
         <td>${p.sector}</td>
-        <td><div class="progress-bar-wrap"><div class="progress-bar-fill ${p.riskScore > 75 ? 'high-risk' : 'medium-risk'}" style="width: ${p.progress}%;"></div></div></td>
+        <td><div style="display: flex; align-items: center; gap: 8px;"><div class="progress-bar-wrap" style="width: 70px;"><div class="progress-bar-fill ${p.riskScore > 75 ? 'high-risk' : 'medium-risk'}" style="width: ${p.progress}%;"></div></div><span style="font-weight: 700; font-size: 0.78rem;">${p.progress}%</span></div></td>
         <td><span style="font-weight: 800; color: ${p.riskScore > 75 ? '#ef4444' : '#f59e0b'};">${p.riskScore}%</span></td>
         <td><span class="status-badge ${p.statusClass}">${p.status}</span></td>
         <td><a class="btn-action-sm" href="project-detail.html?id=${p.id}">View</a></td>
