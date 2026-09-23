@@ -151,13 +151,19 @@
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
   <script src="assets/js/data.js"></script>
+  <script src="assets/js/api.js"></script>
   <script src="assets/js/charts.js"></script>
   <script src="assets/js/common.js"></script>
   <script>
-    document.addEventListener('DOMContentLoaded', () => {
+    document.addEventListener('DOMContentLoaded', async () => {
       const urlParams = new URLSearchParams(window.location.search);
       const projId = urlParams.get('id') || 'PRJ-1001';
-      const project = window.NIRMAAN_DATA.projects.find(p => p.id === projId) || window.NIRMAAN_DATA.projects[0];
+      let project;
+      if (window.NIRMAAN_API) {
+        project = await window.NIRMAAN_API.getProjectById(projId);
+      } else {
+        project = window.NIRMAAN_DATA.projects.find(p => p.id === projId) || window.NIRMAAN_DATA.projects[0];
+      }
 
       document.getElementById('detail-project-name').innerText = project.name;
       document.getElementById('detail-project-state').innerText = project.state;

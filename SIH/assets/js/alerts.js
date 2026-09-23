@@ -4,7 +4,10 @@
 
 let activeAlertTab = 'all';
 
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
+  if (window.NIRMAAN_API) {
+    await window.NIRMAAN_API.getAlerts();
+  }
   initAlertCenter();
 });
 

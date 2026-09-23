@@ -2,7 +2,11 @@
    NIRMAAN AI - Dashboard Page Dedicated Logic
 */
 
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
+  if (window.NIRMAAN_API) {
+    await window.NIRMAAN_API.getProjects();
+    await window.NIRMAAN_API.getSCurveData();
+  }
   const data = window.NIRMAAN_DATA;
   if (!data) return;
 

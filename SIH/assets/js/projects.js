@@ -3,7 +3,10 @@
    Multi-criteria filtering, search, and CSV/PDF export for MoSPI
 */
 
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
+  if (window.NIRMAAN_API) {
+    await window.NIRMAAN_API.getProjects();
+  }
   renderProjectsTable();
 
   // Attach Filter Listeners
