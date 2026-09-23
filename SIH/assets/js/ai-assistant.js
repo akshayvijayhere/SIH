@@ -30,7 +30,7 @@ function initAIAssistant() {
   });
 }
 
-function handleAIQuery(queryText) {
+async function handleAIQuery(queryText) {
   const container = document.getElementById('chat-messages-container');
   if (!container) return;
 
@@ -57,26 +57,37 @@ function handleAIQuery(queryText) {
         <span class="typing-dot"></span>
         <span class="typing-dot"></span>
         <span class="typing-dot"></span>
-        <span style="font-size: 0.78rem; color: var(--text-muted); margin-left: 6px;">NIRMAAN AI is querying MoSPI database...</span>
+        <span style="font-size: 0.78rem; color: var(--text-muted); margin-left: 6px;">NIRMAAN AI is querying MoSPI MongoDB Atlas database...</span>
       </div>
     </div>
   `);
   container.scrollTop = container.scrollHeight;
 
-  // 3. Process Query & Append Bot Response
-  setTimeout(() => {
-    const typingElem = document.getElementById(typingId);
-    if (typingElem) typingElem.remove();
+  // 3. Query Cloud Database API or Fallback
+  let apiProjects = null;
+  if (window.NIRMAAN_API) {
+    try {
+      const apiRes = await window.NIRMAAN_API.queryAI(queryText);
+      if (apiRes && apiRes.success && apiRes.data) {
+        apiProjects = apiRes.data;
+      }
+    } catch (e) {
+      console.warn('AI query API call failed, using client fallback:', e);
+    }
+  }
 
-    const botHtml = generateSmartBotResponse(queryText, timeStr);
-    container.insertAdjacentHTML('beforeend', botHtml);
-    container.scrollTop = container.scrollHeight;
-  }, 600);
+  // Remove Typing Indicator & Render Bot Response
+  const typingElem = document.getElementById(typingId);
+  if (typingElem) typingElem.remove();
+
+  const botHtml = generateSmartBotResponse(queryText, timeStr, apiProjects);
+  container.insertAdjacentHTML('beforeend', botHtml);
+  container.scrollTop = container.scrollHeight;
 }
 
-function generateSmartBotResponse(queryText, timeStr) {
+function generateSmartBotResponse(queryText, timeStr, overrideProjects = null) {
   const data = window.NIRMAAN_DATA;
-  const projects = (data && data.projects) ? data.projects : [];
+  const projects = overrideProjects || ((data && data.projects) ? data.projects : []);
   const queryLower = queryText.toLowerCase();
 
   // Intent parsing
