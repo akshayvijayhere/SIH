@@ -173,6 +173,33 @@ app.get('/api/analytics/scurve', async (req, res) => {
 // 6. GET Overall Stats & Risk Breakdown
 app.get('/api/analytics/stats', async (req, res) => {
   try {
+    if (isDbConnected) {
+      const projects = await Project.find();
+      const highCount = projects.filter(p => p.riskScore >= 70).length;
+      const medCount = projects.filter(p => p.riskScore >= 50 && p.riskScore < 70).length;
+      const lowCount = projects.filter(p => p.riskScore < 50).length;
+      const delayCount = projects.filter(p => p.status === 'Delayed').length;
+      const costCount = projects.filter(p => p.costRisk >= 60).length;
+
+      return res.json({
+        success: true,
+        stats: {
+          totalProjects: 1981,
+          loadedProjects: projects.length,
+          highRisk: highCount,
+          mediumRisk: medCount,
+          lowRisk: lowCount,
+          delayRisk: delayCount,
+          costRisk: costCount
+        },
+        riskDistribution: {
+          high: { count: highCount, percentage: Math.round((highCount / projects.length) * 100) },
+          medium: { count: medCount, percentage: Math.round((medCount / projects.length) * 100) },
+          low: { count: lowCount, percentage: Math.round((lowCount / projects.length) * 100) }
+        }
+      });
+    }
+
     res.json({
       success: true,
       stats: {
@@ -346,9 +373,21 @@ app.get('*', (req, res) => {
 });
 
 // Start Express Server
-app.listen(PORT, () => {
+const server = app.listen(PORT, () => {
   console.log(`=======================================================`);
   console.log(`🚀 NIRMAAN AI Backend API running at http://localhost:${PORT}`);
   console.log(`🌐 Static Frontend served at http://localhost:${PORT}/dashboard.html`);
   console.log(`=======================================================`);
+});
+
+server.on('error', (err) => {
+  if (err.code === 'EADDRINUSE') {
+    console.error(`\n❌ Error: Port ${PORT} is already in use by another process.`);
+    console.log(`💡 Run the following command in terminal to free port ${PORT}:\n`);
+    console.log(`   npx kill-port ${PORT}\n`);
+    console.log(`Then re-run: npm start\n`);
+    process.exit(1);
+  } else {
+    console.error('Server error:', err);
+  }
 });
