@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>NIRMAAN AI - Settings | Government of India</title>
+  <title>NIRMAAN AI - Settings & Administrative Control | MoSPI</title>
   
   <!-- FontAwesome Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -85,42 +85,218 @@
       <div class="page-content-area">
         <div class="settings-layout">
           <div class="page-header-row" style="display: flex; gap: 1rem; align-items: center;">
-            <div class="page-header-icon" style="width: 44px; height: 44px; background: #dbeafe; color: #1a56db; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.35rem;"><i class="fa-solid fa-gear"></i></div>
+            <div class="page-header-icon" style="width: 44px; height: 44px; background: #dbeafe; color: #1a56db; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.35rem;"><i class="fa-solid fa-sliders"></i></div>
             <div class="page-header-text">
-              <h1 style="font-size: 1.4rem; font-weight: 800;">Settings</h1>
-              <p style="font-size: 0.85rem; color: var(--text-muted);">Manage your account, preferences, integrations and application settings.</p>
+              <h1 style="font-size: 1.4rem; font-weight: 800;">Settings & Administrative Control</h1>
+              <p style="font-size: 0.85rem; color: var(--text-muted);">Manage officer credentials, notification thresholds, cloud database sync and UI preferences.</p>
             </div>
           </div>
 
           <div class="settings-container">
+            <!-- Sub Sidebar Navigation -->
             <div class="settings-sub-sidebar">
-              <div class="settings-menu-item active">Profile</div>
-              <div class="settings-menu-item">Security</div>
-              <div class="settings-menu-item">Notifications</div>
-              <div class="settings-menu-item">Appearance</div>
+              <div class="settings-menu-item active" data-tab="tab-profile">
+                <i class="fa-solid fa-id-card"></i> Profile & Identity
+              </div>
+              <div class="settings-menu-item" data-tab="tab-security">
+                <i class="fa-solid fa-shield-halved"></i> Security & Tokens
+              </div>
+              <div class="settings-menu-item" data-tab="tab-notifications">
+                <i class="fa-solid fa-bell"></i> Alert Thresholds
+              </div>
+              <div class="settings-menu-item" data-tab="tab-appearance">
+                <i class="fa-solid fa-palette"></i> Appearance & UI
+              </div>
+              <div class="settings-menu-item" data-tab="tab-cloud">
+                <i class="fa-solid fa-database"></i> Cloud DB Integration
+              </div>
             </div>
 
+            <!-- Content Panels -->
             <div class="settings-content-body">
-              <div class="settings-card">
-                <h3 style="font-size: 1.05rem; font-weight: 700; margin-bottom: 1rem;">Profile Information</h3>
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; font-size: 0.85rem;">
-                  <div><label style="display: block; margin-bottom: 4px; font-weight: 600;">Full Name</label><input type="text" value="Officer" style="width: 100%; padding: 0.65rem; border: 1px solid var(--border-color); border-radius: 8px;" readonly></div>
-                  <div><label style="display: block; margin-bottom: 4px; font-weight: 600;">Email Address</label><input type="email" value="officer@mospi.gov.in" style="width: 100%; padding: 0.65rem; border: 1px solid var(--border-color); border-radius: 8px;" readonly></div>
+              
+              <!-- TAB 1: PROFILE & IDENTITY -->
+              <div class="settings-tab-panel active" id="tab-profile">
+                <div class="settings-card">
+                  <div class="settings-card-header">
+                    <div class="settings-card-title"><i class="fa-solid fa-user-gear"></i> Official Identity & Credentials</div>
+                    <span class="db-status-badge" style="background: #e0f2fe; color: #0284c7; border-color: #7dd3fc;">
+                      <i class="fa-solid fa-badge-check"></i> Level 3 Cabinet Clearance
+                    </span>
+                  </div>
+
+                  <div style="display: flex; gap: 1.5rem; align-items: center; margin-bottom: 1.5rem; padding: 1rem; background: var(--bg-app); border-radius: 12px; border: 1px solid var(--border-color);">
+                    <div style="width: 60px; height: 60px; border-radius: 50%; background: var(--color-primary); color: white; display: flex; align-items: center; justify-content: center; font-size: 1.6rem; font-weight: 800;">O</div>
+                    <div>
+                      <h3 style="font-size: 1.1rem; font-weight: 800;">Officer</h3>
+                      <p style="font-size: 0.8rem; color: var(--text-muted);">Senior Infrastructure Monitoring Analyst</p>
+                      <span style="font-size: 0.72rem; font-weight: 700; color: var(--color-primary);"><i class="fa-solid fa-landmark"></i> MoSPI — Infrastructure & Project Monitoring Division (IPMD)</span>
+                    </div>
+                  </div>
+
+                  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem;">
+                    <div class="form-group">
+                      <label>Full Name</label>
+                      <input type="text" class="form-control" value="Officer" readonly>
+                    </div>
+                    <div class="form-group">
+                      <label>Official Email Address</label>
+                      <input type="email" class="form-control" value="officer@mospi.gov.in" readonly>
+                    </div>
+                    <div class="form-group">
+                      <label>Department / Division</label>
+                      <input type="text" class="form-control" value="IPMD — Infrastructure & Project Monitoring" readonly>
+                    </div>
+                    <div class="form-group">
+                      <label>Jurisdiction Scope</label>
+                      <input type="text" class="form-control" value="Pan-India Mega Projects (≥ ₹150 Cr)" readonly>
+                    </div>
+                  </div>
                 </div>
               </div>
 
-              <div class="settings-card">
-                <h3 style="font-size: 1.05rem; font-weight: 700; margin-bottom: 1rem;">Display Preferences & Theme</h3>
-                <div class="theme-segmented-control" id="theme-mode-switcher">
-                  <button type="button" class="theme-option-btn active" data-theme="light"><i class="fa-regular fa-sun"></i> Light</button>
-                  <button type="button" class="theme-option-btn" data-theme="dark"><i class="fa-regular fa-moon"></i> Dark</button>
-                  <button type="button" class="theme-option-btn" data-theme="system"><i class="fa-solid fa-desktop"></i> System</button>
+              <!-- TAB 2: SECURITY & TOKENS -->
+              <div class="settings-tab-panel" id="tab-security">
+                <div class="settings-card">
+                  <div class="settings-card-header">
+                    <div class="settings-card-title"><i class="fa-solid fa-key"></i> Authentication Tokens & API Keys</div>
+                  </div>
+
+                  <div class="setting-row-item">
+                    <div class="setting-row-info">
+                      <h4>Two-Factor Authentication (2FA)</h4>
+                      <p>Requires OTP verification via official Government email for Level 3 escalations.</p>
+                    </div>
+                    <label class="switch">
+                      <input type="checkbox" checked>
+                      <span class="slider"></span>
+                    </label>
+                  </div>
+
+                  <div class="setting-row-item" style="flex-direction: column; align-items: flex-start; gap: 0.5rem;">
+                    <div class="setting-row-info">
+                      <h4>Active JWT Bearer Token</h4>
+                      <p>Used by client REST API wrapper to authenticate against Node.js Express endpoints.</p>
+                    </div>
+                    <div style="display: flex; width: 100%; gap: 0.5rem; margin-top: 0.25rem;">
+                      <input type="text" class="form-control" value="jwt_mock_token_mospi_officer_2026" readonly style="font-family: monospace; font-size: 0.8rem; background: var(--bg-app);">
+                      <button type="button" class="btn-action-sm" onclick="navigator.clipboard.writeText('jwt_mock_token_mospi_officer_2026'); alert('API Token Copied!');" style="white-space: nowrap;"><i class="fa-solid fa-copy"></i> Copy Token</button>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="settings-card">
+                  <div class="settings-card-header">
+                    <div class="settings-card-title"><i class="fa-solid fa-laptop"></i> Active Login Sessions</div>
+                  </div>
+                  <div style="font-size: 0.82rem; color: var(--text-muted); display: flex; justify-content: space-between; align-items: center;">
+                    <div>
+                      <strong><i class="fa-solid fa-desktop"></i> Current Session — macOS (Chrome Browser)</strong>
+                      <div style="font-size: 0.72rem; color: #10b981; margin-top: 2px;">● Active Now — IP 192.168.1.159</div>
+                    </div>
+                    <button type="button" class="btn-action-sm" id="btn-sign-out" style="background-color: #ef4444;"><i class="fa-solid fa-arrow-right-from-bracket"></i> Sign Out</button>
+                  </div>
                 </div>
               </div>
 
-              <div style="margin-top: 1rem;">
-                <button type="button" class="btn-action-sm" id="btn-sign-out" style="background-color: #ef4444;"><i class="fa-solid fa-arrow-right-from-bracket"></i> Sign Out</button>
+              <!-- TAB 3: ALERT THRESHOLDS -->
+              <div class="settings-tab-panel" id="tab-notifications">
+                <div class="settings-card">
+                  <div class="settings-card-header">
+                    <div class="settings-card-title"><i class="fa-solid fa-bell"></i> Automated Governance Alert Rules</div>
+                  </div>
+
+                  <div class="setting-row-item">
+                    <div class="setting-row-info">
+                      <h4>Level 1 Delay Threshold Notification</h4>
+                      <p>Generate automatic warning alert when milestone delay exceeds 30 days.</p>
+                    </div>
+                    <label class="switch">
+                      <input type="checkbox" checked>
+                      <span class="slider"></span>
+                    </label>
+                  </div>
+
+                  <div class="setting-row-item">
+                    <div class="setting-row-info">
+                      <h4>Level 3 Cabinet Escalation SMS/Push Alert</h4>
+                      <p>Send urgent push notification to Cabinet Secretary when project risk score crosses 75%.</p>
+                    </div>
+                    <label class="switch">
+                      <input type="checkbox" checked>
+                      <span class="slider"></span>
+                    </label>
+                  </div>
+
+                  <div class="setting-row-item">
+                    <div class="setting-row-info">
+                      <h4>S-Curve Financial Overrun Warning</h4>
+                      <p>Flag automated alert when financial payout exceeds physical completion by over 10%.</p>
+                    </div>
+                    <label class="switch">
+                      <input type="checkbox" checked>
+                      <span class="slider"></span>
+                    </label>
+                  </div>
+                </div>
               </div>
+
+              <!-- TAB 4: APPEARANCE & UI -->
+              <div class="settings-tab-panel" id="tab-appearance">
+                <div class="settings-card">
+                  <div class="settings-card-header">
+                    <div class="settings-card-title"><i class="fa-solid fa-palette"></i> Theme & Visual Style</div>
+                  </div>
+
+                  <div style="margin-bottom: 1.5rem;">
+                    <label style="display: block; font-size: 0.8rem; font-weight: 700; margin-bottom: 0.5rem;">Color Theme Mode</label>
+                    <div class="theme-segmented-control" id="theme-mode-switcher">
+                      <button type="button" class="theme-option-btn active" data-theme="light"><i class="fa-regular fa-sun"></i> Light</button>
+                      <button type="button" class="theme-option-btn" data-theme="dark"><i class="fa-regular fa-moon"></i> Dark</button>
+                      <button type="button" class="theme-option-btn" data-theme="system"><i class="fa-solid fa-desktop"></i> System</button>
+                    </div>
+                  </div>
+
+                  <div>
+                    <label style="display: block; font-size: 0.8rem; font-weight: 700; margin-bottom: 0.5rem;">GIS Map Basemap Style</label>
+                    <select class="form-control" style="width: 280px;">
+                      <option value="osm">OpenStreetMap Standard</option>
+                      <option value="carto">CARTO Dark Matter (Command Center)</option>
+                      <option value="satellite">Satellite Imagery Layer</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+
+              <!-- TAB 5: CLOUD DB INTEGRATION -->
+              <div class="settings-tab-panel" id="tab-cloud">
+                <div class="settings-card">
+                  <div class="settings-card-header">
+                    <div class="settings-card-title"><i class="fa-solid fa-server"></i> Live Cloud Database Diagnostics</div>
+                    <span class="db-status-badge"><i class="fa-solid fa-circle-check"></i> MongoDB Atlas Connected</span>
+                  </div>
+
+                  <div style="display: flex; flex-direction: column; gap: 0.85rem; font-size: 0.85rem;">
+                    <div style="display: flex; justify-content: space-between; padding: 0.65rem; background: var(--bg-app); border-radius: 8px;">
+                      <span>Database Engine:</span>
+                      <strong>MongoDB Atlas Cloud (v7.0)</strong>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; padding: 0.65rem; background: var(--bg-app); border-radius: 8px;">
+                      <span>Cluster Endpoint:</span>
+                      <strong style="font-family: monospace;">cluster0.blkij9f.mongodb.net/nirmaan_ai</strong>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; padding: 0.65rem; background: var(--bg-app); border-radius: 8px;">
+                      <span>Collections Monitored:</span>
+                      <strong>projects (11) • alerts (5) • scurves (1)</strong>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; padding: 0.65rem; background: var(--bg-app); border-radius: 8px;">
+                      <span>In-Memory Fallback Engine:</span>
+                      <strong style="color: #10b981;">Active & Ready</strong>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
             </div>
           </div>
         </div>

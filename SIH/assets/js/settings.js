@@ -1,16 +1,33 @@
 /* 
-   NIRMAAN AI - Settings Logic & Theme Manager
+   NIRMAAN AI - Settings Logic & Interactive Control Manager
 */
 
 document.addEventListener('DOMContentLoaded', () => {
-  const menuItems = document.querySelectorAll('.settings-sub-sidebar .settings-menu-item');
-  menuItems.forEach(item => {
-    item.addEventListener('click', () => {
-      menuItems.forEach(m => m.classList.remove('active'));
-      item.classList.add('active');
+  // Tab Switcher Handler
+  const tabButtons = document.querySelectorAll('.settings-sub-sidebar .settings-menu-item');
+  const tabPanels = document.querySelectorAll('.settings-content-body .settings-tab-panel');
+
+  tabButtons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const targetId = btn.getAttribute('data-tab');
+      if (!targetId) return;
+
+      // Update sidebar button active states
+      tabButtons.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+
+      // Update panel visibility
+      tabPanels.forEach(panel => {
+        if (panel.id === targetId) {
+          panel.classList.add('active');
+        } else {
+          panel.classList.remove('active');
+        }
+      });
     });
   });
 
+  // Theme Switcher Handler
   const themeControl = document.getElementById('theme-mode-switcher');
   if (themeControl) {
     const currentSavedTheme = localStorage.getItem('nirmaan_theme') || 'light';
@@ -29,10 +46,13 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  document.getElementById('btn-sign-out')?.addEventListener('click', () => {
-    if (confirm('Sign out from NIRMAAN AI Portal?')) {
-      window.location.href = 'login.html';
-    }
+  // Sign Out Buttons
+  document.querySelectorAll('#btn-sign-out').forEach(btn => {
+    btn.addEventListener('click', () => {
+      if (confirm('Sign out from NIRMAAN AI Executive Portal?')) {
+        window.location.href = 'login.html';
+      }
+    });
   });
 });
 

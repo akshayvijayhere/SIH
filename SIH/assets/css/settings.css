@@ -1,5 +1,5 @@
 /* 
-   NIRMAAN AI - Settings Stylesheet (Screens 7 & 9)
+   NIRMAAN AI - Advanced Settings Stylesheet
 */
 
 .settings-layout {
@@ -13,17 +13,18 @@
   display: flex;
   gap: 1.5rem;
   flex: 1;
+  align-items: flex-start;
 }
 
 .settings-sub-sidebar {
-  width: 260px;
+  width: 270px;
   background-color: var(--bg-surface);
   border: 1px solid var(--border-color);
   border-radius: 16px;
   padding: 1.15rem;
   display: flex;
   flex-direction: column;
-  gap: 1.25rem;
+  gap: 0.5rem;
   box-shadow: var(--shadow-sm);
   flex-shrink: 0;
 }
@@ -31,14 +32,19 @@
 .settings-menu-item {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  padding: 0.65rem 0.85rem;
+  gap: 0.75rem;
+  padding: 0.75rem 0.95rem;
   border-radius: 10px;
   color: var(--text-muted);
   font-size: 0.85rem;
   font-weight: 600;
   cursor: pointer;
   transition: all var(--transition-fast);
+}
+
+.settings-menu-item:hover {
+  background-color: var(--bg-app);
+  color: var(--text-main);
 }
 
 .settings-menu-item.active {
@@ -52,7 +58,16 @@
   display: flex;
   flex-direction: column;
   gap: 1.25rem;
-  overflow-y: auto;
+}
+
+.settings-tab-panel {
+  display: none;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.settings-tab-panel.active {
+  display: flex;
 }
 
 .settings-card {
@@ -63,11 +78,83 @@
   box-shadow: var(--shadow-sm);
 }
 
-/* Switches & Segmented Theme Switches */
+.settings-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.15rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.settings-card-title {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: var(--text-main);
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+/* Form Controls */
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.form-group label {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--text-main);
+}
+
+.form-control {
+  width: 100%;
+  padding: 0.65rem 0.85rem;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  background-color: var(--bg-app);
+  color: var(--text-main);
+  font-size: 0.85rem;
+  outline: none;
+  transition: border-color var(--transition-fast);
+}
+
+.form-control:focus {
+  border-color: var(--color-primary);
+}
+
+/* Switches & Segmented Controls */
+.setting-row-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.85rem 0;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.setting-row-item:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.setting-row-info h4 {
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: var(--text-main);
+  margin-bottom: 2px;
+}
+
+.setting-row-info p {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+}
+
 .switch {
   position: relative;
   display: inline-block;
-  width: 44px;
+  width: 46px;
   height: 24px;
 }
 
@@ -92,8 +179,8 @@
   border-radius: 50%;
 }
 
-input:checked + .slider { background-color: var(--color-accent); }
-input:checked + .slider:before { transform: translateX(20px); }
+input:checked + .slider { background-color: var(--color-primary); }
+input:checked + .slider:before { transform: translateX(22px); }
 
 .theme-segmented-control {
   display: flex;
@@ -113,10 +200,27 @@ input:checked + .slider:before { transform: translateX(20px); }
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  transition: all var(--transition-fast);
 }
 
 .theme-option-btn.active {
   background-color: var(--bg-surface);
   color: var(--text-main);
   box-shadow: var(--shadow-sm);
+}
+
+.db-status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.35rem 0.85rem;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 800;
+  background: #d1fae5;
+  color: #059669;
+  border: 1px solid #6ee7b7;
 }
