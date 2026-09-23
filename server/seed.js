@@ -32,6 +32,11 @@ async function seed() {
     console.log('Seed completed successfully!');
     process.exit(0);
   } catch (err) {
+    if (err.name === 'MongooseServerSelectionError' || err.code === 'ECONNREFUSED') {
+      console.warn('⚠️ MongoDB is not running locally. Skipped standalone seed script.');
+      console.warn('💡 Tip: You can run "npm start" directly — the backend will run using the in-memory MoSPI dataset!');
+      process.exit(0);
+    }
     console.error('Error seeding database:', err);
     process.exit(1);
   }
