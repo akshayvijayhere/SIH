@@ -7,6 +7,21 @@ document.addEventListener('DOMContentLoaded', async () => {
   if (window.NIRMAAN_API) {
     await window.NIRMAAN_API.getProjects();
   }
+
+  // Parse URL search parameters on initial load
+  const urlParams = new URLSearchParams(window.location.search);
+  const searchParam = urlParams.get('search');
+  const sectorParam = urlParams.get('sector');
+  const stateParam = urlParams.get('state');
+
+  const searchInput = document.getElementById('projects-search-input');
+  const sectorSelect = document.getElementById('projects-filter-sector');
+  const stateSelect = document.getElementById('projects-filter-state');
+
+  if (searchParam && searchInput) searchInput.value = searchParam;
+  if (sectorParam && sectorSelect) sectorSelect.value = sectorParam;
+  if (stateParam && stateSelect) stateSelect.value = stateParam;
+
   renderProjectsTable();
 
   // Attach Filter Listeners
@@ -15,7 +30,6 @@ document.addEventListener('DOMContentLoaded', async () => {
   document.getElementById('projects-filter-risk')?.addEventListener('change', renderProjectsTable);
 
   // Search input listeners
-  const searchInput = document.getElementById('projects-search-input');
   const topbarSearch = document.querySelector('.topbar-search input');
 
   if (searchInput) {
@@ -76,7 +90,11 @@ function renderProjectsTable() {
   // Update counter label
   const counterLabel = document.getElementById('projects-count-label');
   if (counterLabel) {
-    counterLabel.innerText = `Showing ${currentFilteredProjects.length} of ${data.stats.totalProjects} national projects`;
+    if (currentFilteredProjects.length < data.projects.length) {
+      counterLabel.innerText = `Showing ${currentFilteredProjects.length} of ${data.projects.length} loaded projects (${data.stats.totalProjects} total MoSPI monitored)`;
+    } else {
+      counterLabel.innerText = `Showing all ${data.projects.length} primary mega projects (${data.stats.totalProjects} total MoSPI monitored)`;
+    }
   }
 
   if (currentFilteredProjects.length === 0) {
@@ -97,7 +115,7 @@ function renderProjectsTable() {
       <td>${idx + 1}</td>
       <td>
         <strong>${escapeHtml(p.name)}</strong>
-        <div style="font-size: 0.72rem; color: var(--text-muted);"><i class="fa-solid fa-location-dot"></i> ${p.city || p.state}, ${p.state}</div>
+        <div style="font-size: 0.72rem; color: var(--text-muted);"><i class="fa-solid fa-building-flag"></i> ${p.agency ? escapeHtml(p.agency) + ' • ' : ''}${escapeHtml(p.city || p.state)}</div>
       </td>
       <td>${p.state}</td>
       <td>${p.sector}</td>
