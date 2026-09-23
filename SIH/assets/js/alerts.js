@@ -122,11 +122,17 @@ function renderAlerts(alertsList) {
           </div>
 
           <!-- Action Button Group -->
-          <div style="display: flex; align-items: center; gap: 0.4rem;">
+          <div style="display: flex; align-items: center; gap: 0.4rem; flex-wrap: wrap;">
             ${item.type !== 'resolved' ? `
-              <button class="btn-action-sm" onclick="escalateAlert('${item.id}')" style="background-color: #dc2626; color: white;">
-                <i class="fa-solid fa-arrow-up-right-dots"></i> Escalate to Cabinet
-              </button>
+              ${(item.escalationLevel && item.escalationLevel.includes('Level 3')) || item.type === 'critical' ? `
+                <span class="btn-action-sm" style="background: #fee2e2; color: #dc2626; border: 1px solid #fca5a5; font-weight: 800; font-size: 0.72rem; display: inline-flex; align-items: center; gap: 4px;">
+                  <i class="fa-solid fa-landmark"></i> Escalated to Cabinet
+                </span>
+              ` : `
+                <button class="btn-action-sm" onclick="escalateAlert('${item.id}')" style="background-color: #dc2626; color: white;">
+                  <i class="fa-solid fa-arrow-up-right-dots"></i> Escalate to Cabinet
+                </button>
+              `}
               <button class="btn-action-sm" onclick="notifyOfficer('${item.id}')" style="background-color: var(--color-primary); color: white;">
                 <i class="fa-solid fa-paper-plane"></i> Remind Field Officer
               </button>
