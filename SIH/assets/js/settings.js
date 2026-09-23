@@ -13,6 +13,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const themeControl = document.getElementById('theme-mode-switcher');
   if (themeControl) {
+    const currentSavedTheme = localStorage.getItem('nirmaan_theme') || 'light';
+    themeControl.querySelectorAll('.theme-option-btn').forEach(b => {
+      if (b.getAttribute('data-theme') === currentSavedTheme) b.classList.add('active');
+      else b.classList.remove('active');
+    });
+
     themeControl.querySelectorAll('.theme-option-btn').forEach(btn => {
       btn.addEventListener('click', () => {
         themeControl.querySelectorAll('.theme-option-btn').forEach(b => b.classList.remove('active'));
