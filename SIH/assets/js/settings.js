@@ -1,32 +1,8 @@
 /* 
-   NIRMAAN AI - Settings Logic & Interactive Control Manager
+   NIRMAAN AI - Profile & Theme Settings Manager
 */
 
 document.addEventListener('DOMContentLoaded', () => {
-  // Tab Switcher Handler
-  const tabButtons = document.querySelectorAll('.settings-sub-sidebar .settings-menu-item');
-  const tabPanels = document.querySelectorAll('.settings-content-body .settings-tab-panel');
-
-  tabButtons.forEach(btn => {
-    btn.addEventListener('click', () => {
-      const targetId = btn.getAttribute('data-tab');
-      if (!targetId) return;
-
-      // Update sidebar button active states
-      tabButtons.forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-
-      // Update panel visibility
-      tabPanels.forEach(panel => {
-        if (panel.id === targetId) {
-          panel.classList.add('active');
-        } else {
-          panel.classList.remove('active');
-        }
-      });
-    });
-  });
-
   // Theme Switcher Handler
   const themeControl = document.getElementById('theme-mode-switcher');
   if (themeControl) {
@@ -46,7 +22,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Sign Out Buttons
+  // Sign Out Handler
   document.querySelectorAll('#btn-sign-out').forEach(btn => {
     btn.addEventListener('click', () => {
       if (confirm('Sign out from NIRMAAN AI Executive Portal?')) {
