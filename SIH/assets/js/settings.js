@@ -34,11 +34,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 function setTheme(themeMode) {
   const html = document.documentElement;
-  let activeTheme = themeMode;
-  if (themeMode === 'system') {
-    const isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    activeTheme = isDark ? 'dark' : 'light';
-  }
+  const activeTheme = themeMode === 'dark' ? 'dark' : 'light';
   html.setAttribute('data-theme', activeTheme);
   localStorage.setItem('nirmaan_theme', activeTheme);
 }
