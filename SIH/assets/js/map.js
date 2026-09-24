@@ -42,19 +42,7 @@ window.NIRMAAN_MAP = {
 
     this.renderMarkers('all');
     this.setupFilterControls();
-    this.setup4DTimelineControls();
   },
-
-  currentQuarterIndex: 5,
-  quartersData: [
-    { label: "2016 (Greenfield Site Baseline)", factor: 0.15, ndvi: "0.92 (Dense Canopy)", avgProg: "8.2%", color: "#94a3b8" },
-    { label: "2018 (Land Acquisition & ROW Clearing)", factor: 0.35, ndvi: "0.75 (Site Cleared)", avgProg: "24.1%", color: "#60a5fa" },
-    { label: "2020 (Earthworks & Pier Foundation)", factor: 0.55, ndvi: "0.61 (Substructure)", avgProg: "42.5%", color: "#38bdf8" },
-    { label: "2022 (Superstructure & Structural Steel)", factor: 0.75, ndvi: "0.48 (Active Build)", avgProg: "58.9%", color: "#f59e0b" },
-    { label: "2024 (Track Laying & Civil Completion)", factor: 0.90, ndvi: "0.43 (Final Phase)", avgProg: "64.2%", color: "#38bdf8" },
-    { label: "2026 (Live Current Telemetry)", factor: 1.00, ndvi: "0.39 (Operational)", avgProg: "68.4%", color: "#10b981" }
-  ],
-  playInterval: null,
 
   renderMarkers(filter = 'all') {
     if (!this.markersGroup || !window.NIRMAAN_DATA || !window.NIRMAAN_DATA.projects) return;
@@ -64,12 +52,9 @@ window.NIRMAAN_MAP = {
     this.currentFilter = filter;
 
     const projects = window.NIRMAAN_DATA.projects;
-    const qSnapshot = this.quartersData[this.currentQuarterIndex] || this.quartersData[5];
 
     projects.forEach(proj => {
       if (!proj.lat || !proj.lng) return;
-
-      const adjustedProgress = Math.max(5, Math.min(100, Math.round(proj.progress * qSnapshot.factor)));
 
       const isHigh = proj.riskScore >= 70;
       const isMed = proj.riskScore >= 50 && proj.riskScore < 70;
@@ -83,13 +68,13 @@ window.NIRMAAN_MAP = {
       let riskCategory = isHigh ? 'high' : (isMed ? 'medium' : 'low');
       let badgeClass = isHigh ? 'badge-danger' : (isMed ? 'badge-warning' : 'badge-success');
 
-      // Add Satellite Footprint Zone (Circle overlay representing construction extent)
+      // Add Satellite Project Footprint Zone
       if (this.footprintGroup) {
-        const footprintRadius = 15000 + (adjustedProgress * 350); // Grows as progress increases
+        const footprintRadius = 18000 + (proj.progress * 300);
         const footprintCircle = L.circle([proj.lat, proj.lng], {
-          color: isHigh ? '#ef4444' : (isMed ? '#f59e0b' : '#38bdf8'),
-          fillColor: isHigh ? '#ef4444' : (isMed ? '#f59e0b' : '#38bdf8'),
-          fillOpacity: 0.12 + (qSnapshot.factor * 0.1),
+          color: isHigh ? '#ef4444' : (isMed ? '#f59e0b' : '#10b981'),
+          fillColor: isHigh ? '#ef4444' : (isMed ? '#f59e0b' : '#10b981'),
+          fillOpacity: 0.15,
           radius: footprintRadius,
           weight: 1.5,
           dashArray: '4, 4'
@@ -112,7 +97,7 @@ window.NIRMAAN_MAP = {
         popupAnchor: [0, -20]
       });
 
-      // Standard GIS Popup with 4D Snapshot Info
+      // Standard GIS Popup
       const popupContent = `
         <div class="gis-popup-card">
           <div class="gis-popup-header">
@@ -126,11 +111,11 @@ window.NIRMAAN_MAP = {
           </div>
           <div class="gis-popup-progress">
             <div class="gis-prog-label">
-              <span>Completion (${qSnapshot.label.split(' ')[0]} ${qSnapshot.label.split(' ')[1]})</span>
-              <strong>${adjustedProgress}%</strong>
+              <span>Physical Completion</span>
+              <strong>${proj.progress}%</strong>
             </div>
             <div class="gis-prog-bar">
-              <div class="gis-prog-fill ${riskCategory}" style="width: ${adjustedProgress}%;"></div>
+              <div class="gis-prog-fill ${riskCategory}" style="width: ${proj.progress}%;"></div>
             </div>
           </div>
           <div class="gis-popup-budget">
@@ -160,64 +145,6 @@ window.NIRMAAN_MAP = {
         this.renderMarkers(filterVal);
       });
     });
-  },
-
-  setup4DTimelineControls() {
-    const slider = document.getElementById('gis-4d-slider');
-    const activeLabel = document.getElementById('timeline-active-quarter');
-    const ndviLabel = document.getElementById('timeline-ndvi-val');
-    const avgProgLabel = document.getElementById('timeline-avg-progress');
-    const playBtn = document.getElementById('btn-play-4d');
-
-    if (!slider) return;
-
-    const updateSnapshot = (idx) => {
-      this.currentQuarterIndex = parseInt(idx);
-      const snapshot = this.quartersData[this.currentQuarterIndex];
-      if (activeLabel) activeLabel.innerText = `Active Snapshot: ${snapshot.label}`;
-      if (ndviLabel) ndviLabel.innerText = snapshot.ndvi;
-      if (avgProgLabel) avgProgLabel.innerText = snapshot.avgProg;
-
-      this.renderMarkers(this.currentFilter);
-    };
-
-    slider.addEventListener('input', (e) => {
-      if (this.playInterval) {
-        clearInterval(this.playInterval);
-        this.playInterval = null;
-        if (playBtn) playBtn.innerHTML = '<i class="fa-solid fa-play"></i>';
-      }
-      updateSnapshot(e.target.value);
-    });
-
-    if (playBtn) {
-      playBtn.addEventListener('click', () => {
-        if (this.playInterval) {
-          clearInterval(this.playInterval);
-          this.playInterval = null;
-          playBtn.innerHTML = '<i class="fa-solid fa-play"></i>';
-          if (window.showGlobalToast) window.showGlobalToast('4D Time-Lapse Paused', 'info');
-        } else {
-          playBtn.innerHTML = '<i class="fa-solid fa-pause"></i>';
-          if (window.showGlobalToast) window.showGlobalToast('▶️ Playing 4D Satellite Time-Lapse (Q1 2024 ➔ Q3 2026)', 'success');
-          
-          if (parseInt(slider.value) >= 5) slider.value = 0;
-
-          this.playInterval = setInterval(() => {
-            let nextVal = parseInt(slider.value) + 1;
-            if (nextVal > 5) {
-              clearInterval(this.playInterval);
-              this.playInterval = null;
-              playBtn.innerHTML = '<i class="fa-solid fa-play"></i>';
-              if (window.showGlobalToast) window.showGlobalToast('✅ 4D Time-Lapse Completed — Showing Current Live Telemetry (Q3 2026)', 'success');
-              return;
-            }
-            slider.value = nextVal;
-            updateSnapshot(nextVal);
-          }, 1200);
-        }
-      });
-    }
   }
 };
 
