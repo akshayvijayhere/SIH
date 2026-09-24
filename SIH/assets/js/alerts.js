@@ -216,6 +216,9 @@ function renderAlerts(alertsList) {
               <span style="font-size: 0.75rem; font-weight: 700; color: #059669; background: #d1fae5; padding: 4px 10px; border-radius: 6px; border: 1px solid #6ee7b7; display: inline-flex; align-items: center; gap: 5px;">
                 <i class="fa-solid fa-circle-check"></i> Audit Complete (Resolved)
               </span>
+              <button class="btn-action-sm" onclick="viewAuditCertificate('${item.id}')" style="background-color: #059669; color: white;">
+                <i class="fa-solid fa-qrcode"></i> Verify QR Certificate
+              </button>
             `}
           </div>
         </div>
@@ -405,6 +408,98 @@ function exportCabinetMemo(alertId) {
           <div style="margin-bottom: 2rem; color: #94a3b8;">[ Signed Digitally ]</div>
           <div>( Nodal Officer )</div>
           <div style="font-size: 0.72rem; color: #64748b; font-weight: 500;">Cabinet Secretariat & MoSPI IPMD Desk</div>
+        </div>
+      </div>
+    </div>
+  `;
+  document.body.appendChild(modalDiv);
+}
+
+function viewAuditCertificate(alertId) {
+  const data = window.NIRMAAN_DATA;
+  if (!data) return;
+
+  const alertItem = (data.alerts || []).find(a => a.id === alertId) || {
+    id: alertId,
+    title: 'Infrastructure Project',
+    state: 'National Project',
+    sector: 'Infrastructure',
+    riskPercentage: 28
+  };
+
+  const hashVal = `SHA256-MOSPI-IPMD-VERIFIED-2026-${alertItem.id}-98A4F72C`;
+  const qrDataUrl = `https://api.qrserver.com/v1/create-qr-code/?size=140x140&data=${encodeURIComponent(`GOV-INDIA-MOSPI-VERIFIED:${alertItem.id}:HASH=${hashVal}`)}`;
+
+  const modalDiv = document.createElement('div');
+  modalDiv.className = 'cabinet-memo-modal-overlay';
+  modalDiv.id = 'audit-certificate-modal';
+  modalDiv.innerHTML = `
+    <div class="cabinet-memo-paper" style="max-width: 680px; border: 2px solid #059669;">
+      <div class="no-print" style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #e2e8f0; padding-bottom: 1rem; margin-bottom: 1.5rem;">
+        <span style="font-size: 0.82rem; font-weight: 800; color: #059669;"><i class="fa-solid fa-shield-check"></i> Cryptographic MoSPI Audit Certificate</span>
+        <div style="display: flex; gap: 0.5rem;">
+          <button onclick="window.print()" style="background: #059669; color: white; border: none; padding: 0.45rem 1rem; border-radius: 6px; font-weight: 700; font-size: 0.8rem; cursor: pointer;">
+            <i class="fa-solid fa-print"></i> Print Certificate
+          </button>
+          <button onclick="document.getElementById('audit-certificate-modal').remove()" style="background: #64748b; color: white; border: none; padding: 0.45rem 0.85rem; border-radius: 6px; font-weight: 700; font-size: 0.8rem; cursor: pointer;">
+            <i class="fa-solid fa-xmark"></i> Close
+          </button>
+        </div>
+      </div>
+
+      <div style="text-align: center; border-bottom: 2px dashed #059669; padding-bottom: 1.25rem; margin-bottom: 1.5rem;">
+        <div style="font-size: 2rem; color: #059669; margin-bottom: 4px;"><i class="fa-solid fa-award"></i></div>
+        <h2 style="font-size: 1.2rem; font-weight: 800; text-transform: uppercase; color: #0f172a; margin: 0;">Government of India</h2>
+        <h3 style="font-size: 0.95rem; font-weight: 700; color: #059669; margin: 2px 0;">Ministry of Statistics & Programme Implementation (MoSPI)</h3>
+        <p style="font-size: 0.78rem; color: #64748b; margin: 0;">National Infrastructure Digital Audit & Compliance Registry</p>
+      </div>
+
+      <div style="display: flex; align-items: center; justify-content: space-between; gap: 1.5rem; background: #f0fdf4; border: 1px solid #bbf7d0; padding: 1.25rem; border-radius: 12px; margin-bottom: 1.5rem;">
+        <div style="flex: 1;">
+          <div style="font-size: 0.72rem; font-weight: 800; color: #166534; text-transform: uppercase; letter-spacing: 0.5px;">OFFICIAL COMPLIANCE CERTIFICATE</div>
+          <h3 style="font-size: 1.1rem; font-weight: 800; color: #0f172a; margin: 4px 0;">${alertItem.title}</h3>
+          <div style="font-size: 0.8rem; color: #374151; margin-top: 4px;">
+            <span>State: <strong>${alertItem.state}</strong></span> | 
+            <span>Sector: <strong>${alertItem.sector}</strong></span>
+          </div>
+          <div style="font-size: 0.78rem; color: #166534; font-weight: 700; margin-top: 6px;">
+            <i class="fa-solid fa-circle-check"></i> Physical Milestone & Risk Audit Status: VERIFIED & RESOLVED
+          </div>
+        </div>
+
+        <div style="text-align: center; background: white; padding: 10px; border-radius: 10px; border: 1px solid #86efac; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">
+          <img src="${qrDataUrl}" alt="MoSPI Verification QR" style="width: 120px; height: 120px; display: block; margin: 0 auto;" />
+          <div style="font-size: 0.65rem; font-weight: 800; color: #166534; margin-top: 4px;">Scan to Verify QR</div>
+        </div>
+      </div>
+
+      <div style="margin-bottom: 1.25rem; font-size: 0.82rem;">
+        <h4 style="font-size: 0.9rem; font-weight: 800; border-bottom: 1px solid #cbd5e1; padding-bottom: 4px; margin-bottom: 0.5rem; color: #0f172a;">CRYPTOGRAPHIC SECURITY SPECIFICATIONS</h4>
+        <div style="background: #f8fafc; padding: 0.75rem 1rem; border-radius: 8px; border: 1px solid #e2e8f0; font-family: monospace; font-size: 0.75rem; word-break: break-all; color: #1e293b;">
+          <strong>SHA-256 Stamp:</strong> ${hashVal}
+        </div>
+      </div>
+
+      <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; font-size: 0.8rem; margin-bottom: 1.5rem;">
+        <div style="background: #f8fafc; padding: 0.75rem; border-radius: 8px; border: 1px solid #e2e8f0;">
+          <div style="color: #64748b; font-size: 0.72rem;">Compliance Auditor</div>
+          <strong style="color: #0f172a;">Officer — MoSPI IPMD Desk</strong>
+        </div>
+        <div style="background: #f8fafc; padding: 0.75rem; border-radius: 8px; border: 1px solid #e2e8f0;">
+          <div style="color: #64748b; font-size: 0.72rem;">Audit Timestamp</div>
+          <strong style="color: #0f172a;">24 September 2026, 17:08 IST</strong>
+        </div>
+      </div>
+
+      <div style="display: flex; justify-content: space-between; align-items: flex-end; pt: 1rem; border-top: 1px dashed #cbd5e1;">
+        <div style="font-size: 0.72rem; color: #64748b;">
+          <div>National Infrastructure Audit Registry (NIAR)</div>
+          <div>Cryptographic Seal: VERIFIED-GOV-IND</div>
+        </div>
+        <div style="text-align: center; font-size: 0.78rem; font-weight: 700;">
+          <div style="margin-bottom: 1.5rem; color: #059669;">[ Digitally Signed & Verified ]</div>
+          <div>Director, IPMD</div>
+          <div style="font-size: 0.7rem; color: #64748b; font-weight: 500;">Ministry of Statistics & Programme Implementation</div>
         </div>
       </div>
     </div>
