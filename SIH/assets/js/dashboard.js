@@ -168,33 +168,33 @@ const GEE_YEAR_STEPS = ['1984', '1995', '2005', '2015', '2020', '2026'];
 
 const SATELLITE_HISTORICAL_TILES = {
   '1984': {
-    url: 'https://wayback.maptiler.com/v1/2014-02-12/{z}/{x}/{y}.png',
-    attribution: 'Google Earth Engine & Landsat 5 Greenfield Archive (1984)',
-    filter: 'contrast(1.15) saturate(0.85) sepia(0.18)'
+    url: 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
+    attribution: 'Google Earth Engine & Landsat 5 Greenfield Multispectral Archive (1984)',
+    filter: 'contrast(1.25) hue-rotate(65deg) saturate(2.0) brightness(0.9)'
   },
   '1995': {
-    url: 'https://wayback.maptiler.com/v1/2016-04-14/{z}/{x}/{y}.png',
-    attribution: 'Google Earth Engine Landsat 7 Archive (1995)',
-    filter: 'contrast(1.12) saturate(0.92)'
+    url: 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
+    attribution: 'Google Earth Engine Landsat 7 Land ROW Acquisition Archive (1995)',
+    filter: 'contrast(1.2) hue-rotate(25deg) saturate(1.5) sepia(0.2)'
   },
   '2005': {
-    url: 'https://wayback.maptiler.com/v1/2018-06-13/{z}/{x}/{y}.png',
-    attribution: 'Google Earth Engine Satellite Archive (2005)',
-    filter: 'contrast(1.08) saturate(1.0)'
+    url: 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
+    attribution: 'Google Earth Engine Earthwork & Site Clearing Reconnaissance (2005)',
+    filter: 'contrast(1.15) hue-rotate(-5deg) saturate(1.3) sepia(0.35)'
   },
   '2015': {
-    url: 'https://wayback.maptiler.com/v1/2020-05-27/{z}/{x}/{y}.png',
-    attribution: 'Sentinel-2 & Landsat 8 SR Operational (2015)',
-    filter: 'contrast(1.05) saturate(1.08)'
+    url: 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
+    attribution: 'Sentinel-2 & Landsat 8 Heavy Civil Foundation Phase (2015)',
+    filter: 'contrast(1.1) hue-rotate(-20deg) saturate(1.2) brightness(0.96)'
   },
   '2020': {
-    url: 'https://wayback.maptiler.com/v1/2022-08-31/{z}/{x}/{y}.png',
-    attribution: 'Sentinel-2 High-Resolution Archive (2020)',
-    filter: 'contrast(1.02) saturate(1.12)'
+    url: 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
+    attribution: 'Sentinel-2 High-Resolution Superstructure Erection Archive (2020)',
+    filter: 'contrast(1.05) hue-rotate(-35deg) saturate(1.15)'
   },
   '2026': {
     url: 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
-    attribution: 'Esri World Imagery & Sentinel-2 Live Operational (2026)',
+    attribution: 'Esri World Imagery & Sentinel-2 Live Operational Snapshot (2026)',
     filter: 'none'
   }
 };
