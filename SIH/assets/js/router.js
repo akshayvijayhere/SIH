@@ -43,7 +43,6 @@ window.NIRMAAN_ROUTER = {
     if (viewId === 'view-project-detail' && typeof initProjectDetailView === 'function') initProjectDetailView(params.projectId);
     if (viewId === 'view-analytics' && typeof initAnalyticsView === 'function') initAnalyticsView();
     if (viewId === 'view-alerts' && typeof initAlertCenter === 'function') initAlertCenter();
-    if (viewId === 'view-ai-assistant' && typeof initAIAssistant === 'function') initAIAssistant();
     if (viewId === 'view-settings' && typeof initSettings === 'function') initSettings();
 
     window.scrollTo(0, 0);

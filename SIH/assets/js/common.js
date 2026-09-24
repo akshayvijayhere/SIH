@@ -380,13 +380,7 @@ function startGlobalVoiceSearch(inputElem, micBtnElem, currentPath) {
       if (inputElem) inputElem.value = transcript;
       showGlobalToast(`Recognized: "${transcript}"`, 'success');
 
-      if (currentPath === 'ai-assistant.html') {
-        const aiPrompt = document.getElementById('prompt-input');
-        if (aiPrompt) {
-          aiPrompt.value = transcript;
-          document.getElementById('send-prompt-btn')?.click();
-        }
-      } else if (currentPath === 'projects.html') {
+      if (currentPath === 'projects.html') {
         const projSearch = document.getElementById('project-search-input');
         if (projSearch) {
           projSearch.value = transcript;
