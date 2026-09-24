@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NIRMAAN AI - Contractor & Nodal Agency Credit Rating Portal | MoSPI</title>
+  
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="assets/css/common.css">
+  <link rel="stylesheet" href="assets/css/components.css">
+  <link rel="stylesheet" href="assets/css/projects.css">
+</head>
+<body>
+
+  <div class="dashboard-shell-layout">
+    <!-- Sidebar Navigation -->
+    <aside class="app-sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-brand-icon"><i class="fa-solid fa-city"></i></div>
+        <div class="sidebar-brand-text">
+          <h2>NIRMAAN AI</h2>
+          <p>Infrastructure Intelligence</p>
+        </div>
+      </div>
+
+      <nav class="sidebar-nav">
+        <a class="nav-item" href="dashboard.html">
+          <div class="nav-item-left"><i class="fa-solid fa-house"></i> <span>Dashboard</span></div>
+        </a>
+        <a class="nav-item" href="projects.html">
+          <div class="nav-item-left"><i class="fa-solid fa-folder"></i> <span>Projects</span></div>
+        </a>
+        <a class="nav-item" href="analytics.html">
+          <div class="nav-item-left"><i class="fa-solid fa-chart-simple"></i> <span>Analytics</span></div>
+        </a>
+        <a class="nav-item" href="alerts.html">
+          <div class="nav-item-left"><i class="fa-solid fa-bell"></i> <span>Alerts</span></div>
+          <span class="nav-badge">3</span>
+        </a>
+        <a class="nav-item active" href="contractors.html">
+          <div class="nav-item-left"><i class="fa-solid fa-user-shield"></i> <span>Contractors</span></div>
+        </a>
+        <a class="nav-item" href="ai-assistant.html">
+          <div class="nav-item-left"><i class="fa-solid fa-robot"></i> <span>AI Assistant</span></div>
+        </a>
+        <a class="nav-item" href="settings.html">
+          <div class="nav-item-left"><i class="fa-solid fa-gear"></i> <span>Settings</span></div>
+        </a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div style="font-size: 0.7rem; color: #94a3b8; margin-bottom: 0.5rem;">Building a Safer, Stronger Tomorrow</div>
+        <div class="sidebar-gov-footer">
+          <i class="fa-solid fa-landmark"></i>
+          <span>Government of India</span>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="app-main-content">
+      <header class="app-topbar">
+        <div class="topbar-search">
+          <i class="fa-solid fa-magnifying-glass topbar-search-icon"></i>
+          <input type="text" placeholder="Search contractor, agency, tender status...">
+        </div>
+
+        <div class="topbar-right">
+          <a class="notification-btn" href="alerts.html">
+            <i class="fa-regular fa-bell"></i>
+            <span class="notification-badge-dot">3</span>
+          </a>
+
+          <div class="user-profile-badge" id="profile-dropdown-btn">
+            <div class="profile-avatar">O</div>
+            <div class="profile-details">
+              <h4>Officer</h4>
+              <p>Government Official</p>
+            </div>
+            <i class="fa-solid fa-chevron-down" style="font-size: 0.75rem; color: var(--text-muted);"></i>
+          </div>
+        </div>
+      </header>
+
+      <div class="page-content-area">
+        <div class="projects-layout">
+          <div>
+            <h1 style="font-size: 1.4rem; font-weight: 800;">Contractor & Nodal Agency Credit Portal</h1>
+            <p style="font-size: 0.85rem; color: var(--text-muted);">MoSPI Performance Intelligence, AI Health Scores, Liquidated Damages Audit & Tender Eligibility Ratings.</p>
+          </div>
+
+          <!-- Key Metrics Grid -->
+          <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem;">
+            <div class="kpi-card" style="background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: 14px; padding: 1.15rem; display: flex; align-items: center; gap: 1rem;">
+              <div style="width: 44px; height: 44px; border-radius: 12px; background: rgba(59, 130, 246, 0.12); color: #2563eb; display: flex; align-items: center; justify-content: center; font-size: 1.25rem;">
+                <i class="fa-solid fa-building"></i>
+              </div>
+              <div>
+                <div style="font-size: 0.75rem; color: var(--text-muted); font-weight: 600;">Monitored Contractors</div>
+                <div style="font-size: 1.5rem; font-weight: 800; color: var(--text-main);">28 Major Firms</div>
+              </div>
+            </div>
+
+            <div class="kpi-card" style="background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: 14px; padding: 1.15rem; display: flex; align-items: center; gap: 1rem;">
+              <div style="width: 44px; height: 44px; border-radius: 12px; background: rgba(16, 185, 129, 0.12); color: #10b981; display: flex; align-items: center; justify-content: center; font-size: 1.25rem;">
+                <i class="fa-solid fa-heart-pulse"></i>
+              </div>
+              <div>
+                <div style="font-size: 0.75rem; color: var(--text-muted); font-weight: 600;">Avg AI Health Index</div>
+                <div style="font-size: 1.5rem; font-weight: 800; color: #10b981;">79.2 / 100</div>
+              </div>
+            </div>
+
+            <div class="kpi-card" style="background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: 14px; padding: 1.15rem; display: flex; align-items: center; gap: 1rem;">
+              <div style="width: 44px; height: 44px; border-radius: 12px; background: rgba(245, 158, 11, 0.12); color: #f59e0b; display: flex; align-items: center; justify-content: center; font-size: 1.25rem;">
+                <i class="fa-solid fa-gavel"></i>
+              </div>
+              <div>
+                <div style="font-size: 0.75rem; color: var(--text-muted); font-weight: 600;">Active Litigation / Disputes</div>
+                <div style="font-size: 1.5rem; font-weight: 800; color: #f59e0b;">14 Arbitrations</div>
+              </div>
+            </div>
+
+            <div class="kpi-card" style="background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: 14px; padding: 1.15rem; display: flex; align-items: center; gap: 1rem;">
+              <div style="width: 44px; height: 44px; border-radius: 12px; background: rgba(239, 68, 68, 0.12); color: #ef4444; display: flex; align-items: center; justify-content: center; font-size: 1.25rem;">
+                <i class="fa-solid fa-receipt"></i>
+              </div>
+              <div>
+                <div style="font-size: 0.75rem; color: var(--text-muted); font-weight: 600;">Delay Penalties Issued</div>
+                <div style="font-size: 1.5rem; font-weight: 800; color: #ef4444;">₹485 Cr</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Filter & Search Bar -->
+          <div class="projects-filter-bar" style="display: flex; flex-direction: column; gap: 0.85rem;">
+            <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.75rem;">
+              <div class="filter-group-inline" style="display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap;">
+                <div style="position: relative; display: flex; align-items: center;">
+                  <i class="fa-solid fa-magnifying-glass" style="position: absolute; left: 10px; font-size: 0.8rem; color: var(--text-muted);"></i>
+                  <input type="text" id="contractor-search-input" placeholder="Search contractor name, agency..." style="padding: 0.4rem 0.6rem 0.4rem 2rem; border-radius: 8px; border: 1px solid var(--border-color); font-size: 0.8rem; width: 240px;">
+                </div>
+
+                <label style="font-size: 0.8rem; font-weight: 600;">Category:</label>
+                <select id="contractor-filter-category">
+                  <option value="all">All Categories</option>
+                  <option value="EPC Contractor">EPC Contractors</option>
+                  <option value="Nodal Agency">Nodal Ministry Agencies</option>
+                  <option value="PSU Execution">PSU Executing Agencies</option>
+                </select>
+
+                <label style="font-size: 0.8rem; font-weight: 600;">Tender Rating:</label>
+                <select id="contractor-filter-rating">
+                  <option value="all">All Ratings</option>
+                  <option value="Tier-1 Preferred">Tier-1 Preferred (Health ≥80)</option>
+                  <option value="Conditional Approval">Conditional Approval (60-79)</option>
+                  <option value="Under Watch">Under Watch (<60)</option>
+                </select>
+              </div>
+
+              <div style="display: flex; align-items: center; gap: 0.5rem;">
+                <button class="btn-action-sm" id="btn-export-contractor-pdf" style="background-color: #3b82f6; color: white;"><i class="fa-solid fa-print"></i> Print Audit Audit</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Contractor Data Table -->
+          <div class="data-table-container">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Contractor / Agency Name</th>
+                  <th>Type</th>
+                  <th>Monitored Projects</th>
+                  <th>On-Time Velocity %</th>
+                  <th>AI Health Index</th>
+                  <th>Tender Status</th>
+                  <th>Active Disputes</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody id="contractors-table-body"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Contractor Audit Modal -->
+  <div id="contractor-modal" class="modal-overlay" style="display: none; position: fixed; inset: 0; background: rgba(15, 23, 42, 0.75); backdrop-filter: blur(8px); z-index: 9999; justify-content: center; align-items: center; padding: 1.5rem;">
+    <div class="modal-card" style="background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: 20px; width: 100%; max-width: 850px; max-height: 90vh; display: flex; flex-direction: column; overflow: hidden; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.35);">
+      <div style="padding: 1.25rem 1.75rem; border-bottom: 1px solid var(--border-color); display: flex; align-items: center; justify-content: space-between; background: linear-gradient(135deg, rgba(59, 130, 246, 0.08) 0%, rgba(37, 99, 235, 0.02) 100%);">
+        <div style="display: flex; align-items: center; gap: 0.85rem;">
+          <div style="width: 42px; height: 42px; border-radius: 12px; background: rgba(59, 130, 246, 0.15); color: #2563eb; display: flex; align-items: center; justify-content: center; font-size: 1.25rem;">
+            <i class="fa-solid fa-user-shield"></i>
+          </div>
+          <div>
+            <h2 id="modal-contractor-name" style="font-size: 1.2rem; font-weight: 800; color: var(--text-main); margin: 0;">Contractor Credit Profile</h2>
+            <p style="font-size: 0.78rem; color: var(--text-muted); margin: 0;">MoSPI Comprehensive Performance, Penalties & Tender Eligibility Audit</p>
+          </div>
+        </div>
+        <button id="close-contractor-modal" style="background: transparent; border: none; font-size: 1.3rem; color: var(--text-muted); cursor: pointer;"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+
+      <div style="padding: 1.5rem; overflow-y: auto; flex: 1; display: flex; flex-direction: column; gap: 1.25rem;" id="modal-contractor-body">
+      </div>
+
+      <div style="padding: 1rem 1.75rem; border-top: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; background: var(--bg-surface);">
+        <span style="font-size: 0.78rem; color: var(--text-muted);"><i class="fa-solid fa-shield-halved"></i> Ministry of Statistics & Programme Implementation Audit</span>
+        <button class="btn-action-sm" id="btn-close-contractor-modal" style="background-color: var(--bg-app); border: 1px solid var(--border-color); color: var(--text-main);">Close Profile</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="assets/js/data.js"></script>
+  <script src="assets/js/api.js"></script>
+  <script src="assets/js/common.js"></script>
+  <script src="assets/js/contractors.js"></script>
+</body>
+</html>
