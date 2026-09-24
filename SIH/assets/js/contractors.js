@@ -184,11 +184,11 @@ function renderContractorsTable() {
   container.innerHTML = currentFilteredContractors.map((c, idx) => {
     let ratingBadge = '';
     if (c.rating === 'Tier-1 Preferred') {
-      ratingBadge = `<span style="background: rgba(16, 185, 129, 0.12); color: #10b981; padding: 4px 10px; border-radius: 20px; font-size: 0.72rem; font-weight: 800; border: 1px solid rgba(16, 185, 129, 0.3); display: inline-flex; align-items: center; gap: 5px;"><i class="fa-solid fa-circle-check"></i> Tier-1 Preferred</span>`;
+      ratingBadge = `<span style="background: rgba(16, 185, 129, 0.12); color: #10b981; padding: 4px 10px; border-radius: 20px; font-size: 0.72rem; font-weight: 800; border: 1px solid rgba(16, 185, 129, 0.3); display: inline-flex; align-items: center; gap: 5px; white-space: nowrap;"><i class="fa-solid fa-circle-check"></i> Tier-1 Preferred</span>`;
     } else if (c.rating === 'Conditional Approval' || c.rating === 'Conditional') {
-      ratingBadge = `<span style="background: rgba(245, 158, 11, 0.12); color: #d97706; padding: 4px 10px; border-radius: 20px; font-size: 0.72rem; font-weight: 800; border: 1px solid rgba(245, 158, 11, 0.3); display: inline-flex; align-items: center; gap: 5px;"><i class="fa-solid fa-triangle-exclamation"></i> Conditional</span>`;
+      ratingBadge = `<span style="background: rgba(245, 158, 11, 0.12); color: #d97706; padding: 4px 10px; border-radius: 20px; font-size: 0.72rem; font-weight: 800; border: 1px solid rgba(245, 158, 11, 0.3); display: inline-flex; align-items: center; gap: 5px; white-space: nowrap;"><i class="fa-solid fa-triangle-exclamation"></i> Conditional</span>`;
     } else {
-      ratingBadge = `<span style="background: rgba(239, 68, 68, 0.12); color: #ef4444; padding: 4px 10px; border-radius: 20px; font-size: 0.72rem; font-weight: 800; border: 1px solid rgba(239, 68, 68, 0.3); display: inline-flex; align-items: center; gap: 5px;"><i class="fa-solid fa-circle-xmark"></i> Under Watch</span>`;
+      ratingBadge = `<span style="background: rgba(239, 68, 68, 0.12); color: #ef4444; padding: 4px 10px; border-radius: 20px; font-size: 0.72rem; font-weight: 800; border: 1px solid rgba(239, 68, 68, 0.3); display: inline-flex; align-items: center; gap: 5px; white-space: nowrap;"><i class="fa-solid fa-circle-xmark"></i> Under Watch</span>`;
     }
 
     const healthColor = c.healthScore >= 80 ? '#10b981' : (c.healthScore >= 60 ? '#f59e0b' : '#ef4444');
@@ -213,50 +213,50 @@ function renderContractorsTable() {
     // Dispute badge
     let disputeBadge = '';
     if (c.disputes.includes('0') || c.disputes.toLowerCase().includes('clean')) {
-      disputeBadge = `<span style="color: #10b981; font-size: 0.76rem; font-weight: 700; background: rgba(16, 185, 129, 0.1); padding: 3px 8px; border-radius: 6px;"><i class="fa-solid fa-shield-check"></i> Clean Record</span>`;
+      disputeBadge = `<span style="color: #10b981; font-size: 0.76rem; font-weight: 700; background: rgba(16, 185, 129, 0.1); padding: 4px 10px; border-radius: 6px; white-space: nowrap;"><i class="fa-solid fa-shield-check"></i> Clean Record</span>`;
     } else if (c.disputes.includes('1') || c.disputes.includes('2')) {
-      disputeBadge = `<span style="color: #f59e0b; font-size: 0.76rem; font-weight: 700; background: rgba(245, 158, 11, 0.1); padding: 3px 8px; border-radius: 6px;"><i class="fa-solid fa-gavel"></i> ${c.disputes}</span>`;
+      disputeBadge = `<span style="color: #f59e0b; font-size: 0.76rem; font-weight: 700; background: rgba(245, 158, 11, 0.1); padding: 4px 10px; border-radius: 6px; white-space: nowrap;"><i class="fa-solid fa-gavel"></i> ${c.disputes}</span>`;
     } else {
-      disputeBadge = `<span style="color: #ef4444; font-size: 0.76rem; font-weight: 700; background: rgba(239, 68, 68, 0.1); padding: 3px 8px; border-radius: 6px;"><i class="fa-solid fa-triangle-exclamation"></i> ${c.disputes}</span>`;
+      disputeBadge = `<span style="color: #ef4444; font-size: 0.76rem; font-weight: 700; background: rgba(239, 68, 68, 0.1); padding: 4px 10px; border-radius: 6px; white-space: nowrap;"><i class="fa-solid fa-triangle-exclamation"></i> ${c.disputes}</span>`;
     }
 
     return `
       <tr style="border-bottom: 1px solid var(--border-color); transition: background 0.2s ease;">
-        <td style="padding: 1rem 0.75rem; font-size: 0.8rem; font-weight: 700; color: var(--text-muted); text-align: center;">${idx + 1}</td>
-        <td style="padding: 1rem;">
-          <div style="display: flex; align-items: center; gap: 0.85rem;">
+        <td style="padding: 0.75rem 0.5rem; font-size: 0.8rem; font-weight: 700; color: var(--text-muted); text-align: center; white-space: nowrap;">${idx + 1}</td>
+        <td style="padding: 0.75rem 0.6rem;">
+          <div style="display: flex; align-items: center; gap: 0.75rem;">
             ${entityAvatar}
             <div>
-              <div style="font-size: 0.88rem; font-weight: 800; color: var(--text-main); margin-bottom: 2px;">${escapeHtml(c.name)}</div>
-              <div style="font-size: 0.73rem; color: #2563eb; font-weight: 700;">
+              <div style="font-size: 0.86rem; font-weight: 800; color: var(--text-main); margin-bottom: 2px;">${escapeHtml(c.name)}</div>
+              <div style="font-size: 0.72rem; color: #2563eb; font-weight: 700; white-space: nowrap;">
                 <i class="fa-solid fa-coins"></i> Capital Outlay: <strong>${c.capitalOutlay}</strong>
               </div>
             </div>
           </div>
         </td>
-        <td style="padding: 1rem; text-align: left;">
+        <td style="padding: 0.75rem 0.6rem; text-align: left; white-space: nowrap;">
           <span style="font-size: 0.75rem; font-weight: 700; color: var(--text-muted); background: var(--bg-app); border: 1px solid var(--border-color); padding: 4px 10px; border-radius: 6px; display: inline-flex; align-items: center; gap: 5px;">
             <i class="fa-solid ${typeIcon}"></i> ${c.type}
           </span>
         </td>
-        <td style="padding: 1rem; text-align: center;">
-          <span style="font-weight: 800; font-size: 0.85rem; color: var(--text-main); background: var(--bg-app); border: 1px solid var(--border-color); padding: 4px 10px; border-radius: 8px; display: inline-block;">${c.projectsCount} Mega Projects</span>
+        <td style="padding: 0.75rem 0.6rem; text-align: center; white-space: nowrap;">
+          <span style="font-weight: 800; font-size: 0.82rem; color: var(--text-main); background: var(--bg-app); border: 1px solid var(--border-color); padding: 4px 10px; border-radius: 8px; display: inline-block;">${c.projectsCount} Mega Projects</span>
         </td>
-        <td style="padding: 1rem; text-align: left;">
-          <div style="display: flex; align-items: center; gap: 0.6rem;">
-            <div class="progress-bar-wrap" style="width: 80px; height: 8px; background: rgba(0,0,0,0.08); border-radius: 4px; overflow: hidden;"><div class="progress-bar-fill" style="width: ${c.velocity}%; height: 100%; background: linear-gradient(90deg, #2563eb, #38bdf8); border-radius: 4px;"></div></div>
+        <td style="padding: 0.75rem 0.6rem; text-align: left; white-space: nowrap;">
+          <div style="display: flex; align-items: center; gap: 0.5rem;">
+            <div class="progress-bar-wrap" style="width: 70px; height: 7px; background: rgba(0,0,0,0.08); border-radius: 4px; overflow: hidden; flex-shrink: 0;"><div class="progress-bar-fill" style="width: ${c.velocity}%; height: 100%; background: linear-gradient(90deg, #2563eb, #38bdf8); border-radius: 4px;"></div></div>
             <span style="font-weight: 800; font-size: 0.82rem; color: var(--text-main);">${c.velocity}%</span>
           </div>
         </td>
-        <td style="padding: 1rem; text-align: center;">
-          <span style="font-weight: 800; font-size: 0.85rem; color: ${healthColor}; background: ${healthBg}; border: 1px solid ${healthColor}40; padding: 4px 10px; border-radius: 8px; display: inline-block;">
+        <td style="padding: 0.75rem 0.6rem; text-align: center; white-space: nowrap;">
+          <span style="font-weight: 800; font-size: 0.83rem; color: ${healthColor}; background: ${healthBg}; border: 1px solid ${healthColor}40; padding: 4px 10px; border-radius: 8px; display: inline-block;">
             ${c.healthScore} / 100
           </span>
         </td>
-        <td style="padding: 1rem; text-align: center;">${ratingBadge}</td>
-        <td style="padding: 1rem; text-align: center;">${disputeBadge}</td>
-        <td style="padding: 1rem 1rem 1rem 0.75rem; text-align: right;">
-          <button class="btn-action-sm" onclick="openContractorModal('${c.id}')" style="background: linear-gradient(135deg, #1e293b, #0f172a); color: white; border: 1px solid rgba(255,255,255,0.15); padding: 0.45rem 0.9rem; border-radius: 8px; font-weight: 700; font-size: 0.75rem; cursor: pointer; box-shadow: var(--shadow-sm); transition: all 0.2s; white-space: nowrap;">
+        <td style="padding: 0.75rem 0.6rem; text-align: center; white-space: nowrap;">${ratingBadge}</td>
+        <td style="padding: 0.75rem 0.6rem; text-align: center; white-space: nowrap;">${disputeBadge}</td>
+        <td style="padding: 0.75rem 0.75rem 0.75rem 0.6rem; text-align: right; white-space: nowrap;">
+          <button class="btn-action-sm" onclick="openContractorModal('${c.id}')" style="background: linear-gradient(135deg, #1e293b, #0f172a); color: white; border: 1px solid rgba(255,255,255,0.15); padding: 0.45rem 0.85rem; border-radius: 8px; font-weight: 700; font-size: 0.75rem; cursor: pointer; box-shadow: var(--shadow-sm); transition: all 0.2s; white-space: nowrap;">
             Audit Profile <i class="fa-solid fa-arrow-right" style="margin-left: 3px;"></i>
           </button>
         </td>

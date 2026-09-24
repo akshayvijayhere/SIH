@@ -173,19 +173,19 @@
           </div>
 
           <!-- Contractor Data Table -->
-          <div class="data-table-container" style="background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: 14px; overflow: hidden; box-shadow: var(--shadow-sm);">
-            <table class="data-table" style="width: 100%; border-collapse: collapse;">
+          <div class="data-table-container" style="background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: 14px; overflow-x: auto; box-shadow: var(--shadow-sm); width: 100%;">
+            <table class="data-table" style="width: 100%; min-width: 1150px; border-collapse: collapse; table-layout: auto;">
               <thead>
                 <tr style="background: var(--bg-app); border-bottom: 2px solid var(--border-color);">
-                  <th style="padding: 1rem 0.75rem 1rem 1rem; font-size: 0.75rem; font-weight: 800; text-transform: uppercase; color: var(--text-muted); text-align: center; width: 40px;">#</th>
-                  <th style="padding: 1rem; font-size: 0.75rem; font-weight: 800; text-transform: uppercase; color: var(--text-muted); text-align: left;">Contractor / Nodal Agency Entity</th>
-                  <th style="padding: 1rem; font-size: 0.75rem; font-weight: 800; text-transform: uppercase; color: var(--text-muted); text-align: left;">Category Type</th>
-                  <th style="padding: 1rem; font-size: 0.75rem; font-weight: 800; text-transform: uppercase; color: var(--text-muted); text-align: center;">Mega Portfolio</th>
-                  <th style="padding: 1rem; font-size: 0.75rem; font-weight: 800; text-transform: uppercase; color: var(--text-muted); text-align: left;">Execution Velocity</th>
-                  <th style="padding: 1rem; font-size: 0.75rem; font-weight: 800; text-transform: uppercase; color: var(--text-muted); text-align: center;">AI Health Score</th>
-                  <th style="padding: 1rem; font-size: 0.75rem; font-weight: 800; text-transform: uppercase; color: var(--text-muted); text-align: center;">Tender Rating</th>
-                  <th style="padding: 1rem; font-size: 0.75rem; font-weight: 800; text-transform: uppercase; color: var(--text-muted); text-align: center;">Dispute Record</th>
-                  <th style="padding: 1rem 1rem 1rem 0.75rem; font-size: 0.75rem; font-weight: 800; text-transform: uppercase; color: var(--text-muted); text-align: right;">Audit Action</th>
+                  <th style="padding: 0.75rem 0.5rem; font-size: 0.72rem; font-weight: 800; text-transform: uppercase; color: var(--text-muted); text-align: center; width: 35px; white-space: nowrap;">#</th>
+                  <th style="padding: 0.75rem 0.6rem; font-size: 0.72rem; font-weight: 800; text-transform: uppercase; color: var(--text-muted); text-align: left; min-width: 250px; white-space: nowrap;">Contractor / Nodal Agency Entity</th>
+                  <th style="padding: 0.75rem 0.6rem; font-size: 0.72rem; font-weight: 800; text-transform: uppercase; color: var(--text-muted); text-align: left; white-space: nowrap;">Category Type</th>
+                  <th style="padding: 0.75rem 0.6rem; font-size: 0.72rem; font-weight: 800; text-transform: uppercase; color: var(--text-muted); text-align: center; white-space: nowrap;">Mega Portfolio</th>
+                  <th style="padding: 0.75rem 0.6rem; font-size: 0.72rem; font-weight: 800; text-transform: uppercase; color: var(--text-muted); text-align: left; min-width: 130px; white-space: nowrap;">Execution Velocity</th>
+                  <th style="padding: 0.75rem 0.6rem; font-size: 0.72rem; font-weight: 800; text-transform: uppercase; color: var(--text-muted); text-align: center; white-space: nowrap;">AI Health Score</th>
+                  <th style="padding: 0.75rem 0.6rem; font-size: 0.72rem; font-weight: 800; text-transform: uppercase; color: var(--text-muted); text-align: center; white-space: nowrap;">Tender Rating</th>
+                  <th style="padding: 0.75rem 0.6rem; font-size: 0.72rem; font-weight: 800; text-transform: uppercase; color: var(--text-muted); text-align: center; white-space: nowrap;">Dispute Record</th>
+                  <th style="padding: 0.75rem 0.75rem 0.75rem 0.6rem; font-size: 0.72rem; font-weight: 800; text-transform: uppercase; color: var(--text-muted); text-align: right; white-space: nowrap;">Audit Action</th>
                 </tr>
               </thead>
               <tbody id="contractors-table-body"></tbody>
