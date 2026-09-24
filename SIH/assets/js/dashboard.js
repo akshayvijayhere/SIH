@@ -51,7 +51,11 @@ document.addEventListener('DOMContentLoaded', async () => {
   document.getElementById('btn-close-digest-footer')?.addEventListener('click', closeExecutiveDigestModal);
 
   document.getElementById('btn-print-executive-digest')?.addEventListener('click', () => {
+    document.body.classList.add('printing-digest');
     window.print();
+    setTimeout(() => {
+      document.body.classList.remove('printing-digest');
+    }, 600);
   });
 
   // Google Earth Engine 40-Year Time-Lapse Modal Listeners

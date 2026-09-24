@@ -186,15 +186,15 @@
 }
 
 @media print {
-  body * {
+  body.printing-memo body * {
     visibility: hidden;
   }
-  .cabinet-memo-modal-overlay,
-  .cabinet-memo-paper,
-  .cabinet-memo-paper * {
+  body.printing-memo .cabinet-memo-modal-overlay,
+  body.printing-memo .cabinet-memo-paper,
+  body.printing-memo .cabinet-memo-paper * {
     visibility: visible;
   }
-  .cabinet-memo-modal-overlay {
+  body.printing-memo .cabinet-memo-modal-overlay {
     position: absolute;
     left: 0;
     top: 0;
@@ -202,7 +202,7 @@
     background: transparent;
     padding: 0;
   }
-  .cabinet-memo-paper {
+  body.printing-memo .cabinet-memo-paper {
     box-shadow: none;
     border: none;
     max-width: 100%;

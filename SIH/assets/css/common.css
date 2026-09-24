@@ -571,4 +571,152 @@ a {
   background: #1d4ed8;
 }
 
+/* ==========================================================================
+   Executive Monthly PDF Digest & Print Design System
+   Guarantees exact background colors, crisp fonts, high-contrast badges & document letterhead
+   ========================================================================== */
+
+@media print {
+  /* Force browsers (Chrome, Safari, Edge) to print exact background colors and graphic fills */
+  *, *::before, *::after {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    color-adjust: exact !important;
+  }
+
+  @page {
+    size: A4 portrait;
+    margin: 12mm 15mm;
+  }
+
+  /* Hide app navigation UI, sidebars, floating widgets, and modal action footers */
+  .app-sidebar,
+  .app-topbar,
+  .copilot-fab,
+  .copilot-drawer,
+  .notification-btn,
+  .user-profile-badge,
+  .topbar-search,
+  .no-print,
+  #close-digest-modal,
+  #btn-close-digest-footer,
+  #btn-print-executive-digest,
+  .modal-card > div:first-child #close-digest-modal,
+  .modal-card > div:last-child {
+    display: none !important;
+  }
+
+  body {
+    background: #ffffff !important;
+    color: #0f172a !important;
+    font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  /* Hide main page layout when printing Executive Digest Modal */
+  body.printing-digest .app-main-content,
+  body.printing-digest .app-sidebar,
+  body.printing-digest .copilot-fab,
+  body.printing-digest .copilot-drawer {
+    display: none !important;
+  }
+
+  /* Expand Executive Digest modal to full printed paper size */
+  #executive-digest-modal {
+    position: static !important;
+    display: block !important;
+    background: #ffffff !important;
+    backdrop-filter: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    width: 100% !important;
+    box-shadow: none !important;
+  }
+
+  #executive-digest-modal .modal-card {
+    max-width: 100% !important;
+    max-height: none !important;
+    border: none !important;
+    box-shadow: none !important;
+    background: #ffffff !important;
+    overflow: visible !important;
+    border-radius: 0 !important;
+  }
+
+  #digest-report-content {
+    background: #ffffff !important;
+    color: #0f172a !important;
+    padding: 0 !important;
+    overflow: visible !important;
+  }
+
+  /* Colors and Background Fixes for PDF Digest Content */
+  #digest-report-content * {
+    color-adjust: exact !important;
+    -webkit-print-color-adjust: exact !important;
+  }
+
+  /* Letterhead Header styling */
+  #digest-report-content div[style*="border-bottom: 2px solid"] {
+    border-bottom: 2px solid #091e36 !important;
+    padding-bottom: 1rem !important;
+  }
+
+  #digest-report-content h2 {
+    color: #091e36 !important;
+  }
+
+  /* Stats Cards Grid with exact background fill */
+  #digest-report-content div[style*="grid-template-columns"] {
+    background-color: #f8fafc !important;
+    border: 1px solid #cbd5e1 !important;
+    border-radius: 12px !important;
+    padding: 1rem !important;
+    box-shadow: none !important;
+  }
+
+  #digest-report-content div[style*="grid-template-columns"] div {
+    color: #0f172a !important;
+  }
+
+  /* Sector Progress Table */
+  #digest-report-content table.data-table {
+    width: 100% !important;
+    border-collapse: collapse !important;
+    border: 1px solid #cbd5e1 !important;
+  }
+
+  #digest-report-content table.data-table th {
+    background-color: #f1f5f9 !important;
+    color: #1e293b !important;
+    font-weight: 800 !important;
+    border-bottom: 2px solid #94a3b8 !important;
+    padding: 0.6rem 0.75rem !important;
+  }
+
+  #digest-report-content table.data-table td {
+    background-color: #ffffff !important;
+    color: #0f172a !important;
+    border-bottom: 1px solid #e2e8f0 !important;
+    padding: 0.6rem 0.75rem !important;
+  }
+
+  /* Critical Projects list cards */
+  #digest-critical-projects-list > div {
+    background-color: #f8fafc !important;
+    border: 1px solid #cbd5e1 !important;
+    border-radius: 8px !important;
+    padding: 0.75rem 1rem !important;
+  }
+
+  #digest-critical-projects-list div[style*="color: var(--text-main)"] {
+    color: #0f172a !important;
+  }
+
+  #digest-critical-projects-list div[style*="color: var(--text-muted)"] {
+    color: #475569 !important;
+  }
+}
+
 
