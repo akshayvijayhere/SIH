@@ -120,6 +120,121 @@
               </div>
             </div>
           </div>
+
+          <!-- Interactive Land Acquisition & Environmental Clearance Cascade Simulator -->
+          <div class="analytics-card" style="background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: 16px; padding: 1.5rem; box-shadow: var(--shadow-sm); margin-top: 0.5rem;">
+            <div style="display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--border-color); padding-bottom: 0.85rem; margin-bottom: 1.25rem;">
+              <div style="display: flex; align-items: center; gap: 0.75rem;">
+                <div style="width: 42px; height: 42px; border-radius: 12px; background: rgba(245, 158, 11, 0.15); color: #d97706; display: flex; align-items: center; justify-content: center; font-size: 1.25rem;">
+                  <i class="fa-solid fa-sliders"></i>
+                </div>
+                <div>
+                  <h3 style="font-size: 1.15rem; font-weight: 800; color: var(--text-main); margin: 0;">Land Acquisition & Environmental Clearance Bottleneck Simulator</h3>
+                  <p style="font-size: 0.78rem; color: var(--text-muted); margin: 0;">Interactive Monte Carlo Delay Cascade Engine — Adjust Right-of-Way (ROW) completion % & environmental approval timelines to simulate real-time impact on project completion dates & capital outlay.</p>
+                </div>
+              </div>
+              <button id="btn-reset-simulator" class="btn-action-sm" style="background: var(--bg-app); border: 1px solid var(--border-color); color: var(--text-main);"><i class="fa-solid fa-rotate-left"></i> Reset Defaults</button>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; align-items: flex-start;">
+              <!-- Simulator Controls Column -->
+              <div style="display: flex; flex-direction: column; gap: 1.25rem; background: var(--bg-app); border: 1px solid var(--border-color); border-radius: 14px; padding: 1.25rem;">
+                
+                <!-- Target Sector Selector -->
+                <div>
+                  <label style="font-size: 0.82rem; font-weight: 700; color: var(--text-main); display: block; margin-bottom: 0.35rem;">Select Target National Sector:</label>
+                  <select id="sim-sector-select" style="width: 100%; padding: 0.5rem 0.85rem; border-radius: 8px; border: 1px solid var(--border-color); background: var(--bg-surface); font-size: 0.85rem; font-weight: 600;">
+                    <option value="Roads & Highways">Roads & Highways (NHAI / MoRTH)</option>
+                    <option value="Railways & Transit">Railways & Transit (Indian Railways / RVNL)</option>
+                    <option value="Energy & Power">Energy & Thermal Power (NTPC / PowerGrid)</option>
+                    <option value="Urban Transport">Urban Transport & Metro Rails</option>
+                  </select>
+                </div>
+
+                <!-- Slider 1: Land Acquisition ROW % -->
+                <div>
+                  <div style="display: flex; justify-content: space-between; font-size: 0.82rem; font-weight: 700; margin-bottom: 0.35rem;">
+                    <span>Right-of-Way (ROW) Land Handover:</span>
+                    <span id="sim-row-val" style="color: #2563eb;">65% Completed</span>
+                  </div>
+                  <input type="range" id="sim-row-slider" min="20" max="100" value="65" step="5" style="width: 100%; accent-color: #2563eb; cursor: pointer;">
+                  <div style="display: flex; justify-content: space-between; font-size: 0.68rem; color: var(--text-muted); margin-top: 2px;">
+                    <span>20% (Severe Delay)</span>
+                    <span>60% (Moderate)</span>
+                    <span>100% (Full ROW Clear)</span>
+                  </div>
+                </div>
+
+                <!-- Slider 2: Environmental & Forest Clearance Delay (Months) -->
+                <div>
+                  <div style="display: flex; justify-content: space-between; font-size: 0.82rem; font-weight: 700; margin-bottom: 0.35rem;">
+                    <span>Forest & Wildlife Clearance Delay:</span>
+                    <span id="sim-forest-val" style="color: #d97706;">+6 Months Delay</span>
+                  </div>
+                  <input type="range" id="sim-forest-slider" min="0" max="24" value="6" step="1" style="width: 100%; accent-color: #d97706; cursor: pointer;">
+                  <div style="display: flex; justify-content: space-between; font-size: 0.68rem; color: var(--text-muted); margin-top: 2px;">
+                    <span>0 Mo (On Track)</span>
+                    <span>12 Mo (High Risk)</span>
+                    <span>24 Mo (Critical Bottleneck)</span>
+                  </div>
+                </div>
+
+                <!-- Slider 3: Monsoon / Extreme Weather Disruption -->
+                <div>
+                  <div style="display: flex; justify-content: space-between; font-size: 0.82rem; font-weight: 700; margin-bottom: 0.35rem;">
+                    <span>Monsoon Working Days Lost:</span>
+                    <span id="sim-weather-val" style="color: #ef4444;">45 Days Lost</span>
+                  </div>
+                  <input type="range" id="sim-weather-slider" min="0" max="120" value="45" step="5" style="width: 100%; accent-color: #ef4444; cursor: pointer;">
+                </div>
+              </div>
+
+              <!-- Simulation Results & Impact Output Column -->
+              <div style="display: flex; flex-direction: column; gap: 1rem;">
+                <div style="background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: 14px; padding: 1.25rem; display: flex; flex-direction: column; gap: 1rem;">
+                  <div style="font-size: 0.85rem; font-weight: 800; text-transform: uppercase; color: var(--text-muted); letter-spacing: 0.5px;">
+                    Simulated Project Cascade Output
+                  </div>
+
+                  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                    <!-- Result Card 1: Estimated Completion Delay -->
+                    <div style="background: rgba(239, 68, 68, 0.08); border: 1px solid rgba(239, 68, 68, 0.2); border-radius: 12px; padding: 1rem; text-align: center;">
+                      <div style="font-size: 0.75rem; color: #ef4444; font-weight: 700;">Simulated Deadline Shift</div>
+                      <div id="sim-res-delay-months" style="font-size: 1.8rem; font-weight: 800; color: #ef4444; margin: 4px 0;">+11.4 Months</div>
+                      <div id="sim-res-completion-date" style="font-size: 0.75rem; color: var(--text-muted); font-weight: 600;">Est. Completion: May 2028</div>
+                    </div>
+
+                    <!-- Result Card 2: Projected Capital Cost Overrun -->
+                    <div style="background: rgba(245, 158, 11, 0.08); border: 1px solid rgba(245, 158, 11, 0.2); border-radius: 12px; padding: 1rem; text-align: center;">
+                      <div style="font-size: 0.75rem; color: #d97706; font-weight: 700;">Est. Financial Cost Overrun</div>
+                      <div id="sim-res-cost-overrun" style="font-size: 1.8rem; font-weight: 800; color: #d97706; margin: 4px 0;">+₹14,250 Cr</div>
+                      <div id="sim-res-overrun-pct" style="font-size: 0.75rem; color: var(--text-muted); font-weight: 600;">+18.4% above Approved Outlay</div>
+                    </div>
+                  </div>
+
+                  <!-- Risk Index Output Gauge Bar -->
+                  <div style="border-top: 1px solid var(--border-color); padding-top: 0.85rem;">
+                    <div style="display: flex; justify-content: space-between; font-size: 0.82rem; font-weight: 700; margin-bottom: 0.35rem;">
+                      <span>Simulated Sector Composite Risk Index:</span>
+                      <span id="sim-res-risk-index" style="color: #ef4444; font-weight: 800; font-size: 1rem;">78% (CRITICAL RISK)</span>
+                    </div>
+                    <div class="progress-bar-wrap" style="height: 10px;"><div id="sim-res-risk-bar" class="progress-bar-fill high-risk" style="width: 78%;"></div></div>
+                  </div>
+                </div>
+
+                <!-- AI MoSPI Mitigation Directive Box -->
+                <div style="background: linear-gradient(135deg, rgba(37, 99, 235, 0.08) 0%, rgba(16, 185, 129, 0.08) 100%); border: 1px solid rgba(37, 99, 235, 0.2); border-radius: 14px; padding: 1.15rem; display: flex; gap: 0.85rem; align-items: flex-start;">
+                  <div style="background: #2563eb; color: white; width: 36px; height: 36px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; flex-shrink: 0; margin-top: 2px;">
+                    <i class="fa-solid fa-wand-magic-sparkles"></i>
+                  </div>
+                  <div>
+                    <div style="font-size: 0.85rem; font-weight: 800; color: var(--text-main); margin-bottom: 0.25rem;">NIRMAAN AI Automated Mitigation Directive</div>
+                    <p id="sim-directive-text" style="font-size: 0.82rem; color: var(--text-main); line-height: 1.45; margin: 0;"></p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </main>
