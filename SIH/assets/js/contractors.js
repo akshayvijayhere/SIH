@@ -184,38 +184,80 @@ function renderContractorsTable() {
   container.innerHTML = currentFilteredContractors.map((c, idx) => {
     let ratingBadge = '';
     if (c.rating === 'Tier-1 Preferred') {
-      ratingBadge = `<span style="background: rgba(16, 185, 129, 0.12); color: #10b981; padding: 3px 10px; border-radius: 12px; font-size: 0.72rem; font-weight: 700; border: 1px solid rgba(16, 185, 129, 0.3);"><i class="fa-solid fa-circle-check"></i> Tier-1 Preferred</span>`;
-    } else if (c.rating === 'Conditional Approval') {
-      ratingBadge = `<span style="background: rgba(245, 158, 11, 0.12); color: #d97706; padding: 3px 10px; border-radius: 12px; font-size: 0.72rem; font-weight: 700; border: 1px solid rgba(245, 158, 11, 0.3);"><i class="fa-solid fa-triangle-exclamation"></i> Conditional</span>`;
+      ratingBadge = `<span style="background: rgba(16, 185, 129, 0.12); color: #10b981; padding: 4px 10px; border-radius: 20px; font-size: 0.72rem; font-weight: 800; border: 1px solid rgba(16, 185, 129, 0.3); display: inline-flex; align-items: center; gap: 5px;"><i class="fa-solid fa-circle-check"></i> Tier-1 Preferred</span>`;
+    } else if (c.rating === 'Conditional Approval' || c.rating === 'Conditional') {
+      ratingBadge = `<span style="background: rgba(245, 158, 11, 0.12); color: #d97706; padding: 4px 10px; border-radius: 20px; font-size: 0.72rem; font-weight: 800; border: 1px solid rgba(245, 158, 11, 0.3); display: inline-flex; align-items: center; gap: 5px;"><i class="fa-solid fa-triangle-exclamation"></i> Conditional</span>`;
     } else {
-      ratingBadge = `<span style="background: rgba(239, 68, 68, 0.12); color: #ef4444; padding: 3px 10px; border-radius: 12px; font-size: 0.72rem; font-weight: 700; border: 1px solid rgba(239, 68, 68, 0.3);"><i class="fa-solid fa-circle-xmark"></i> Under Watch</span>`;
+      ratingBadge = `<span style="background: rgba(239, 68, 68, 0.12); color: #ef4444; padding: 4px 10px; border-radius: 20px; font-size: 0.72rem; font-weight: 800; border: 1px solid rgba(239, 68, 68, 0.3); display: inline-flex; align-items: center; gap: 5px;"><i class="fa-solid fa-circle-xmark"></i> Under Watch</span>`;
     }
 
     const healthColor = c.healthScore >= 80 ? '#10b981' : (c.healthScore >= 60 ? '#f59e0b' : '#ef4444');
+    const healthBg = c.healthScore >= 80 ? 'rgba(16, 185, 129, 0.12)' : (c.healthScore >= 60 ? 'rgba(245, 158, 11, 0.12)' : 'rgba(239, 68, 68, 0.12)');
+
+    // Entity Icon / Badge Color based on name
+    let entityAvatar = '';
+    if (c.name.includes('Larsen')) entityAvatar = `<div style="width: 38px; height: 38px; border-radius: 10px; background: linear-gradient(135deg, #2563eb, #1d4ed8); color: white; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 0.8rem; flex-shrink: 0; box-shadow: 0 3px 8px rgba(37, 99, 235, 0.3);">L&T</div>`;
+    else if (c.name.includes('Tata')) entityAvatar = `<div style="width: 38px; height: 38px; border-radius: 10px; background: linear-gradient(135deg, #0284c7, #0369a1); color: white; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 0.75rem; flex-shrink: 0; box-shadow: 0 3px 8px rgba(2, 132, 199, 0.3);">TATA</div>`;
+    else if (c.name.includes('Afcons')) entityAvatar = `<div style="width: 38px; height: 38px; border-radius: 10px; background: linear-gradient(135deg, #8b5cf6, #6d28d9); color: white; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 0.78rem; flex-shrink: 0; box-shadow: 0 3px 8px rgba(139, 92, 246, 0.3);">AF</div>`;
+    else if (c.name.includes('Rail Vikas')) entityAvatar = `<div style="width: 38px; height: 38px; border-radius: 10px; background: linear-gradient(135deg, #f59e0b, #d97706); color: white; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 0.7rem; flex-shrink: 0; box-shadow: 0 3px 8px rgba(245, 158, 11, 0.3);">RVNL</div>`;
+    else if (c.name.includes('National Highways')) entityAvatar = `<div style="width: 38px; height: 38px; border-radius: 10px; background: linear-gradient(135deg, #10b981, #047857); color: white; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 0.7rem; flex-shrink: 0; box-shadow: 0 3px 8px rgba(16, 185, 129, 0.3);">NHAI</div>`;
+    else if (c.name.includes('Dilip')) entityAvatar = `<div style="width: 38px; height: 38px; border-radius: 10px; background: linear-gradient(135deg, #ec4899, #be185d); color: white; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 0.75rem; flex-shrink: 0; box-shadow: 0 3px 8px rgba(236, 72, 153, 0.3);">DBL</div>`;
+    else if (c.name.includes('Hindustan Construction')) entityAvatar = `<div style="width: 38px; height: 38px; border-radius: 10px; background: linear-gradient(135deg, #ef4444, #b91c1c); color: white; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 0.75rem; flex-shrink: 0; box-shadow: 0 3px 8px rgba(239, 68, 68, 0.3);">HCC</div>`;
+    else entityAvatar = `<div style="width: 38px; height: 38px; border-radius: 10px; background: linear-gradient(135deg, #64748b, #334155); color: white; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 0.75rem; flex-shrink: 0;">NCC</div>`;
+
+    // Type icon
+    let typeIcon = 'fa-building';
+    if (c.type === 'Nodal Agency') typeIcon = 'fa-landmark';
+    else if (c.type === 'PSU Execution') typeIcon = 'fa-train';
+
+    // Dispute badge
+    let disputeBadge = '';
+    if (c.disputes.includes('0') || c.disputes.toLowerCase().includes('clean')) {
+      disputeBadge = `<span style="color: #10b981; font-size: 0.76rem; font-weight: 700; background: rgba(16, 185, 129, 0.1); padding: 3px 8px; border-radius: 6px;"><i class="fa-solid fa-shield-check"></i> Clean Record</span>`;
+    } else if (c.disputes.includes('1') || c.disputes.includes('2')) {
+      disputeBadge = `<span style="color: #f59e0b; font-size: 0.76rem; font-weight: 700; background: rgba(245, 158, 11, 0.1); padding: 3px 8px; border-radius: 6px;"><i class="fa-solid fa-gavel"></i> ${c.disputes}</span>`;
+    } else {
+      disputeBadge = `<span style="color: #ef4444; font-size: 0.76rem; font-weight: 700; background: rgba(239, 68, 68, 0.1); padding: 3px 8px; border-radius: 6px;"><i class="fa-solid fa-triangle-exclamation"></i> ${c.disputes}</span>`;
+    }
 
     return `
-      <tr>
-        <td>${idx + 1}</td>
-        <td>
-          <strong>${escapeHtml(c.name)}</strong>
-          <div style="font-size: 0.72rem; color: var(--text-muted);"><i class="fa-solid fa-coins"></i> Capital Outlay: ${c.capitalOutlay}</div>
-        </td>
-        <td><span style="font-size: 0.78rem; font-weight: 600; color: var(--text-muted);">${c.type}</span></td>
-        <td><strong style="color: #2563eb;">${c.projectsCount} Mega Projects</strong></td>
-        <td>
-          <div style="display: flex; align-items: center; gap: 0.5rem;">
-            <div class="progress-bar-wrap" style="width: 70px;"><div class="progress-bar-fill" style="width: ${c.velocity}%;"></div></div>
-            <span style="font-weight: 700; font-size: 0.8rem;">${c.velocity}%</span>
+      <tr style="border-bottom: 1px solid var(--border-color); transition: background 0.2s ease;">
+        <td style="padding: 1rem; font-size: 0.8rem; font-weight: 700; color: var(--text-muted);">${idx + 1}</td>
+        <td style="padding: 1rem;">
+          <div style="display: flex; align-items: center; gap: 0.85rem;">
+            ${entityAvatar}
+            <div>
+              <div style="font-size: 0.88rem; font-weight: 800; color: var(--text-main); margin-bottom: 2px;">${escapeHtml(c.name)}</div>
+              <div style="font-size: 0.73rem; color: #2563eb; font-weight: 700;">
+                <i class="fa-solid fa-coins"></i> Capital Outlay: <strong>${c.capitalOutlay}</strong>
+              </div>
+            </div>
           </div>
         </td>
-        <td>
-          <span style="font-weight: 800; font-size: 1.1rem; color: ${healthColor};">${c.healthScore} / 100</span>
+        <td style="padding: 1rem;">
+          <span style="font-size: 0.75rem; font-weight: 700; color: var(--text-muted); background: var(--bg-app); border: 1px solid var(--border-color); padding: 3px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 5px;">
+            <i class="fa-solid ${typeIcon}"></i> ${c.type}
+          </span>
         </td>
-        <td>${ratingBadge}</td>
-        <td><span style="font-size: 0.78rem; font-weight: 600; color: ${c.disputes.includes('0') ? '#10b981' : '#ef4444'};">${c.disputes}</span></td>
-        <td>
-          <button class="btn-action-sm" onclick="openContractorModal('${c.id}')" style="background-color: var(--bg-app); border: 1px solid var(--border-color); color: var(--text-main);">
-            Audit Profile <i class="fa-solid fa-arrow-right"></i>
+        <td style="padding: 1rem;">
+          <span style="font-weight: 800; font-size: 0.85rem; color: var(--text-main);">${c.projectsCount} Mega Projects</span>
+        </td>
+        <td style="padding: 1rem;">
+          <div style="display: flex; align-items: center; gap: 0.6rem;">
+            <div class="progress-bar-wrap" style="width: 75px; height: 8px; background: rgba(0,0,0,0.08); border-radius: 4px; overflow: hidden;"><div class="progress-bar-fill" style="width: ${c.velocity}%; height: 100%; background: linear-gradient(90deg, #2563eb, #38bdf8); border-radius: 4px;"></div></div>
+            <span style="font-weight: 800; font-size: 0.82rem; color: var(--text-main);">${c.velocity}%</span>
+          </div>
+        </td>
+        <td style="padding: 1rem;">
+          <span style="font-weight: 800; font-size: 0.85rem; color: ${healthColor}; background: ${healthBg}; border: 1px solid ${healthColor}40; padding: 4px 10px; border-radius: 8px; display: inline-block;">
+            ${c.healthScore} / 100
+          </span>
+        </td>
+        <td style="padding: 1rem;">${ratingBadge}</td>
+        <td style="padding: 1rem;">${disputeBadge}</td>
+        <td style="padding: 1rem; text-align: right;">
+          <button class="btn-action-sm" onclick="openContractorModal('${c.id}')" style="background: linear-gradient(135deg, #1e293b, #0f172a); color: white; border: 1px solid rgba(255,255,255,0.15); padding: 0.4rem 0.85rem; border-radius: 8px; font-weight: 700; font-size: 0.75rem; cursor: pointer; box-shadow: var(--shadow-sm); transition: all 0.2s;">
+            Audit Profile <i class="fa-solid fa-arrow-right" style="margin-left: 3px;"></i>
           </button>
         </td>
       </tr>
