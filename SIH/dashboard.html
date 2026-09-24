@@ -175,6 +175,9 @@
                 <button class="gis-drone-toggle-btn" id="toggle-drone-mode-btn" style="background: linear-gradient(135deg, #0284c7, #0f172a); color: white; border: 1px solid #38bdf8; padding: 0.35rem 0.85rem; border-radius: 20px; font-size: 0.75rem; font-weight: 800; display: inline-flex; align-items: center; gap: 6px; cursor: pointer; transition: all 0.2s ease; margin-left: 4px;">
                   <i class="fa-solid fa-plane-up"></i> Drone Survey Mode
                 </button>
+                <button id="btn-open-gee-modal" style="background: linear-gradient(135deg, #2563eb, #1e40af); color: white; border: 1px solid #60a5fa; padding: 0.35rem 0.85rem; border-radius: 20px; font-size: 0.75rem; font-weight: 800; display: inline-flex; align-items: center; gap: 6px; cursor: pointer; transition: all 0.2s ease; margin-left: 4px;">
+                  <i class="fa-solid fa-globe"></i> 🌍 Google Earth Engine (1984-2026)
+                </button>
               </div>
             </div>
 
@@ -422,6 +425,100 @@
         <div style="display: flex; gap: 0.5rem;">
           <button class="btn-action-sm" id="btn-print-executive-digest" style="background-color: #ef4444; color: white;"><i class="fa-solid fa-print"></i> Print / Save PDF</button>
           <button class="btn-action-sm" id="btn-close-digest-footer" style="background-color: var(--bg-app); border: 1px solid var(--border-color); color: var(--text-main);">Close Digest</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Google Earth Engine 40-Year Historical Satellite Time-Lapse Modal -->
+  <div class="modal-overlay" id="gee-timelapse-modal" style="display: none; position: fixed; inset: 0; background: rgba(15, 23, 42, 0.85); backdrop-filter: blur(8px); z-index: 10000; align-items: center; justify-content: center; padding: 1.5rem;">
+    <div class="modal-card" style="background: #0f172a; color: white; border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 20px; width: 100%; max-width: 960px; max-height: 90vh; overflow-y: auto; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5);">
+      <!-- Header -->
+      <div style="padding: 1.25rem 1.75rem; border-bottom: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: space-between;">
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <div style="width: 40px; height: 40px; border-radius: 12px; background: rgba(66, 133, 244, 0.2); border: 1px solid rgba(66, 133, 244, 0.4); display: flex; align-items: center; justify-content: center; color: #60a5fa; font-size: 1.25rem;">
+            <i class="fa-solid fa-earth-asia"></i>
+          </div>
+          <div>
+            <h3 style="font-size: 1.05rem; font-weight: 800; margin: 0; color: white;">Google Earth Engine — 40-Year Satellite Reconnaissance (1984 ➔ 2026)</h3>
+            <p style="font-size: 0.75rem; color: #94a3b8; margin: 2px 0 0 0;">Multi-Decadal Landsat & Sentinel-2 Change Detection Engine</p>
+          </div>
+        </div>
+        <button id="btn-close-gee-modal" style="background: rgba(255,255,255,0.1); border: none; color: white; width: 32px; height: 32px; border-radius: 50%; cursor: pointer; font-size: 1rem;"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+
+      <!-- Modal Content -->
+      <div style="padding: 1.5rem 1.75rem; display: flex; flex-direction: column; gap: 1.25rem;">
+        <!-- Project Selector & Geolocation Bar -->
+        <div style="display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 1rem; align-items: center; background: rgba(255,255,255,0.05); padding: 1rem; border-radius: 12px; border: 1px solid rgba(255,255,255,0.08);">
+          <div>
+            <label style="font-size: 0.72rem; color: #94a3b8; font-weight: 700;">SELECT MEGA PROJECT FOR 40-YR SATELLITE RECONNAISSANCE:</label>
+            <select id="gee-project-select" style="width: 100%; margin-top: 4px; padding: 0.45rem 0.75rem; background: #1e293b; color: white; border: 1px solid rgba(255,255,255,0.2); border-radius: 8px; font-size: 0.85rem; font-weight: 700;">
+              <option value="chenab">🌉 Chenab Railway Bridge (Jammu & Kashmir) — Lat: 33.155, Lng: 74.885</option>
+              <option value="navimumbai">✈️ Navi Mumbai International Airport (Maharashtra) — Lat: 18.990, Lng: 73.076</option>
+              <option value="zojila">⛰️ Zojila Mountain Pass Tunnel (Ladakh/UT) — Lat: 34.296, Lng: 75.250</option>
+              <option value="bengaluru">🛣️ Bengaluru Satellite Ring Road (Karnataka) — Lat: 12.971, Lng: 77.594</option>
+              <option value="bullettrain">🚅 Mumbai-Ahmedabad High Speed Rail (Gujarat) — Lat: 19.076, Lng: 72.877</option>
+            </select>
+          </div>
+          <div>
+            <label style="font-size: 0.72rem; color: #94a3b8; font-weight: 700;">SATELLITE DATASET:</label>
+            <div style="margin-top: 6px; font-size: 0.8rem; font-weight: 700; color: #38bdf8;">Landsat 5/7/8/9 & Sentinel-2 SR</div>
+          </div>
+          <div>
+            <label style="font-size: 0.72rem; color: #94a3b8; font-weight: 700;">RESOLUTION:</label>
+            <div style="margin-top: 6px; font-size: 0.8rem; font-weight: 700; color: #10b981;">10m Optical / 0.5m Pan</div>
+          </div>
+        </div>
+
+        <!-- Split Screen Comparison View (1984 vs 2026) -->
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem;">
+          <!-- Left: Greenfield Baseline (1984/2014) -->
+          <div style="position: relative; height: 260px; background: linear-gradient(135deg, #1e293b, #0f172a); border-radius: 14px; overflow: hidden; border: 1px solid rgba(255,255,255,0.15); display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 1rem;">
+            <div style="position: absolute; top: 10px; left: 10px; background: rgba(15,23,42,0.85); color: #94a3b8; border: 1px solid rgba(255,255,255,0.15); padding: 4px 10px; border-radius: 20px; font-size: 0.72rem; font-weight: 800;">
+              <i class="fa-solid fa-clock-rotate-left"></i> YEAR <span id="gee-left-year">1984</span> (Greenfield Baseline)
+            </div>
+            <i class="fa-solid fa-tree" id="gee-left-icon" style="font-size: 3rem; color: #10b981; margin-bottom: 8px; opacity: 0.8;"></i>
+            <div id="gee-left-title" style="font-size: 0.9rem; font-weight: 800; color: white;">Natural Valley & Uncleared ROW</div>
+            <div id="gee-left-desc" style="font-size: 0.75rem; color: #94a3b8; margin-top: 4px; max-width: 320px;">NDVI Vegetation Index: 0.94 (Dense Forest / Natural Topography). Zero concrete footprint detected.</div>
+          </div>
+
+          <!-- Right: Current Active Construction (2026) -->
+          <div style="position: relative; height: 260px; background: linear-gradient(135deg, #1e293b, #0f172a); border-radius: 14px; overflow: hidden; border: 1px solid #38bdf8; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 1rem;">
+            <div style="position: absolute; top: 10px; left: 10px; background: rgba(56,189,248,0.2); color: #38bdf8; border: 1px solid #38bdf8; padding: 4px 10px; border-radius: 20px; font-size: 0.72rem; font-weight: 800;">
+              <i class="fa-solid fa-satellite"></i> YEAR <span id="gee-right-year">2026</span> (Live Construction)
+            </div>
+            <i class="fa-solid fa-archway" id="gee-right-icon" style="font-size: 3rem; color: #38bdf8; margin-bottom: 8px;"></i>
+            <div id="gee-right-title" style="font-size: 0.9rem; font-weight: 800; color: white;">359m Steel Arch Bridge Structure</div>
+            <div id="gee-right-desc" style="font-size: 0.75rem; color: #cbd5e1; margin-top: 4px; max-width: 320px;">NDVI Index: 0.38 (Cleared). Bare Soil & Concrete Index: 0.82. Physical Completion: 92.4%.</div>
+          </div>
+        </div>
+
+        <!-- 40-Year Time Slider -->
+        <div style="background: rgba(255,255,255,0.05); padding: 1rem 1.25rem; border-radius: 12px; border: 1px solid rgba(255,255,255,0.08);">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+            <span style="font-size: 0.78rem; font-weight: 800; color: #60a5fa;"><i class="fa-solid fa-sliders"></i> GOOGLE EARTH ENGINE 40-YEAR HISTORICAL TIMELINE SLIDER:</span>
+            <span id="gee-active-year-label" style="font-size: 0.8rem; font-weight: 800; color: #10b981;">Active Snapshot: 2026</span>
+          </div>
+          <div style="display: flex; justify-content: space-between; font-size: 0.7rem; font-weight: 700; color: #64748b; margin-bottom: 4px;">
+            <span>1984</span>
+            <span>1995</span>
+            <span>2005</span>
+            <span>2015</span>
+            <span>2020</span>
+            <span style="color: #38bdf8;">2026 (NOW)</span>
+          </div>
+          <input type="range" id="gee-modal-slider" min="0" max="5" value="5" step="1" style="width: 100%; accent-color: #60a5fa; cursor: pointer;">
+        </div>
+
+        <!-- External Launch Actions -->
+        <div style="display: flex; gap: 1rem; justify-content: flex-end; align-items: center; margin-top: 0.5rem;">
+          <a id="btn-launch-google-earth-3d" href="https://earth.google.com/web/@33.155,74.885,500a,35d,35y,0h,0t,0r" target="_blank" style="background: linear-gradient(135deg, #1e293b, #334155); color: white; border: 1px solid rgba(255,255,255,0.2); padding: 0.6rem 1.2rem; border-radius: 10px; font-size: 0.8rem; font-weight: 800; text-decoration: none; display: inline-flex; align-items: center; gap: 8px;">
+            <i class="fa-solid fa-up-right-from-square"></i> Open Google Earth Web 3D
+          </a>
+          <a id="btn-launch-gee-timelapse" href="https://earthengine.google.com/timelapse/" target="_blank" style="background: linear-gradient(135deg, #2563eb, #1d4ed8); color: white; border: none; padding: 0.6rem 1.25rem; border-radius: 10px; font-size: 0.8rem; font-weight: 800; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 4px 12px rgba(37,99,235,0.3);">
+            <i class="fa-solid fa-play"></i> Launch Google Earth Engine Full Screen
+          </a>
         </div>
       </div>
     </div>
