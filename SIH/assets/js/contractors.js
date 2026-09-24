@@ -222,7 +222,7 @@ function renderContractorsTable() {
 
     return `
       <tr style="border-bottom: 1px solid var(--border-color); transition: background 0.2s ease;">
-        <td style="padding: 1rem; font-size: 0.8rem; font-weight: 700; color: var(--text-muted);">${idx + 1}</td>
+        <td style="padding: 1rem 0.75rem; font-size: 0.8rem; font-weight: 700; color: var(--text-muted); text-align: center;">${idx + 1}</td>
         <td style="padding: 1rem;">
           <div style="display: flex; align-items: center; gap: 0.85rem;">
             ${entityAvatar}
@@ -234,29 +234,29 @@ function renderContractorsTable() {
             </div>
           </div>
         </td>
-        <td style="padding: 1rem;">
-          <span style="font-size: 0.75rem; font-weight: 700; color: var(--text-muted); background: var(--bg-app); border: 1px solid var(--border-color); padding: 3px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 5px;">
+        <td style="padding: 1rem; text-align: left;">
+          <span style="font-size: 0.75rem; font-weight: 700; color: var(--text-muted); background: var(--bg-app); border: 1px solid var(--border-color); padding: 4px 10px; border-radius: 6px; display: inline-flex; align-items: center; gap: 5px;">
             <i class="fa-solid ${typeIcon}"></i> ${c.type}
           </span>
         </td>
-        <td style="padding: 1rem;">
-          <span style="font-weight: 800; font-size: 0.85rem; color: var(--text-main);">${c.projectsCount} Mega Projects</span>
+        <td style="padding: 1rem; text-align: center;">
+          <span style="font-weight: 800; font-size: 0.85rem; color: var(--text-main); background: var(--bg-app); border: 1px solid var(--border-color); padding: 4px 10px; border-radius: 8px; display: inline-block;">${c.projectsCount} Mega Projects</span>
         </td>
-        <td style="padding: 1rem;">
+        <td style="padding: 1rem; text-align: left;">
           <div style="display: flex; align-items: center; gap: 0.6rem;">
-            <div class="progress-bar-wrap" style="width: 75px; height: 8px; background: rgba(0,0,0,0.08); border-radius: 4px; overflow: hidden;"><div class="progress-bar-fill" style="width: ${c.velocity}%; height: 100%; background: linear-gradient(90deg, #2563eb, #38bdf8); border-radius: 4px;"></div></div>
+            <div class="progress-bar-wrap" style="width: 80px; height: 8px; background: rgba(0,0,0,0.08); border-radius: 4px; overflow: hidden;"><div class="progress-bar-fill" style="width: ${c.velocity}%; height: 100%; background: linear-gradient(90deg, #2563eb, #38bdf8); border-radius: 4px;"></div></div>
             <span style="font-weight: 800; font-size: 0.82rem; color: var(--text-main);">${c.velocity}%</span>
           </div>
         </td>
-        <td style="padding: 1rem;">
+        <td style="padding: 1rem; text-align: center;">
           <span style="font-weight: 800; font-size: 0.85rem; color: ${healthColor}; background: ${healthBg}; border: 1px solid ${healthColor}40; padding: 4px 10px; border-radius: 8px; display: inline-block;">
             ${c.healthScore} / 100
           </span>
         </td>
-        <td style="padding: 1rem;">${ratingBadge}</td>
-        <td style="padding: 1rem;">${disputeBadge}</td>
-        <td style="padding: 1rem; text-align: right;">
-          <button class="btn-action-sm" onclick="openContractorModal('${c.id}')" style="background: linear-gradient(135deg, #1e293b, #0f172a); color: white; border: 1px solid rgba(255,255,255,0.15); padding: 0.4rem 0.85rem; border-radius: 8px; font-weight: 700; font-size: 0.75rem; cursor: pointer; box-shadow: var(--shadow-sm); transition: all 0.2s;">
+        <td style="padding: 1rem; text-align: center;">${ratingBadge}</td>
+        <td style="padding: 1rem; text-align: center;">${disputeBadge}</td>
+        <td style="padding: 1rem 1rem 1rem 0.75rem; text-align: right;">
+          <button class="btn-action-sm" onclick="openContractorModal('${c.id}')" style="background: linear-gradient(135deg, #1e293b, #0f172a); color: white; border: 1px solid rgba(255,255,255,0.15); padding: 0.45rem 0.9rem; border-radius: 8px; font-weight: 700; font-size: 0.75rem; cursor: pointer; box-shadow: var(--shadow-sm); transition: all 0.2s; white-space: nowrap;">
             Audit Profile <i class="fa-solid fa-arrow-right" style="margin-left: 3px;"></i>
           </button>
         </td>
