@@ -334,17 +334,7 @@ function openDispatchModal(alertId) {
     emailAddr = 'cabinet-infra@nic.in';
   }
 
-  const payloadText = `🚨 *MoSPI URGENT INFRASTRUCTURE DIRECTIVE* 🚨
-----------------------------------------
-📌 *Project:* ${item.title} (${item.state})
-🏛️ *Escalation:* ${currentLevel}
-⚠️ *Risk Score:* ${item.riskPercentage}% Critical Index
-📋 *Issue:* ${item.issue}
-
-👉 *Action Required:* Immediate compliance response required within 72 hours.
-🌐 *Audit Link:* http://localhost:5000/alerts.html
-
-_Issued by Ministry of Statistics & Programme Implementation (IPMD)_`;
+  const payloadText = `Official Notice: ${item.title} (${item.state}) - ${currentLevel}. Risk Index: ${item.riskPercentage}%. Issue: ${item.issue}. Action: Compliance response requested within 72 hours.`;
 
   currentDispatchPayload = payloadText;
 
