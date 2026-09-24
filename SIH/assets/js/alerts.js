@@ -149,35 +149,58 @@ function renderAlerts(alertsList) {
   }).join('');
 }
 
-function escalateAlert(alertId) {
+async function escalateAlert(alertId) {
   const data = window.NIRMAAN_DATA;
   if (!data) return;
 
   const item = data.alerts.find(a => a.id === alertId);
-  if (item) {
-    if (item.escalationLevel.includes('Level 1')) {
-      item.escalationLevel = 'Level 2: Ministry Nodal Agency';
-      showToast(`Escalated ${item.title} to Level 2 (Ministry Nodal Agency)`, 'warning');
-    } else {
-      item.escalationLevel = 'Level 3: Cabinet Committee';
-      item.type = 'critical';
-      showToast(`CRITICAL ESCALATION: ${item.title} dispatched to Cabinet Committee on Infrastructure!`, 'danger');
+  if (!item) return;
+
+  if (window.NIRMAAN_API) {
+    try {
+      const res = await window.NIRMAAN_API.escalateAlert(alertId);
+      if (res && res.success && res.data) {
+        Object.assign(item, res.data);
+      }
+    } catch (e) {
+      console.warn('API escalate alert failed:', e);
     }
-    filterAlerts();
   }
+
+  if (item.escalationLevel && item.escalationLevel.includes('Level 1')) {
+    item.escalationLevel = 'Level 2: Ministry Nodal Agency';
+    item.type = 'warning';
+    showToast(`Escalated ${item.title} to Level 2 (Ministry Nodal Agency)`, 'warning');
+  } else {
+    item.escalationLevel = 'Level 3: Cabinet Committee';
+    item.type = 'critical';
+    showToast(`CRITICAL ESCALATION: ${item.title} dispatched to Cabinet Committee on Infrastructure!`, 'danger');
+  }
+  filterAlerts();
 }
 
-function resolveAlert(alertId) {
+async function resolveAlert(alertId) {
   const data = window.NIRMAAN_DATA;
   if (!data) return;
 
   const item = data.alerts.find(a => a.id === alertId);
-  if (item) {
-    item.type = 'resolved';
-    item.riskPercentage = Math.round(item.riskPercentage * 0.4);
-    showToast(`Audit Completed for ${item.title}. Risk status set to Resolved.`, 'success');
-    filterAlerts();
+  if (!item) return;
+
+  if (window.NIRMAAN_API) {
+    try {
+      const res = await window.NIRMAAN_API.resolveAlert(alertId);
+      if (res && res.success && res.data) {
+        Object.assign(item, res.data);
+      }
+    } catch (e) {
+      console.warn('API resolve alert failed:', e);
+    }
   }
+
+  item.type = 'resolved';
+  item.riskPercentage = Math.round(item.riskPercentage * 0.4);
+  showToast(`Audit Completed for ${item.title}. Risk status set to Resolved.`, 'success');
+  filterAlerts();
 }
 
 function notifyOfficer(alertId) {

@@ -72,6 +72,17 @@ window.NIRMAAN_API = {
     return null;
   },
 
+  async resolveAlert(alertId) {
+    try {
+      const res = await fetch(`${this.baseUrl}/api/alerts/${alertId}/resolve`, { method: 'POST' });
+      const data = await res.json();
+      if (data.success) return data;
+    } catch (e) {
+      console.warn('API resolveAlert failed:', e);
+    }
+    return null;
+  },
+
   async queryAI(prompt) {
     try {
       const res = await fetch(`${this.baseUrl}/api/ai/query`, {
