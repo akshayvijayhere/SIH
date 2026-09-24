@@ -148,5 +148,101 @@ function initCascadeSimulator() {
 
   // Run initial calculation
   runSimulation();
+
+  // Initialize Fraud Anomaly Audit Table
+  renderFraudAuditTable();
 }
+
+const FRAUD_ANOMALY_DATASET = [
+  {
+    invId: "INV-8804",
+    contractor: "L&T Construction",
+    project: "Mumbai-Ahmedabad High Speed Rail",
+    amount: "₹142.5 Cr",
+    anomaly: "Physical Progress Mismatch: Billed 68% milestone payout, but GIS drone scan verifies only 44% completion.",
+    confidence: "94%",
+    status: "Active Flag",
+    frozen: false
+  },
+  {
+    invId: "INV-8791",
+    contractor: "Dilip Buildcon",
+    project: "Gorakhpur Link Expressway",
+    amount: "₹68.0 Cr",
+    anomaly: "Material Price Inflation: Structural steel rebar billed at +38.4% above WPI benchmark index.",
+    confidence: "88%",
+    status: "Active Flag",
+    frozen: false
+  },
+  {
+    invId: "INV-8742",
+    contractor: "Hindustan Construction (HCC)",
+    project: "Bandra-Worli Sea Link Phase-2",
+    amount: "₹95.2 Cr",
+    anomaly: "Duplicate Milestone Claim: Pier foundation piling work billed twice under sub-contractor accounts.",
+    confidence: "96%",
+    status: "Active Flag",
+    frozen: false
+  },
+  {
+    invId: "INV-8650",
+    contractor: "RVNL Executing Agency",
+    project: "Kolkata Metro Expansion",
+    amount: "₹36.4 Cr",
+    anomaly: "Phantom Labor Billing: Biometric RFID logs reveal 42 workers present vs 140 workers billed.",
+    confidence: "82%",
+    status: "Active Flag",
+    frozen: false
+  }
+];
+
+function renderFraudAuditTable() {
+  const container = document.getElementById('fraud-audit-table-body');
+  if (!container) return;
+
+  container.innerHTML = FRAUD_ANOMALY_DATASET.map(item => `
+    <tr>
+      <td><strong style="font-family: monospace; font-size: 0.85rem; color: #2563eb;">${item.invId}</strong></td>
+      <td>
+        <strong>${escapeHtml(item.contractor)}</strong>
+        <div style="font-size: 0.72rem; color: var(--text-muted);"><i class="fa-solid fa-building"></i> ${escapeHtml(item.project)}</div>
+      </td>
+      <td><strong style="font-size: 0.9rem; color: var(--text-main);">${item.amount}</strong></td>
+      <td><span style="font-size: 0.78rem; color: #ef4444; font-weight: 600;">${escapeHtml(item.anomaly)}</span></td>
+      <td><span style="font-weight: 800; color: #ef4444;">${item.confidence}</span></td>
+      <td>
+        ${item.frozen ? `
+          <span style="background: rgba(239, 68, 68, 0.15); color: #dc2626; padding: 4px 10px; border-radius: 12px; font-size: 0.72rem; font-weight: 800; border: 1px solid #fca5a5;">
+            <i class="fa-solid fa-lock"></i> PAYMENT FROZEN
+          </span>
+        ` : `
+          <span style="background: rgba(245, 158, 11, 0.15); color: #d97706; padding: 4px 10px; border-radius: 12px; font-size: 0.72rem; font-weight: 800; border: 1px solid #fcd34d;">
+            <i class="fa-solid fa-triangle-exclamation"></i> Flagged
+          </span>
+        `}
+      </td>
+      <td>
+        ${item.frozen ? `
+          <button class="btn-action-sm" disabled style="opacity: 0.6; cursor: not-allowed; background: #64748b; color: white;">
+            <i class="fa-solid fa-check"></i> Audit Locked
+          </button>
+        ` : `
+          <button class="btn-action-sm" onclick="freezeInvoicePayment('${item.invId}')" style="background-color: #dc2626; color: white;">
+            <i class="fa-solid fa-lock"></i> Freeze Payment
+          </button>
+        `}
+      </td>
+    </tr>
+  `).join('');
+}
+
+function freezeInvoicePayment(invId) {
+  const item = FRAUD_ANOMALY_DATASET.find(i => i.invId === invId);
+  if (item) {
+    item.frozen = true;
+    renderFraudAuditTable();
+    if (window.showGlobalToast) window.showGlobalToast(`🔒 Financial Lock Enforced: Payment for ${invId} (${item.amount}) frozen. Dispatched to MoSPI Special Audit Cell.`, 'danger');
+  }
+}
+
 
