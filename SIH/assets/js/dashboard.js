@@ -53,9 +53,6 @@ document.addEventListener('DOMContentLoaded', async () => {
   document.getElementById('btn-print-executive-digest')?.addEventListener('click', () => {
     window.print();
   });
-
-  // Setup PM Gati Shakti Interactive Handlers
-  setupGatiShaktiHandlers();
 });
 
 function openExecutiveDigestModal() {
@@ -89,107 +86,5 @@ function openExecutiveDigestModal() {
 function closeExecutiveDigestModal() {
   const modal = document.getElementById('executive-digest-modal');
   if (modal) modal.style.display = 'none';
-}
-
-function setupGatiShaktiHandlers() {
-  const nmpData = {
-    '801': {
-      ref: 'NMP/NPG/2026/RES-801',
-      title: 'Directives for Murbad-Neral Rail Viaduct ✕ NH-61 Highway Crossing',
-      desc: 'Spatial Collision between Railway Viaduct Pier #142 and NHAI Highway Median Right-of-Way in Palghar, MH.',
-      m1Name: 'Ministry of Railways (MoR)',
-      m1Detail: 'Share 6.5m Viaduct Utility Deck (₹32.5 Cr CAPEX)',
-      m2Name: 'Ministry of Road Transport & Highways (MoRTH)',
-      m2Detail: 'Integrate Highway Utility Trench (₹32.5 Cr CAPEX)',
-      delayShift: '14 Mo ➔ 2 Mo',
-      savings: '₹142 Crore'
-    },
-    '802': {
-      ref: 'NMP/NPG/2026/RES-802',
-      title: 'Directives for Delhi-Dehradun Expressway ✕ PowerGrid HVDC Line',
-      desc: 'Transmission tower height clearance deadlock at Haridwar Tunnel Portal.',
-      m1Name: 'Ministry of Road Transport & Highways (MoRTH)',
-      m1Detail: 'Construct Low-Profile Tunnel Portal (₹24 Cr CAPEX)',
-      m2Name: 'Ministry of Power / PowerGrid',
-      m2Detail: 'Install Underground GIS Cable Bypass (₹24 Cr CAPEX)',
-      delayShift: '8 Mo ➔ 2 Mo',
-      savings: '₹48 Crore'
-    }
-  };
-
-  // Co-Location Simulation
-  document.querySelectorAll('.btn-simulate-colocation').forEach(btn => {
-    btn.addEventListener('click', (e) => {
-      const id = e.currentTarget.getAttribute('data-id');
-      const delayEl = document.getElementById(`delay-val-${id}`);
-      const costEl = document.getElementById(`cost-val-${id}`);
-      const statusEl = document.getElementById(`status-val-${id}`);
-      const hintEl = document.getElementById(`savings-hint-${id}`);
-
-      if (id === '801') {
-        if (delayEl) { delayEl.innerText = '2 Months (-12 Mo)'; delayEl.style.color = '#34d399'; }
-        if (costEl) { costEl.innerText = '₹38 Cr (-₹142 Cr)'; costEl.style.color = '#34d399'; }
-        if (statusEl) { statusEl.innerText = 'Co-Location Optimized'; statusEl.style.color = '#34d399'; }
-        if (hintEl) { hintEl.innerHTML = '<i class="fa-solid fa-circle-check"></i> <strong>Simulation Active:</strong> ₹142 Crore saved; 12 months delay eliminated via shared viaduct deck.'; }
-        if (window.showGlobalToast) window.showGlobalToast('⚙️ PM Gati Shakti Simulation: Shared Viaduct Deck saves ₹142 Crore & 12 Months Delay!', 'success');
-      } else if (id === '802') {
-        if (delayEl) { delayEl.innerText = '2 Months (-6 Mo)'; delayEl.style.color = '#34d399'; }
-        if (costEl) { costEl.innerText = '₹17 Cr (-₹48 Cr)'; costEl.style.color = '#34d399'; }
-        if (statusEl) { statusEl.innerText = 'Co-Location Optimized'; statusEl.style.color = '#34d399'; }
-        if (hintEl) { hintEl.innerHTML = '<i class="fa-solid fa-circle-check"></i> <strong>Simulation Active:</strong> ₹48 Crore saved; Underground GIS cable bypass confirmed.'; }
-        if (window.showGlobalToast) window.showGlobalToast('⚙️ PM Gati Shakti Simulation: Underground GIS Bypass saves ₹48 Crore & 6 Months Delay!', 'success');
-      }
-    });
-  });
-
-  // Issue NPG Directive Modal Triggers
-  document.querySelectorAll('.btn-issue-npg-directive').forEach(btn => {
-    btn.addEventListener('click', (e) => {
-      const id = e.currentTarget.getAttribute('data-id') || '801';
-      const info = nmpData[id] || nmpData['801'];
-
-      document.getElementById('npg-modal-ref').innerText = info.ref;
-      document.getElementById('npg-modal-title').innerText = info.title;
-      document.getElementById('npg-modal-desc').innerText = info.desc;
-      document.getElementById('npg-ministry1-name').innerText = info.m1Name;
-      document.getElementById('npg-ministry1-detail').innerText = info.m1Detail;
-      document.getElementById('npg-ministry2-name').innerText = info.m2Name;
-      document.getElementById('npg-ministry2-detail').innerText = info.m2Detail;
-      document.getElementById('npg-modal-delay-shift').innerText = info.delayShift;
-      document.getElementById('npg-modal-savings').innerText = info.savings;
-
-      const modal = document.getElementById('npg-directive-modal');
-      if (modal) modal.style.display = 'flex';
-    });
-  });
-
-  // Close NPG Modal
-  document.getElementById('close-npg-modal')?.addEventListener('click', () => {
-    document.getElementById('npg-directive-modal').style.display = 'none';
-  });
-  document.getElementById('close-npg-footer-btn')?.addEventListener('click', () => {
-    document.getElementById('npg-directive-modal').style.display = 'none';
-  });
-
-  // Dispatch via WhatsApp Button
-  document.getElementById('btn-dispatch-npg-whatsapp')?.addEventListener('click', () => {
-    if (window.showGlobalToast) {
-      window.showGlobalToast('📱 WhatsApp API Dispatch Sent to Cabinet Secretary & Nodal Officers for Immediate Enforcement!', 'success');
-    }
-    const btn = document.getElementById('btn-dispatch-npg-whatsapp');
-    if (btn) {
-      btn.innerHTML = '<i class="fa-solid fa-check-double"></i> Order Dispatched to Cabinet!';
-      btn.style.background = '#10b981';
-      setTimeout(() => {
-        btn.innerHTML = '<i class="fa-brands fa-whatsapp"></i> Dispatch Order to Secretaries';
-        btn.style.background = 'linear-gradient(135deg, #25d366, #128c7e)';
-      }, 4000);
-    }
-  });
-
-  // View EGoS Summary Button
-  document.getElementById('btn-open-egos-summary')?.addEventListener('click', () => {
-    document.querySelectorAll('.btn-issue-npg-directive')[0]?.click();
-  });
 }
 
