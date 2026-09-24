@@ -160,7 +160,7 @@ window.NIRMAAN_CHARTS = {
           },
           y: {
             min: 0,
-            max: 110,
+            max: 100,
             grid: { color: '#e2e8f0' },
             ticks: {
               font: { family: 'Inter', size: 11 },
