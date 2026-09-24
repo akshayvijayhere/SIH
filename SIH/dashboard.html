@@ -169,6 +169,9 @@
                 <button class="gis-filter-btn" data-filter="high"><i class="fa-solid fa-circle" style="color:#ef4444; font-size: 0.6rem;"></i> High Risk</button>
                 <button class="gis-filter-btn" data-filter="medium"><i class="fa-solid fa-circle" style="color:#f59e0b; font-size: 0.6rem;"></i> Medium Risk</button>
                 <button class="gis-filter-btn" data-filter="low"><i class="fa-solid fa-circle" style="color:#10b981; font-size: 0.6rem;"></i> Low Risk</button>
+                <button class="gis-tile-toggle-btn" id="toggle-satellite-btn" style="background: linear-gradient(135deg, #334155, #0f172a); color: white; border: 1px solid #64748b; padding: 0.35rem 0.85rem; border-radius: 20px; font-size: 0.75rem; font-weight: 800; display: inline-flex; align-items: center; gap: 6px; cursor: pointer; transition: all 0.2s ease; margin-left: 4px;">
+                  <i class="fa-solid fa-map"></i> 🗺️ Street Vector View
+                </button>
                 <button class="gis-drone-toggle-btn" id="toggle-drone-mode-btn" style="background: linear-gradient(135deg, #0284c7, #0f172a); color: white; border: 1px solid #38bdf8; padding: 0.35rem 0.85rem; border-radius: 20px; font-size: 0.75rem; font-weight: 800; display: inline-flex; align-items: center; gap: 6px; cursor: pointer; transition: all 0.2s ease; margin-left: 4px;">
                   <i class="fa-solid fa-plane-up"></i> Drone Survey Mode
                 </button>
@@ -181,26 +184,26 @@
             <!-- Geospatial 4D Satellite Timeline Controller Bar -->
             <div class="gis-4d-timeline-bar" style="padding: 0.85rem 1.25rem; background: linear-gradient(135deg, rgba(15, 23, 42, 0.95), rgba(30, 41, 59, 0.95)); border-top: 1px solid rgba(255, 255, 255, 0.1); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem; color: white; border-bottom-left-radius: 16px; border-bottom-right-radius: 16px;">
               <div style="display: flex; align-items: center; gap: 0.75rem;">
-                <button id="btn-play-4d" style="width: 36px; height: 36px; border-radius: 50%; background: #2563eb; color: white; display: flex; align-items: center; justify-content: center; font-size: 1rem; border: none; cursor: pointer; transition: all 0.2s;" title="Play 4D Historical Time-Lapse">
+                <button id="btn-play-4d" style="width: 36px; height: 36px; border-radius: 50%; background: #2563eb; color: white; display: flex; align-items: center; justify-content: center; font-size: 1rem; border: none; cursor: pointer; transition: all 0.2s;" title="Play 10-Year Satellite Time-Lapse">
                   <i class="fa-solid fa-play"></i>
                 </button>
                 <div>
                   <div style="font-size: 0.78rem; font-weight: 800; color: #38bdf8; display: flex; align-items: center; gap: 6px;">
-                    <i class="fa-solid fa-satellite"></i> GEOSPATIAL 4D TIME-LAPSE
+                    <i class="fa-solid fa-satellite"></i> 10-YEAR SATELLITE TIME-LAPSE (2016-2026)
                   </div>
-                  <div id="timeline-active-quarter" style="font-size: 0.7rem; color: #94a3b8;">Active Snapshot: Q3 2026 (Live Telemetry)</div>
+                  <div id="timeline-active-quarter" style="font-size: 0.7rem; color: #94a3b8;">Active Snapshot: 2026 (Live Current Telemetry)</div>
                 </div>
               </div>
 
               <!-- Timeline Slider Control -->
               <div style="flex: 1; max-width: 420px; display: flex; flex-direction: column; gap: 4px;">
                 <div style="display: flex; justify-content: space-between; font-size: 0.68rem; font-weight: 700; color: #64748b;">
-                  <span>Q1 '24</span>
-                  <span>Q3 '24</span>
-                  <span>Q1 '25</span>
-                  <span>Q3 '25</span>
-                  <span>Q1 '26</span>
-                  <span style="color: #38bdf8;">Q3 '26 (NOW)</span>
+                  <span>2016</span>
+                  <span>2018</span>
+                  <span>2020</span>
+                  <span>2022</span>
+                  <span>2024</span>
+                  <span style="color: #38bdf8;">2026 (NOW)</span>
                 </div>
                 <input type="range" id="gis-4d-slider" min="0" max="5" value="5" step="1" style="width: 100%; accent-color: #38bdf8; cursor: pointer;">
               </div>

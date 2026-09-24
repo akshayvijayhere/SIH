@@ -6,8 +6,12 @@
 window.NIRMAAN_MAP = {
   mapInstance: null,
   markersGroup: null,
+  footprintGroup: null,
   currentFilter: 'all',
   isDroneMode: false,
+  isSatelliteView: false,
+  streetLayer: null,
+  satelliteLayer: null,
 
   initMap(containerId) {
     const container = document.getElementById(containerId);
@@ -27,11 +31,20 @@ window.NIRMAAN_MAP = {
       scrollWheelZoom: false
     });
 
-    // Official open-source OpenStreetMap Tile Layer (no API key required)
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    // Official open-source OpenStreetMap Tile Layer
+    this.streetLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
       maxZoom: 19
-    }).addTo(this.mapInstance);
+    });
+
+    // High-Resolution Esri World Imagery Satellite Tile Layer
+    this.satelliteLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+      attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community',
+      maxZoom: 19
+    });
+
+    // Default to Street Layer
+    this.streetLayer.addTo(this.mapInstance);
 
     this.markersGroup = L.layerGroup().addTo(this.mapInstance);
     this.footprintGroup = L.layerGroup().addTo(this.mapInstance);
@@ -43,12 +56,12 @@ window.NIRMAAN_MAP = {
 
   currentQuarterIndex: 5,
   quartersData: [
-    { label: "Q1 2024 (Land Acquisition Phase)", factor: 0.35, ndvi: "0.85 (Dense Forest)", avgProg: "24.1%", color: "#94a3b8" },
-    { label: "Q3 2024 (Earthworks & ROW Clearing)", factor: 0.50, ndvi: "0.71 (Site Cleared)", avgProg: "34.5%", color: "#60a5fa" },
-    { label: "Q1 2025 (Foundation & Pier Piling)", factor: 0.65, ndvi: "0.58 (Substructure)", avgProg: "44.8%", color: "#38bdf8" },
-    { label: "Q3 2025 (Superstructure Erection)", factor: 0.80, ndvi: "0.49 (Active Build)", avgProg: "55.2%", color: "#f59e0b" },
-    { label: "Q1 2026 (Track Laying & Paving)", factor: 0.92, ndvi: "0.45 (Final Phase)", avgProg: "63.0%", color: "#38bdf8" },
-    { label: "Q3 2026 (Live Current Telemetry)", factor: 1.00, ndvi: "0.42 (Cleared)", avgProg: "68.4%", color: "#10b981" }
+    { label: "2016 (Greenfield Site Baseline)", factor: 0.15, ndvi: "0.92 (Dense Canopy)", avgProg: "8.2%", color: "#94a3b8" },
+    { label: "2018 (Land Acquisition & ROW Clearing)", factor: 0.35, ndvi: "0.75 (Site Cleared)", avgProg: "24.1%", color: "#60a5fa" },
+    { label: "2020 (Earthworks & Pier Foundation)", factor: 0.55, ndvi: "0.61 (Substructure)", avgProg: "42.5%", color: "#38bdf8" },
+    { label: "2022 (Superstructure & Structural Steel)", factor: 0.75, ndvi: "0.48 (Active Build)", avgProg: "58.9%", color: "#f59e0b" },
+    { label: "2024 (Track Laying & Civil Completion)", factor: 0.90, ndvi: "0.43 (Final Phase)", avgProg: "64.2%", color: "#38bdf8" },
+    { label: "2026 (Live Current Telemetry)", factor: 1.00, ndvi: "0.39 (Operational)", avgProg: "68.4%", color: "#10b981" }
   ],
   playInterval: null,
 
@@ -209,6 +222,36 @@ window.NIRMAAN_MAP = {
         this.renderMarkers(filterVal);
       });
     });
+
+    const satelliteToggleBtn = document.getElementById('toggle-satellite-btn');
+    if (satelliteToggleBtn) {
+      satelliteToggleBtn.addEventListener('click', () => {
+        this.isSatelliteView = !this.isSatelliteView;
+        if (this.isSatelliteView) {
+          if (this.streetLayer && this.mapInstance.hasLayer(this.streetLayer)) {
+            this.mapInstance.removeLayer(this.streetLayer);
+          }
+          if (this.satelliteLayer) {
+            this.mapInstance.addLayer(this.satelliteLayer);
+          }
+          satelliteToggleBtn.style.background = 'linear-gradient(135deg, #059669, #064e3b)';
+          satelliteToggleBtn.style.borderColor = '#34d399';
+          satelliteToggleBtn.innerHTML = '<i class="fa-solid fa-earth-asia"></i> 🛰️ Satellite View (Esri High-Res)';
+          if (window.showGlobalToast) window.showGlobalToast('🛰️ High-Resolution Esri World Satellite Imagery Activated', 'success');
+        } else {
+          if (this.satelliteLayer && this.mapInstance.hasLayer(this.satelliteLayer)) {
+            this.mapInstance.removeLayer(this.satelliteLayer);
+          }
+          if (this.streetLayer) {
+            this.mapInstance.addLayer(this.streetLayer);
+          }
+          satelliteToggleBtn.style.background = 'linear-gradient(135deg, #334155, #0f172a)';
+          satelliteToggleBtn.style.borderColor = '#64748b';
+          satelliteToggleBtn.innerHTML = '<i class="fa-solid fa-map"></i> 🗺️ Street Vector View';
+          if (window.showGlobalToast) window.showGlobalToast('🗺️ Standard GIS Vector Layer Activated', 'info');
+        }
+      });
+    }
 
     const droneToggleBtn = document.getElementById('toggle-drone-mode-btn');
     if (droneToggleBtn) {
