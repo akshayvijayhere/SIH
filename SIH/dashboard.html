@@ -471,26 +471,32 @@
           </div>
         </div>
 
-        <!-- Split Screen Comparison View (1984 vs 2026) -->
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem;">
-          <!-- Left: Greenfield Baseline (1984/2014) -->
-          <div style="position: relative; height: 260px; background: linear-gradient(135deg, #1e293b, #0f172a); border-radius: 14px; overflow: hidden; border: 1px solid rgba(255,255,255,0.15); display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 1rem;">
-            <div style="position: absolute; top: 10px; left: 10px; background: rgba(15,23,42,0.85); color: #94a3b8; border: 1px solid rgba(255,255,255,0.15); padding: 4px 10px; border-radius: 20px; font-size: 0.72rem; font-weight: 800;">
-              <i class="fa-solid fa-clock-rotate-left"></i> YEAR <span id="gee-left-year">1984</span> (Greenfield Baseline)
-            </div>
-            <i class="fa-solid fa-tree" id="gee-left-icon" style="font-size: 3rem; color: #10b981; margin-bottom: 8px; opacity: 0.8;"></i>
-            <div id="gee-left-title" style="font-size: 0.9rem; font-weight: 800; color: white;">Natural Valley & Uncleared ROW</div>
-            <div id="gee-left-desc" style="font-size: 0.75rem; color: #94a3b8; margin-top: 4px; max-width: 320px;">NDVI Vegetation Index: 0.94 (Dense Forest / Natural Topography). Zero concrete footprint detected.</div>
+        <!-- Live Embedded Satellite Time-Lapse Viewport Container -->
+        <div style="position: relative; width: 100%; height: 340px; border-radius: 14px; overflow: hidden; border: 1px solid rgba(56, 189, 248, 0.4); background: #0f172a; box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
+          <!-- In-App Embedded Leaflet / GEE Satellite Canvas -->
+          <div id="gee-modal-map-viewport" style="width: 100%; height: 100%; z-index: 1;"></div>
+          
+          <!-- Overlay Floating Telemetry Badge -->
+          <div style="position: absolute; top: 12px; left: 12px; z-index: 10; background: rgba(15, 23, 42, 0.85); backdrop-filter: blur(8px); border: 1px solid rgba(56, 189, 248, 0.4); padding: 6px 12px; border-radius: 20px; font-size: 0.72rem; color: white; display: flex; align-items: center; gap: 8px;">
+            <i class="fa-solid fa-satellite-dish" style="color: #38bdf8;"></i>
+            <span><strong>LIVE SATELLITE RECONNAISSANCE:</strong> <span id="gee-overlay-project-name" style="color: #38bdf8;">Chenab Railway Bridge</span></span>
+            <span style="background: rgba(16, 185, 129, 0.2); color: #10b981; border: 1px solid #10b981; padding: 1px 6px; border-radius: 10px; font-weight: 800; font-size: 0.65rem;">10m RESOLUTION</span>
           </div>
 
-          <!-- Right: Current Active Construction (2026) -->
-          <div style="position: relative; height: 260px; background: linear-gradient(135deg, #1e293b, #0f172a); border-radius: 14px; overflow: hidden; border: 1px solid #38bdf8; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 1rem;">
-            <div style="position: absolute; top: 10px; left: 10px; background: rgba(56,189,248,0.2); color: #38bdf8; border: 1px solid #38bdf8; padding: 4px 10px; border-radius: 20px; font-size: 0.72rem; font-weight: 800;">
-              <i class="fa-solid fa-satellite"></i> YEAR <span id="gee-right-year">2026</span> (Live Construction)
+          <!-- Overlay Floating AI Change Metrics Badge -->
+          <div style="position: absolute; bottom: 12px; right: 12px; z-index: 10; background: rgba(15, 23, 42, 0.9); backdrop-filter: blur(8px); border: 1px solid rgba(255, 255, 255, 0.15); padding: 8px 14px; border-radius: 12px; font-size: 0.72rem; color: white; display: flex; flex-direction: column; gap: 4px; max-width: 280px;">
+            <div style="display: flex; justify-content: space-between; gap: 12px;">
+              <span style="color: #94a3b8;">Vegetation Index (NDVI):</span>
+              <strong id="gee-overlay-ndvi" style="color: #10b981;">0.38 (Cleared)</strong>
             </div>
-            <i class="fa-solid fa-archway" id="gee-right-icon" style="font-size: 3rem; color: #38bdf8; margin-bottom: 8px;"></i>
-            <div id="gee-right-title" style="font-size: 0.9rem; font-weight: 800; color: white;">359m Steel Arch Bridge Structure</div>
-            <div id="gee-right-desc" style="font-size: 0.75rem; color: #cbd5e1; margin-top: 4px; max-width: 320px;">NDVI Index: 0.38 (Cleared). Bare Soil & Concrete Index: 0.82. Physical Completion: 92.4%.</div>
+            <div style="display: flex; justify-content: space-between; gap: 12px;">
+              <span style="color: #94a3b8;">Bare Soil & Concrete:</span>
+              <strong id="gee-overlay-bsi" style="color: #f59e0b;">0.88 (Paved)</strong>
+            </div>
+            <div style="display: flex; justify-content: space-between; gap: 12px;">
+              <span style="color: #94a3b8;">40-Yr Footprint Expansion:</span>
+              <strong id="gee-overlay-expansion" style="color: #38bdf8;">+420% Growth</strong>
+            </div>
           </div>
         </div>
 

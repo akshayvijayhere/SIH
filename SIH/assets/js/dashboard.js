@@ -63,38 +63,46 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 const GEE_PROJECT_METADATA = {
   chenab: {
+    name: 'Chenab Railway Bridge (Jammu & Kashmir)',
     lat: 33.155, lng: 74.885,
     baselineYear: '1984', baselineTitle: 'Jammu Mountain River Valley', baselineDesc: 'NDVI Vegetation Index: 0.94 (Dense Forest / Pristine Topography). Zero civil footprint.',
     currentYear: '2026', currentTitle: '359m Steel Arch Railway Bridge', currentDesc: 'NDVI: 0.38. Bare Soil & Steel Index: 0.88. World highest railway arch bridge complete.',
-    icon: 'fa-archway', color: '#38bdf8'
+    ndvi: '0.38 (Cleared)', bsi: '0.88 (Paved)', expansion: '+420% Expansion'
   },
   navimumbai: {
+    name: 'Navi Mumbai International Airport',
     lat: 18.990, lng: 73.076,
     baselineYear: '1984', baselineTitle: 'Panvel Agricultural Delta & Mangroves', baselineDesc: 'NDVI: 0.89 (Coastal Mangrove & Paddy Fields). Zero runway excavation.',
     currentYear: '2026', currentTitle: 'Navi Mumbai International Airport Phase 1', currentDesc: 'NDVI: 0.28 (Paved). 3,700m Code 4F Runway & Terminal Pier 1 Structure Operational.',
-    icon: 'fa-plane-departure', color: '#38bdf8'
+    ndvi: '0.28 (Runway Paved)', bsi: '0.94 (Concrete)', expansion: '+650% Expansion'
   },
   zojila: {
+    name: 'Zojila Mountain Pass Tunnel',
     lat: 34.296, lng: 75.250,
     baselineYear: '1984', baselineTitle: 'High-Altitude Alpine Mountain Pass', baselineDesc: 'NDVI: 0.65 (Alpine Scrub / Snow Cover). Seasonally cut off for 6 months.',
     currentYear: '2026', currentTitle: '13.15 km All-Weather Zojila Tunnel Portal', currentDesc: 'NDVI: 0.31. Tunnel Excavation Completed. Smart NATM Ventilation & Fire Ducting.',
-    icon: 'fa-mountain-sun', color: '#f59e0b'
+    ndvi: '0.31 (Scrub Cleared)', bsi: '0.81 (Rock Boring)', expansion: '+310% Expansion'
   },
   bengaluru: {
+    name: 'Bengaluru Satellite Ring Road (STRR)',
     lat: 12.971, lng: 77.594,
     baselineYear: '1984', baselineTitle: 'Peri-Urban Agriculture & Lakes', baselineDesc: 'NDVI: 0.91 (Agricultural Land). Zero heavy arterial road paving.',
     currentYear: '2026', currentTitle: '280 km 8-Lane Expressway Corridor', currentDesc: 'NDVI: 0.41 (Cleared). Bituminous Pavement Index: 0.84. Toll Plaza & Flyover Live.',
-    icon: 'fa-road', color: '#10b981'
+    ndvi: '0.41 (Bituminous)', bsi: '0.84 (Pavement)', expansion: '+540% Expansion'
   },
   bullettrain: {
+    name: 'Mumbai-Ahmedabad High Speed Rail',
     lat: 19.076, lng: 72.877,
     baselineYear: '1984', baselineTitle: 'Urban & Suburbs Greenfield Corridor', baselineDesc: 'NDVI: 0.82 (Suburban Farmland). No elevated pier foundations.',
     currentYear: '2026', currentTitle: 'High-Speed Rail Elevated Viaduct & Pier Track', currentDesc: 'NDVI: 0.35. Segmental Girder Erection Completed. Shinkansen Track Bed Installed.',
-    icon: 'fa-train-subway', color: '#8b5cf6'
+    ndvi: '0.35 (Viaduct Pervious)', bsi: '0.89 (Elevated Pier)', expansion: '+480% Expansion'
   }
 };
 
 const GEE_YEAR_STEPS = ['1984', '1995', '2005', '2015', '2020', '2026'];
+let geeModalMapInstance = null;
+let geeModalMarker = null;
+let geeModalCircle = null;
 
 function openGEETimelapseModal() {
   const modal = document.getElementById('gee-timelapse-modal');
@@ -102,7 +110,7 @@ function openGEETimelapseModal() {
     modal.style.display = 'flex';
     updateGEEProjectData();
     if (window.showGlobalToast) {
-      window.showGlobalToast('🌍 Google Earth Engine 40-Year Historical Time-Lapse Reconnaissance Initialized', 'info');
+      window.showGlobalToast('🌍 Live Embedded Google Earth Engine Satellite View Initialized', 'info');
     }
   }
 }
@@ -119,13 +127,15 @@ function updateGEEProjectData() {
   const key = select.value || 'chenab';
   const meta = GEE_PROJECT_METADATA[key] || GEE_PROJECT_METADATA['chenab'];
 
-  document.getElementById('gee-left-year').innerText = meta.baselineYear;
-  document.getElementById('gee-left-title').innerText = meta.baselineTitle;
-  document.getElementById('gee-left-desc').innerText = meta.baselineDesc;
+  const overlayName = document.getElementById('gee-overlay-project-name');
+  const overlayNdvi = document.getElementById('gee-overlay-ndvi');
+  const overlayBsi = document.getElementById('gee-overlay-bsi');
+  const overlayExpansion = document.getElementById('gee-overlay-expansion');
 
-  document.getElementById('gee-right-year').innerText = meta.currentYear;
-  document.getElementById('gee-right-title').innerText = meta.currentTitle;
-  document.getElementById('gee-right-desc').innerText = meta.currentDesc;
+  if (overlayName) overlayName.innerText = meta.name;
+  if (overlayNdvi) overlayNdvi.innerText = meta.ndvi;
+  if (overlayBsi) overlayBsi.innerText = meta.bsi;
+  if (overlayExpansion) overlayExpansion.innerText = meta.expansion;
 
   const earthLink = document.getElementById('btn-launch-google-earth-3d');
   if (earthLink) {
@@ -133,24 +143,89 @@ function updateGEEProjectData() {
   }
 
   const slider = document.getElementById('gee-modal-slider');
-  if (slider) {
-    slider.value = 5;
-    updateGEEYearSlider();
-  }
+  const sliderVal = slider ? parseInt(slider.value) : 5;
+
+  initOrUpdateGEEModalMap(meta.lat, meta.lng, meta.name, sliderVal);
 }
 
 function updateGEEYearSlider() {
   const slider = document.getElementById('gee-modal-slider');
   const activeLabel = document.getElementById('gee-active-year-label');
-  const rightYear = document.getElementById('gee-right-year');
 
   if (!slider || !activeLabel) return;
 
   const idx = parseInt(slider.value) || 5;
   const year = GEE_YEAR_STEPS[idx] || '2026';
 
-  activeLabel.innerText = `Active Snapshot: ${year}`;
-  if (rightYear) rightYear.innerText = year;
+  activeLabel.innerText = `Active Snapshot: Year ${year}`;
+
+  const select = document.getElementById('gee-project-select');
+  const key = select ? (select.value || 'chenab') : 'chenab';
+  const meta = GEE_PROJECT_METADATA[key] || GEE_PROJECT_METADATA['chenab'];
+
+  initOrUpdateGEEModalMap(meta.lat, meta.lng, meta.name, idx);
+}
+
+function initOrUpdateGEEModalMap(lat, lng, name, yearIndex = 5) {
+  const container = document.getElementById('gee-modal-map-viewport');
+  if (!container || !window.L) return;
+
+  if (!geeModalMapInstance) {
+    geeModalMapInstance = L.map('gee-modal-map-viewport', {
+      center: [lat, lng],
+      zoom: 13,
+      zoomControl: true,
+      scrollWheelZoom: true
+    });
+
+    L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+      attribution: 'Tiles &copy; Esri World Imagery Satellite',
+      maxZoom: 19
+    }).addTo(geeModalMapInstance);
+  } else {
+    geeModalMapInstance.setView([lat, lng], 13);
+  }
+
+  setTimeout(() => {
+    if (geeModalMapInstance) geeModalMapInstance.invalidateSize();
+  }, 200);
+
+  if (geeModalMarker) geeModalMapInstance.removeLayer(geeModalMarker);
+  if (geeModalCircle) geeModalMapInstance.removeLayer(geeModalCircle);
+
+  const radius = 800 + (yearIndex * 900);
+  const factor = (yearIndex + 1) / 6;
+
+  geeModalCircle = L.circle([lat, lng], {
+    color: '#38bdf8',
+    fillColor: '#38bdf8',
+    fillOpacity: 0.12 + (factor * 0.15),
+    radius: radius,
+    weight: 2,
+    dashArray: '6, 6'
+  }).addTo(geeModalMapInstance);
+
+  const customIcon = L.divIcon({
+    className: 'custom-gee-pin',
+    html: `
+      <div style="width: 34px; height: 34px; background: linear-gradient(135deg, #0284c7, #0f172a); border: 2px solid #38bdf8; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 0.95rem; box-shadow: 0 0 15px rgba(56, 189, 248, 0.8);">
+        <i class="fa-solid fa-satellite-dish"></i>
+      </div>
+    `,
+    iconSize: [34, 34],
+    iconAnchor: [17, 17]
+  });
+
+  geeModalMarker = L.marker([lat, lng], { icon: customIcon }).addTo(geeModalMapInstance);
+  geeModalMarker.bindPopup(`
+    <div style="color: #0f172a; font-family: system-ui, sans-serif; font-size: 0.82rem; padding: 2px;">
+      <strong style="color: #0284c7; font-size: 0.88rem;">${name}</strong><br>
+      <span style="color: #64748b;">GPS: Lat ${lat.toFixed(4)}, Lng ${lng.toFixed(4)}</span><br>
+      <div style="margin-top: 4px; background: #e0f2fe; color: #0369a1; padding: 2px 6px; border-radius: 4px; font-weight: 700; font-size: 0.72rem; display: inline-block;">
+        Google Earth Engine Satellite Footprint
+      </div>
+    </div>
+  `).openPopup();
 }
 
 function openExecutiveDigestModal() {
