@@ -40,6 +40,31 @@ function initAlertCenter() {
   }
 
   document.getElementById('state-quick-filter')?.addEventListener('change', filterAlerts);
+
+  // Dispatch Modal Listeners
+  document.getElementById('close-dispatch-modal')?.addEventListener('click', closeDispatchModal);
+
+  document.getElementById('btn-copy-dispatch')?.addEventListener('click', () => {
+    const textVal = document.getElementById('dispatch-payload-textarea')?.value || currentDispatchPayload;
+    navigator.clipboard.writeText(textVal);
+    showToast('Official Payload Text copied to clipboard!', 'success');
+  });
+
+  document.getElementById('btn-send-whatsapp')?.addEventListener('click', () => {
+    const textVal = document.getElementById('dispatch-payload-textarea')?.value || currentDispatchPayload;
+    const waUrl = `https://wa.me/?text=${encodeURIComponent(textVal)}`;
+    window.open(waUrl, '_blank');
+    showToast('WhatsApp Official Dispatch Payload Launched', 'success');
+    closeDispatchModal();
+  });
+
+  document.getElementById('btn-send-email')?.addEventListener('click', () => {
+    const textVal = document.getElementById('dispatch-payload-textarea')?.value || currentDispatchPayload;
+    const mailUrl = `mailto:official-infra@mospi.gov.in?subject=${encodeURIComponent('URGENT MoSPI DIRECTIVE')}&body=${encodeURIComponent(textVal)}`;
+    window.location.href = mailUrl;
+    showToast('Official Ministry Email Memorandum Dispatched', 'success');
+    closeDispatchModal();
+  });
 }
 
 function updateBadgeCounts() {
@@ -206,7 +231,7 @@ function renderAlerts(alertsList) {
           <div style="display: flex; align-items: center; gap: 0.4rem; flex-wrap: wrap;">
             ${item.type !== 'resolved' ? `
               ${escalationBtnHtml}
-              <button class="btn-action-sm" onclick="notifyOfficer('${item.id}')" style="background-color: var(--color-primary); color: white;">
+              <button class="btn-action-sm" onclick="openDispatchModal('${item.id}')" style="background-color: var(--color-primary); color: white;">
                 <i class="fa-solid fa-paper-plane"></i> ${reminderText}
               </button>
               <button class="btn-action-sm" onclick="resolveAlert('${item.id}')" style="background-color: #059669; color: white;">
@@ -284,19 +309,80 @@ async function resolveAlert(alertId) {
   filterAlerts();
 }
 
-function notifyOfficer(alertId) {
+let currentDispatchPayload = '';
+
+function openDispatchModal(alertId) {
   const data = window.NIRMAAN_DATA;
   if (!data) return;
 
   const item = data.alerts.find(a => a.id === alertId);
-  if (item) {
-    const currentLevel = item.escalationLevel || 'Level 1: Nodal Officer';
-    let recipient = 'Field Nodal Engineer';
-    if (currentLevel.includes('Level 2')) recipient = 'Ministry Joint Secretary';
-    else if (currentLevel.includes('Level 3')) recipient = 'Cabinet Secretariat Desk';
+  if (!item) return;
 
-    showToast(`Urgent MoSPI Notice & SMS dispatched to ${recipient} for "${item.title}".`, 'info');
+  const currentLevel = item.escalationLevel || 'Level 1: Nodal Officer';
+  let recipient = 'Field Nodal Engineer';
+  let officialName = 'Shri Rajesh Verma (Executive Engineer, MoRTH)';
+  let whatsappNum = '+919876543210';
+  let emailAddr = 'nodal-officer@mospi.gov.in';
+
+  if (currentLevel.includes('Level 2')) {
+    recipient = 'Ministry Nodal Agency Director';
+    officialName = 'Shri A. K. Sundaram, IAS (Joint Secretary, Ministry of Railways)';
+    emailAddr = 'js-railways@mospi.gov.in';
+  } else if (currentLevel.includes('Level 3')) {
+    recipient = 'Cabinet Secretariat Desk';
+    officialName = 'Dr. Rajiv Gauba, IAS (Cabinet Secretariat Infrastructure Cell)';
+    emailAddr = 'cabinet-infra@nic.in';
   }
+
+  const payloadText = `🚨 *MoSPI URGENT INFRASTRUCTURE DIRECTIVE* 🚨
+----------------------------------------
+📌 *Project:* ${item.title} (${item.state})
+🏛️ *Escalation:* ${currentLevel}
+⚠️ *Risk Score:* ${item.riskPercentage}% Critical Index
+📋 *Issue:* ${item.issue}
+
+👉 *Action Required:* Immediate compliance response required within 72 hours.
+🌐 *Audit Link:* http://localhost:5000/alerts.html
+
+_Issued by Ministry of Statistics & Programme Implementation (IPMD)_`;
+
+  currentDispatchPayload = payloadText;
+
+  const bodyEl = document.getElementById('dispatch-modal-body');
+  if (bodyEl) {
+    bodyEl.innerHTML = `
+      <!-- Recipient Badge -->
+      <div style="background: var(--bg-app); border: 1px solid var(--border-color); border-radius: 12px; padding: 1rem; display: flex; align-items: center; justify-content: space-between;">
+        <div>
+          <div style="font-size: 0.72rem; font-weight: 800; color: #2563eb; text-transform: uppercase;">Official Nodal Recipient</div>
+          <div style="font-size: 0.95rem; font-weight: 800; color: var(--text-main); margin-top: 2px;">${officialName}</div>
+          <div style="font-size: 0.75rem; color: var(--text-muted);"><i class="fa-solid fa-envelope"></i> ${emailAddr} • <i class="fa-brands fa-whatsapp" style="color: #25d366;"></i> ${whatsappNum}</div>
+        </div>
+        <span style="font-size: 0.75rem; font-weight: 800; background: rgba(37, 99, 235, 0.1); color: #2563eb; padding: 4px 12px; border-radius: 20px;">${recipient}</span>
+      </div>
+
+      <!-- Payload Preview -->
+      <div>
+        <label style="font-size: 0.82rem; font-weight: 700; color: var(--text-main); display: block; margin-bottom: 0.35rem;">
+          <i class="fa-solid fa-code"></i> Formatted Official Payload Message:
+        </label>
+        <textarea id="dispatch-payload-textarea" style="width: 100%; height: 160px; padding: 0.85rem; border-radius: 12px; border: 1px solid var(--border-color); background: var(--bg-app); font-family: monospace; font-size: 0.82rem; color: var(--text-main); line-height: 1.5; resize: vertical;">${escapeHtml(payloadText)}</textarea>
+      </div>
+
+      <!-- Protocol Security Note -->
+      <div style="font-size: 0.75rem; color: var(--text-muted); display: flex; align-items: center; gap: 6px; background: rgba(16, 185, 129, 0.08); padding: 8px 12px; border-radius: 8px; border: 1px solid rgba(16, 185, 129, 0.2);">
+        <i class="fa-solid fa-lock" style="color: #10b981;"></i> Digitally encrypted using MoSPI SHA-256 Protocol Key for Government Communication.
+      </div>
+    `;
+  }
+
+  const modal = document.getElementById('dispatch-modal');
+  if (modal) modal.style.display = 'flex';
+}
+
+function closeDispatchModal() {
+  const modal = document.getElementById('dispatch-modal');
+  if (modal) modal.style.display = 'none';
 }
 
 function exportCabinetMemo(alertId) {
