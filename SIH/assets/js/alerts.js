@@ -13,18 +13,19 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 function initAlertCenter() {
   const data = window.NIRMAAN_DATA;
-  if (!data) return;
+  if (!data || !data.alerts) return;
 
   // Enrich alert records with MoSPI escalation levels if not set
-  data.alerts.forEach((item, idx) => {
+  data.alerts.forEach((item) => {
     if (!item.escalationLevel) {
       if (item.type === 'critical') item.escalationLevel = 'Level 3: Cabinet Committee';
-      else if (item.type === 'warning') item.escalationLevel = 'Level 2: Nodal Agency';
-      else item.escalationLevel = 'Level 1: Nodal Officer';
+      else if (item.type === 'warning') item.escalationLevel = 'Level 2: Ministry Nodal Agency';
+      else item.escalationLevel = 'Level 1: Field Nodal Officer';
     }
   });
 
-  renderAlerts(data.alerts);
+  updateBadgeCounts();
+  filterAlerts();
 
   const tabsContainer = document.getElementById('alert-tabs-container');
   if (tabsContainer) {
@@ -41,9 +42,50 @@ function initAlertCenter() {
   document.getElementById('state-quick-filter')?.addEventListener('change', filterAlerts);
 }
 
+function updateBadgeCounts() {
+  const data = window.NIRMAAN_DATA;
+  if (!data || !data.alerts) return;
+
+  const activeAlerts = data.alerts.filter(a => a.type !== 'resolved');
+  const criticalAlerts = data.alerts.filter(a => a.type === 'critical');
+  const warningAlerts = data.alerts.filter(a => a.type === 'warning');
+  const delayAlerts = data.alerts.filter(a => a.category === 'delay' && a.type !== 'resolved');
+  const costAlerts = data.alerts.filter(a => a.category === 'cost' && a.type !== 'resolved');
+  const resolvedAlerts = data.alerts.filter(a => a.type === 'resolved');
+
+  // Update header and sidebar badges
+  document.querySelectorAll('.nav-badge, .notification-badge-dot').forEach(el => {
+    el.textContent = activeAlerts.length;
+    if (activeAlerts.length === 0) {
+      el.style.display = 'none';
+    } else {
+      el.style.display = 'inline-flex';
+    }
+  });
+
+  // Update tab text labels with counts
+  const tabAll = document.querySelector('.tab-btn[data-tab="all"]');
+  if (tabAll) tabAll.innerHTML = `All Alerts (${data.alerts.length})`;
+
+  const tabCritical = document.querySelector('.tab-btn[data-tab="critical"]');
+  if (tabCritical) tabCritical.innerHTML = `<i class="fa-solid fa-triangle-exclamation"></i> Critical (${criticalAlerts.length})`;
+
+  const tabWarning = document.querySelector('.tab-btn[data-tab="warning"]');
+  if (tabWarning) tabWarning.innerHTML = `Level 2 Warning (${warningAlerts.length})`;
+
+  const tabDelay = document.querySelector('.tab-btn[data-tab="delay"]');
+  if (tabDelay) tabDelay.innerHTML = `Delay Risk (${delayAlerts.length})`;
+
+  const tabCost = document.querySelector('.tab-btn[data-tab="cost"]');
+  if (tabCost) tabCost.innerHTML = `Cost Risk (${costAlerts.length})`;
+
+  const tabResolved = document.querySelector('.tab-btn[data-tab="resolved"]');
+  if (tabResolved) tabResolved.innerHTML = `<i class="fa-solid fa-circle-check"></i> Audited & Resolved (${resolvedAlerts.length})`;
+}
+
 function filterAlerts() {
   const data = window.NIRMAAN_DATA;
-  if (!data) return;
+  if (!data || !data.alerts) return;
 
   const stateQuick = document.getElementById('state-quick-filter')?.value || 'all';
 
@@ -51,8 +93,8 @@ function filterAlerts() {
     if (activeAlertTab !== 'all') {
       if (activeAlertTab === 'critical' && item.type !== 'critical') return false;
       if (activeAlertTab === 'warning' && item.type !== 'warning') return false;
-      if (activeAlertTab === 'delay' && item.category !== 'delay') return false;
-      if (activeAlertTab === 'cost' && item.category !== 'cost') return false;
+      if (activeAlertTab === 'delay' && (item.category !== 'delay' || item.type === 'resolved')) return false;
+      if (activeAlertTab === 'cost' && (item.category !== 'cost' || item.type === 'resolved')) return false;
       if (activeAlertTab === 'resolved' && item.type !== 'resolved') return false;
     }
 
@@ -80,16 +122,18 @@ function renderAlerts(alertsList) {
 
   container.innerHTML = alertsList.map(item => {
     let iconClass = 'fa-triangle-exclamation';
-    if (item.type === 'info') iconClass = 'fa-circle-info';
-    else if (item.type === 'resolved') iconClass = 'fa-circle-check';
-
-    let tagClass = 'delay';
-    if (item.category === 'cost') tagClass = 'cost';
-    else if (item.category === 'progress') tagClass = 'progress';
-    else if (item.category === 'reduced') tagClass = 'reduced';
+    let typeLabel = item.type ? item.type.toUpperCase() : 'ALERT';
+    if (item.type === 'info') {
+      iconClass = 'fa-circle-info';
+    } else if (item.type === 'resolved') {
+      iconClass = 'fa-circle-check';
+      typeLabel = 'AUDITED & RESOLVED';
+    }
 
     let escBadgeStyle = 'background: #fee2e2; color: #dc2626; border: 1px solid #fca5a5;';
-    if (item.escalationLevel && item.escalationLevel.includes('Level 2')) {
+    if (item.type === 'resolved') {
+      escBadgeStyle = 'background: #d1fae5; color: #059669; border: 1px solid #6ee7b7;';
+    } else if (item.escalationLevel && item.escalationLevel.includes('Level 2')) {
       escBadgeStyle = 'background: #fef3c7; color: #d97706; border: 1px solid #fcd34d;';
     } else if (item.escalationLevel && item.escalationLevel.includes('Level 1')) {
       escBadgeStyle = 'background: #e0f2fe; color: #0284c7; border: 1px solid #7dd3fc;';
@@ -99,14 +143,14 @@ function renderAlerts(alertsList) {
       <div class="alert-item-card ${item.type}" style="display: flex; flex-direction: column; gap: 0.75rem; padding: 1.15rem; background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: 14px; box-shadow: var(--shadow-sm); margin-bottom: 1rem;">
         <div style="display: flex; align-items: flex-start; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem;">
           <div style="display: flex; align-items: center; gap: 0.6rem;">
-            <span class="alert-severity-badge ${item.type}" style="font-size: 0.7rem; font-weight: 800; padding: 3px 8px; border-radius: 6px;">
-              <i class="fa-solid ${iconClass}"></i> ${item.type.toUpperCase()}
+            <span class="alert-severity-badge ${item.type}">
+              <i class="fa-solid ${iconClass}"></i> ${typeLabel}
             </span>
             <span style="font-size: 0.68rem; font-weight: 800; padding: 3px 8px; border-radius: 6px; ${escBadgeStyle}">
-              <i class="fa-solid fa-sitemap"></i> ${item.escalationLevel || 'Level 1: Nodal Officer'}
+              <i class="fa-solid ${item.type === 'resolved' ? 'fa-shield-check' : 'fa-sitemap'}"></i> ${item.type === 'resolved' ? 'Audit Status: Verified' : (item.escalationLevel || 'Level 1: Nodal Officer')}
             </span>
           </div>
-          <span style="font-size: 0.72rem; color: var(--text-muted);"><i class="fa-regular fa-clock"></i> ${item.timeAgo}</span>
+          <span style="font-size: 0.72rem; color: var(--text-muted);"><i class="fa-regular fa-clock"></i> ${item.timeAgo || 'Recently'}</span>
         </div>
 
         <div>
@@ -118,7 +162,9 @@ function renderAlerts(alertsList) {
           <div style="display: flex; align-items: center; gap: 1rem; color: var(--text-muted);">
             <span><i class="fa-solid fa-location-dot"></i> ${item.state}</span>
             <span><i class="fa-solid fa-building"></i> ${item.sector}</span>
-            <span style="font-weight: 800; color: ${item.riskPercentage > 60 ? '#ef4444' : '#f59e0b'};">Risk: ${item.riskPercentage}%</span>
+            <span style="font-weight: 800; color: ${item.type === 'resolved' ? '#059669' : (item.riskPercentage > 60 ? '#ef4444' : '#f59e0b')};">
+              Risk: ${item.riskPercentage}%
+            </span>
           </div>
 
           <!-- Action Button Group -->
@@ -140,7 +186,9 @@ function renderAlerts(alertsList) {
                 <i class="fa-solid fa-circle-check"></i> Mark Audited
               </button>
             ` : `
-              <span style="font-size: 0.75rem; font-weight: 700; color: #059669;"><i class="fa-solid fa-check"></i> Audit Complete</span>
+              <span style="font-size: 0.75rem; font-weight: 700; color: #059669; background: #d1fae5; padding: 4px 10px; border-radius: 6px; border: 1px solid #6ee7b7; display: inline-flex; align-items: center; gap: 5px;">
+                <i class="fa-solid fa-circle-check"></i> Audit Complete (Resolved)
+              </span>
             `}
           </div>
         </div>
@@ -176,6 +224,7 @@ async function escalateAlert(alertId) {
     item.type = 'critical';
     showToast(`CRITICAL ESCALATION: ${item.title} dispatched to Cabinet Committee on Infrastructure!`, 'danger');
   }
+  updateBadgeCounts();
   filterAlerts();
 }
 
@@ -199,7 +248,8 @@ async function resolveAlert(alertId) {
 
   item.type = 'resolved';
   item.riskPercentage = Math.round(item.riskPercentage * 0.4);
-  showToast(`Audit Completed for ${item.title}. Risk status set to Resolved.`, 'success');
+  showToast(`Audit Completed for "${item.title}". Status set to Audited & Resolved.`, 'success');
+  updateBadgeCounts();
   filterAlerts();
 }
 
