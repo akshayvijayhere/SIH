@@ -259,8 +259,9 @@ app.post('/api/alerts/:id/escalate', async (req, res) => {
     if (isDbConnected) {
       const item = await Alert.findOne({ id: alertId });
       if (item) {
-        if (item.escalationLevel.includes('Level 1')) {
+        if (!item.escalationLevel || item.escalationLevel.includes('Level 1')) {
           item.escalationLevel = 'Level 2: Ministry Nodal Agency';
+          item.type = 'warning';
         } else {
           item.escalationLevel = 'Level 3: Cabinet Committee';
           item.type = 'critical';
@@ -272,9 +273,14 @@ app.post('/api/alerts/:id/escalate', async (req, res) => {
 
     const itemMem = memoryStore.alerts.find(a => a.id === alertId);
     if (itemMem) {
-      itemMem.escalationLevel = 'Level 3: Cabinet Committee';
-      itemMem.type = 'critical';
-      return res.json({ success: true, data: itemMem, message: 'Escalated to Level 3: Cabinet Committee' });
+      if (!itemMem.escalationLevel || itemMem.escalationLevel.includes('Level 1')) {
+        itemMem.escalationLevel = 'Level 2: Ministry Nodal Agency';
+        itemMem.type = 'warning';
+      } else {
+        itemMem.escalationLevel = 'Level 3: Cabinet Committee';
+        itemMem.type = 'critical';
+      }
+      return res.json({ success: true, data: itemMem, message: `Escalated to ${itemMem.escalationLevel}` });
     }
 
     res.status(404).json({ success: false, message: 'Alert not found' });

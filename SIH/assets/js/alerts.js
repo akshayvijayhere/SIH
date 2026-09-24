@@ -20,7 +20,7 @@ function initAlertCenter() {
     if (!item.escalationLevel) {
       if (item.type === 'critical') item.escalationLevel = 'Level 3: Cabinet Committee';
       else if (item.type === 'warning') item.escalationLevel = 'Level 2: Ministry Nodal Agency';
-      else item.escalationLevel = 'Level 1: Field Nodal Officer';
+      else item.escalationLevel = 'Level 1: Nodal Officer';
     }
   });
 
@@ -142,6 +142,35 @@ function renderAlerts(alertsList) {
       escBadgeStyle = 'background: #e0f2fe; color: #0284c7; border: 1px solid #7dd3fc;';
     }
 
+    // Categorized escalation button based on current tier
+    let escalationBtnHtml = '';
+    const currentLevel = item.escalationLevel || 'Level 1: Nodal Officer';
+
+    if (currentLevel.includes('Level 1')) {
+      escalationBtnHtml = `
+        <button class="btn-action-sm" onclick="escalateAlert('${item.id}')" style="background-color: #d97706; color: white;">
+          <i class="fa-solid fa-arrow-up-right-dots"></i> Escalate to Level 2 (Ministry)
+        </button>
+      `;
+    } else if (currentLevel.includes('Level 2')) {
+      escalationBtnHtml = `
+        <button class="btn-action-sm" onclick="escalateAlert('${item.id}')" style="background-color: #dc2626; color: white;">
+          <i class="fa-solid fa-landmark"></i> Escalate to Level 3 (Cabinet)
+        </button>
+      `;
+    } else {
+      escalationBtnHtml = `
+        <span class="btn-action-sm" style="background: #fee2e2; color: #dc2626; border: 1px solid #fca5a5; font-weight: 800; font-size: 0.72rem; display: inline-flex; align-items: center; gap: 4px;">
+          <i class="fa-solid fa-landmark"></i> Escalated to Cabinet (Level 3)
+        </span>
+      `;
+    }
+
+    // Recipient officer reminder label
+    let reminderText = 'Remind Field Officer';
+    if (currentLevel.includes('Level 2')) reminderText = 'Remind Ministry Nodal Agency';
+    else if (currentLevel.includes('Level 3')) reminderText = 'Remind Cabinet Secretariat';
+
     return `
       <div class="alert-item-card ${item.type}" style="display: flex; flex-direction: column; gap: 0.75rem; padding: 1.15rem; background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: 14px; box-shadow: var(--shadow-sm); margin-bottom: 1rem;">
         <div style="display: flex; align-items: flex-start; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem;">
@@ -150,7 +179,7 @@ function renderAlerts(alertsList) {
               <i class="fa-solid ${iconClass}"></i> ${typeLabel}
             </span>
             <span style="font-size: 0.68rem; font-weight: 800; padding: 3px 8px; border-radius: 6px; ${escBadgeStyle}">
-              <i class="fa-solid ${item.type === 'resolved' ? 'fa-shield-check' : 'fa-sitemap'}"></i> ${item.type === 'resolved' ? 'Audit Status: Verified' : (item.escalationLevel || 'Level 1: Nodal Officer')}
+              <i class="fa-solid ${item.type === 'resolved' ? 'fa-shield-check' : 'fa-sitemap'}"></i> ${item.type === 'resolved' ? 'Audit Status: Verified' : currentLevel}
             </span>
           </div>
           <span style="font-size: 0.72rem; color: var(--text-muted);"><i class="fa-regular fa-clock"></i> ${item.timeAgo || 'Recently'}</span>
@@ -173,17 +202,9 @@ function renderAlerts(alertsList) {
           <!-- Action Button Group -->
           <div style="display: flex; align-items: center; gap: 0.4rem; flex-wrap: wrap;">
             ${item.type !== 'resolved' ? `
-              ${(item.escalationLevel && item.escalationLevel.includes('Level 3')) || item.type === 'critical' ? `
-                <span class="btn-action-sm" style="background: #fee2e2; color: #dc2626; border: 1px solid #fca5a5; font-weight: 800; font-size: 0.72rem; display: inline-flex; align-items: center; gap: 4px;">
-                  <i class="fa-solid fa-landmark"></i> Escalated to Cabinet
-                </span>
-              ` : `
-                <button class="btn-action-sm" onclick="escalateAlert('${item.id}')" style="background-color: #dc2626; color: white;">
-                  <i class="fa-solid fa-arrow-up-right-dots"></i> Escalate to Cabinet
-                </button>
-              `}
+              ${escalationBtnHtml}
               <button class="btn-action-sm" onclick="notifyOfficer('${item.id}')" style="background-color: var(--color-primary); color: white;">
-                <i class="fa-solid fa-paper-plane"></i> Remind Field Officer
+                <i class="fa-solid fa-paper-plane"></i> ${reminderText}
               </button>
               <button class="btn-action-sm" onclick="resolveAlert('${item.id}')" style="background-color: #059669; color: white;">
                 <i class="fa-solid fa-circle-check"></i> Mark Audited
@@ -218,15 +239,16 @@ async function escalateAlert(alertId) {
     }
   }
 
-  if (item.escalationLevel && item.escalationLevel.includes('Level 1')) {
+  if (!item.escalationLevel || item.escalationLevel.includes('Level 1')) {
     item.escalationLevel = 'Level 2: Ministry Nodal Agency';
     item.type = 'warning';
-    showToast(`Escalated ${item.title} to Level 2 (Ministry Nodal Agency)`, 'warning');
-  } else {
+    showToast(`Escalated "${item.title}" to Level 2 (Ministry Nodal Agency)`, 'warning');
+  } else if (item.escalationLevel.includes('Level 2')) {
     item.escalationLevel = 'Level 3: Cabinet Committee';
     item.type = 'critical';
-    showToast(`CRITICAL ESCALATION: ${item.title} dispatched to Cabinet Committee on Infrastructure!`, 'danger');
+    showToast(`CRITICAL ESCALATION: "${item.title}" dispatched to Cabinet Committee on Infrastructure!`, 'danger');
   }
+
   updateBadgeCounts();
   filterAlerts();
 }
@@ -262,7 +284,12 @@ function notifyOfficer(alertId) {
 
   const item = data.alerts.find(a => a.id === alertId);
   if (item) {
-    showToast(`Urgent MoSPI Notice & SMS dispatched to Field Nodal Engineer for ${item.title}.`, 'info');
+    const currentLevel = item.escalationLevel || 'Level 1: Nodal Officer';
+    let recipient = 'Field Nodal Engineer';
+    if (currentLevel.includes('Level 2')) recipient = 'Ministry Joint Secretary';
+    else if (currentLevel.includes('Level 3')) recipient = 'Cabinet Secretariat Desk';
+
+    showToast(`Urgent MoSPI Notice & SMS dispatched to ${recipient} for "${item.title}".`, 'info');
   }
 }
 
