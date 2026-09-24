@@ -44,4 +44,47 @@ document.addEventListener('DOMContentLoaded', async () => {
       </tr>
     `).join('');
   }
+
+  // Executive Monthly PDF Digest Button Listener
+  document.getElementById('btn-generate-executive-digest')?.addEventListener('click', openExecutiveDigestModal);
+  document.getElementById('close-digest-modal')?.addEventListener('click', closeExecutiveDigestModal);
+  document.getElementById('btn-close-digest-footer')?.addEventListener('click', closeExecutiveDigestModal);
+
+  document.getElementById('btn-print-executive-digest')?.addEventListener('click', () => {
+    window.print();
+  });
 });
+
+function openExecutiveDigestModal() {
+  const data = window.NIRMAAN_DATA;
+  if (!data || !data.projects) return;
+
+  const criticalProjects = data.projects.filter(p => p.riskScore >= 70).sort((a, b) => b.riskScore - a.riskScore).slice(0, 5);
+  const container = document.getElementById('digest-critical-projects-list');
+
+  if (container) {
+    container.innerHTML = criticalProjects.map((p, idx) => `
+      <div style="background: var(--bg-app); border: 1px solid var(--border-color); border-radius: 10px; padding: 0.85rem; display: flex; align-items: center; justify-content: space-between; gap: 1rem;">
+        <div>
+          <div style="font-size: 0.85rem; font-weight: 800; color: var(--text-main);">${idx + 1}. ${p.name}</div>
+          <div style="font-size: 0.74rem; color: var(--text-muted); margin-top: 2px;">
+            <i class="fa-solid fa-location-dot"></i> ${p.state} • Sector: <strong>${p.sector}</strong> • Contractor: <strong>${p.contractor || 'L&T Construction'}</strong>
+          </div>
+        </div>
+        <div style="text-align: right; flex-shrink: 0;">
+          <div style="font-size: 0.82rem; font-weight: 800; color: #ef4444;">Risk Index: ${p.riskScore}%</div>
+          <div style="font-size: 0.72rem; color: var(--text-muted);">Physical Completion: <strong>${p.progress}%</strong></div>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  const modal = document.getElementById('executive-digest-modal');
+  if (modal) modal.style.display = 'flex';
+}
+
+function closeExecutiveDigestModal() {
+  const modal = document.getElementById('executive-digest-modal');
+  if (modal) modal.style.display = 'none';
+}
+

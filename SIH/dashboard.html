@@ -90,12 +90,17 @@
 
       <div class="page-content-area">
         <div class="dashboard-layout">
-          <div style="display: flex; align-items: center; justify-content: space-between;">
+          <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.75rem;">
             <div>
               <h1 style="font-size: 1.4rem; font-weight: 800;">Welcome Back, Officer</h1>
               <p style="font-size: 0.85rem; color: var(--text-muted);">Monitor and manage all 1,981 infrastructure projects across India.</p>
             </div>
-            <div style="font-size: 0.8rem; font-weight: 600; color: var(--text-muted);"><i class="fa-regular fa-calendar"></i> <span id="current-live-date">23 Sep 2026</span></div>
+            <div style="display: flex; align-items: center; gap: 0.75rem;">
+              <button id="btn-generate-executive-digest" class="btn-action-sm" style="background: linear-gradient(135deg, #1e293b, #0f172a); color: white; border: 1px solid rgba(255,255,255,0.2); padding: 0.5rem 1rem; border-radius: 10px; font-weight: 700; font-size: 0.82rem; display: flex; align-items: center; gap: 6px; cursor: pointer; box-shadow: var(--shadow-sm);">
+                <i class="fa-solid fa-file-pdf" style="color: #ef4444;"></i> Generate Executive Monthly PDF Digest
+              </button>
+              <div style="font-size: 0.8rem; font-weight: 600; color: var(--text-muted);"><i class="fa-regular fa-calendar"></i> <span id="current-live-date">24 Sep 2026</span></div>
+            </div>
           </div>
 
           <!-- Top Metrics Cards -->
@@ -279,6 +284,147 @@
         </div>
       </div>
     </main>
+  </div>
+
+  <!-- MoSPI Executive Monthly Infrastructure Performance Digest PDF Modal -->
+  <div id="executive-digest-modal" class="modal-overlay" style="display: none; position: fixed; inset: 0; background: rgba(15, 23, 42, 0.75); backdrop-filter: blur(8px); z-index: 9999; justify-content: center; align-items: center; padding: 1.5rem;">
+    <div class="modal-card" style="background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: 20px; width: 100%; max-width: 950px; max-height: 92vh; display: flex; flex-direction: column; overflow: hidden; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.35);">
+      
+      <!-- Modal Header -->
+      <div style="padding: 1.25rem 1.75rem; border-bottom: 1px solid var(--border-color); display: flex; align-items: center; justify-content: space-between; background: linear-gradient(135deg, rgba(30, 41, 59, 0.08) 0%, rgba(15, 23, 42, 0.02) 100%);">
+        <div style="display: flex; align-items: center; gap: 0.85rem;">
+          <div style="width: 42px; height: 42px; border-radius: 12px; background: rgba(239, 68, 68, 0.15); color: #ef4444; display: flex; align-items: center; justify-content: center; font-size: 1.25rem;">
+            <i class="fa-solid fa-file-pdf"></i>
+          </div>
+          <div>
+            <h2 style="font-size: 1.25rem; font-weight: 800; color: var(--text-main); margin: 0;">MoSPI Monthly Infrastructure Performance Digest</h2>
+            <p style="font-size: 0.8rem; color: var(--text-muted); margin: 0;">Official Cabinet Monitoring Report • September 2026 Edition</p>
+          </div>
+        </div>
+        <button id="close-digest-modal" style="background: transparent; border: none; font-size: 1.3rem; color: var(--text-muted); cursor: pointer;"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+
+      <!-- Modal Body (Printable Government Report Document) -->
+      <div style="padding: 1.75rem; overflow-y: auto; flex: 1; display: flex; flex-direction: column; gap: 1.5rem; background: var(--bg-surface);" id="digest-report-content">
+        <!-- Letterhead Header -->
+        <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--text-main); padding-bottom: 1rem;">
+          <div style="display: flex; align-items: center; gap: 1rem;">
+            <div style="width: 48px; height: 48px; border-radius: 50%; background: #091e36; color: white; display: flex; align-items: center; justify-content: center; font-size: 1.4rem;">
+              <i class="fa-solid fa-landmark"></i>
+            </div>
+            <div>
+              <div style="font-size: 0.72rem; font-weight: 800; text-transform: uppercase; color: #64748b; letter-spacing: 0.5px;">Government of India • Ministry of Statistics and Programme Implementation</div>
+              <h2 style="font-size: 1.15rem; font-weight: 800; color: #091e36; margin: 2px 0;">Infrastructure & Project Monitoring Division (IPMD)</h2>
+              <div style="font-size: 0.75rem; color: #64748b;">Central Sector Infrastructure Projects (≥ ₹150 Crore Outlay) Monthly Review</div>
+            </div>
+          </div>
+          <div style="text-align: right; font-size: 0.75rem; color: #64748b;">
+            <div><strong>Doc Ref:</strong> MoSPI/IPMD/2026/DIG-09</div>
+            <div><strong>Date:</strong> 24 September 2026</div>
+            <div style="color: #ef4444; font-weight: 800; text-transform: uppercase; margin-top: 2px;">CONFIDENTIAL - CABINET USE</div>
+          </div>
+        </div>
+
+        <!-- Executive Summary Stats -->
+        <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; background: var(--bg-app); border: 1px solid var(--border-color); border-radius: 12px; padding: 1.15rem; text-align: center;">
+          <div>
+            <div style="font-size: 0.72rem; color: var(--text-muted); font-weight: 700;">Monitored Mega Projects</div>
+            <div style="font-size: 1.4rem; font-weight: 800; color: var(--text-main); margin-top: 2px;">1,981</div>
+          </div>
+          <div>
+            <div style="font-size: 0.72rem; color: var(--text-muted); font-weight: 700;">Sanctioned Outlay</div>
+            <div style="font-size: 1.4rem; font-weight: 800; color: #2563eb; margin-top: 2px;">₹4,25,000 Cr</div>
+          </div>
+          <div>
+            <div style="font-size: 0.72rem; color: var(--text-muted); font-weight: 700;">Avg Physical Completion</div>
+            <div style="font-size: 1.4rem; font-weight: 800; color: #10b981; margin-top: 2px;">68.4%</div>
+          </div>
+          <div>
+            <div style="font-size: 0.72rem; color: var(--text-muted); font-weight: 700;">Critical Risk Bottlenecks</div>
+            <div style="font-size: 1.4rem; font-weight: 800; color: #ef4444; margin-top: 2px;">151 Projects</div>
+          </div>
+        </div>
+
+        <!-- National Sector Performance Breakdown -->
+        <div>
+          <h4 style="font-size: 0.9rem; font-weight: 800; color: var(--text-main); margin-bottom: 0.65rem; border-left: 4px solid #2563eb; padding-left: 0.5rem;">1. National Sector Progress & Financial Spent Matrix</h4>
+          <table class="data-table" style="font-size: 0.8rem;">
+            <thead>
+              <tr style="background: var(--bg-app);">
+                <th>Sector</th>
+                <th>Active Projects</th>
+                <th>Total Sanctioned Outlay</th>
+                <th>Avg Physical Progress</th>
+                <th>EAC Financial Overrun %</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Roads & Highways (NHAI)</strong></td>
+                <td>642</td>
+                <td>₹1,45,000 Cr</td>
+                <td>74.2%</td>
+                <td><span style="color: #10b981; font-weight: 700;">+4.2%</span></td>
+                <td><span class="status-badge on-track">On Track</span></td>
+              </tr>
+              <tr>
+                <td><strong>Railways & Mass Transit</strong></td>
+                <td>318</td>
+                <td>₹1,25,000 Cr</td>
+                <td>62.5%</td>
+                <td><span style="color: #ef4444; font-weight: 700;">+16.8%</span></td>
+                <td><span class="status-badge delayed">Delayed</span></td>
+              </tr>
+              <tr>
+                <td><strong>Energy & Thermal Power</strong></td>
+                <td>210</td>
+                <td>₹85,000 Cr</td>
+                <td>81.0%</td>
+                <td><span style="color: #f59e0b; font-weight: 700;">+8.5%</span></td>
+                <td><span class="status-badge warning">Warning</span></td>
+              </tr>
+              <tr>
+                <td><strong>Urban Transport & Metro</strong></td>
+                <td>184</td>
+                <td>₹45,000 Cr</td>
+                <td>58.4%</td>
+                <td><span style="color: #ef4444; font-weight: 700;">+14.1%</span></td>
+                <td><span class="status-badge critical">Critical Risk</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Top 5 Critical Risk Projects Sheet -->
+        <div>
+          <h4 style="font-size: 0.9rem; font-weight: 800; color: var(--text-main); margin-bottom: 0.65rem; border-left: 4px solid #ef4444; padding-left: 0.5rem;">2. Top Monitored Critical Risk Projects (Level 3 Escalation)</h4>
+          <div style="display: flex; flex-direction: column; gap: 0.65rem;" id="digest-critical-projects-list">
+          </div>
+        </div>
+
+        <!-- Verification Signature Footer -->
+        <div style="border-top: 1px dashed var(--border-color); padding-top: 1rem; display: flex; justify-content: space-between; align-items: flex-end; font-size: 0.75rem; color: #64748b;">
+          <div>
+            <div><strong>Verification Hash:</strong> <span style="font-family: monospace;">SHA-256: 8f4e9a1b0c2d3e4f5a6b7c8d9e0f1a2b</span></div>
+            <div>Generated automatically by NIRMAAN AI MoSPI Platform</div>
+          </div>
+          <div style="text-align: right;">
+            <div style="font-weight: 800; color: #091e36;">Director General, IPMD</div>
+            <div>Ministry of Statistics & Programme Implementation</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Modal Footer -->
+      <div style="padding: 1rem 1.75rem; border-top: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; background: var(--bg-surface);">
+        <span style="font-size: 0.78rem; color: var(--text-muted);"><i class="fa-solid fa-shield-halved"></i> Ministry of Statistics & Programme Implementation Digest</span>
+        <div style="display: flex; gap: 0.5rem;">
+          <button class="btn-action-sm" id="btn-print-executive-digest" style="background-color: #ef4444; color: white;"><i class="fa-solid fa-print"></i> Print / Save PDF</button>
+          <button class="btn-action-sm" id="btn-close-digest-footer" style="background-color: var(--bg-app); border: 1px solid var(--border-color); color: var(--text-main);">Close Digest</button>
+        </div>
+      </div>
+    </div>
   </div>
 
   <!-- Leaflet JS Library -->
