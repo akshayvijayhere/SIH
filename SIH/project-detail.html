@@ -143,70 +143,6 @@
             <div id="detail-cause-analysis" style="font-size: 0.82rem; color: var(--text-muted); line-height: 1.6;"></div>
           </div>
 
-          <!-- IoT Physical Sensor Telemetry & Structural Stress Monitor Card -->
-          <div class="dashboard-card" style="background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: 16px; padding: 1.35rem; margin-top: 1.25rem; box-shadow: var(--shadow-sm);">
-            <div style="display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--border-color); padding-bottom: 0.75rem; margin-bottom: 1.25rem;">
-              <div style="display: flex; align-items: center; gap: 0.75rem;">
-                <div style="width: 40px; height: 40px; border-radius: 12px; background: rgba(16, 185, 129, 0.15); color: #10b981; display: flex; align-items: center; justify-content: center; font-size: 1.2rem;">
-                  <i class="fa-solid fa-tower-cell"></i>
-                </div>
-                <div>
-                  <h3 style="font-size: 1.05rem; font-weight: 800; color: var(--text-main); margin: 0;">IoT Physical Sensor Telemetry & Structural Stress Monitor</h3>
-                  <div style="font-size: 0.75rem; color: #10b981; font-weight: 700; display: flex; align-items: center; gap: 6px; margin-top: 2px;">
-                    <i class="fa-solid fa-wifi" style="animation: pulse 1.5s infinite;"></i> LIVE 5G SENSOR FEED • 5 IoT NODES ACTIVE ON-SITE
-                  </div>
-                </div>
-              </div>
-              <button id="btn-simulate-iot-anomaly" class="btn-action-sm" style="background-color: #ef4444; color: white;"><i class="fa-solid fa-triangle-exclamation"></i> Simulate Stress Anomaly</button>
-            </div>
-
-            <!-- 4 IoT Sensor Gauges -->
-            <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-bottom: 1.25rem;">
-              <!-- Sensor 1: Tiltmeter -->
-              <div style="background: var(--bg-app); border: 1px solid var(--border-color); border-radius: 12px; padding: 1rem;">
-                <div style="display: flex; justify-content: space-between; align-items: center;">
-                  <span style="font-size: 0.72rem; font-weight: 700; color: var(--text-muted);">TILT / ALIGNMENT</span>
-                  <i class="fa-solid fa-compass" style="color: #3b82f6;"></i>
-                </div>
-                <div id="iot-tilt-val" style="font-size: 1.5rem; font-weight: 800; color: var(--text-main); margin: 6px 0;">0.02°</div>
-                <div id="iot-tilt-status" style="font-size: 0.68rem; font-weight: 700; color: #10b981;">Normal (Threshold < 0.10°)</div>
-              </div>
-
-              <!-- Sensor 2: Concrete Curing Temp -->
-              <div style="background: var(--bg-app); border: 1px solid var(--border-color); border-radius: 12px; padding: 1rem;">
-                <div style="display: flex; justify-content: space-between; align-items: center;">
-                  <span style="font-size: 0.72rem; font-weight: 700; color: var(--text-muted);">CONCRETE CURING TEMP</span>
-                  <i class="fa-solid fa-temperature-high" style="color: #f59e0b;"></i>
-                </div>
-                <div id="iot-temp-val" style="font-size: 1.5rem; font-weight: 800; color: var(--text-main); margin: 6px 0;">34.2°C</div>
-                <div id="iot-temp-status" style="font-size: 0.68rem; font-weight: 700; color: #10b981;">Optimal Curing (28-38°C)</div>
-              </div>
-
-              <!-- Sensor 3: Vibration / Seismic Strain -->
-              <div style="background: var(--bg-app); border: 1px solid var(--border-color); border-radius: 12px; padding: 1rem;">
-                <div style="display: flex; justify-content: space-between; align-items: center;">
-                  <span style="font-size: 0.72rem; font-weight: 700; color: var(--text-muted);">STRUCTURAL STRAIN</span>
-                  <i class="fa-solid fa-wave-square" style="color: #8b5cf6;"></i>
-                </div>
-                <div id="iot-strain-val" style="font-size: 1.5rem; font-weight: 800; color: var(--text-main); margin: 6px 0;">1.2 µε</div>
-                <div id="iot-strain-status" style="font-size: 0.68rem; font-weight: 700; color: #10b981;">Micro-strain Stable</div>
-              </div>
-
-              <!-- Sensor 4: Worker Safety Helmet Wear -->
-              <div style="background: var(--bg-app); border: 1px solid var(--border-color); border-radius: 12px; padding: 1rem;">
-                <div style="display: flex; justify-content: space-between; align-items: center;">
-                  <span style="font-size: 0.72rem; font-weight: 700; color: var(--text-muted);">SITE SAFETY HELMETS</span>
-                  <i class="fa-solid fa-hard-hat" style="color: #10b981;"></i>
-                </div>
-                <div id="iot-safety-val" style="font-size: 1.5rem; font-weight: 800; color: var(--text-main); margin: 6px 0;">98.6%</div>
-                <div id="iot-safety-status" style="font-size: 0.68rem; font-weight: 700; color: #10b981;">124 / 126 Active Wear</div>
-              </div>
-            </div>
-
-            <!-- Live Sensor Log Terminal -->
-            <div style="background: #0f172a; color: #38bdf8; font-family: monospace; font-size: 0.76rem; border-radius: 10px; padding: 0.85rem; height: 110px; overflow-y: auto; display: flex; flex-direction: column; gap: 4px;" id="iot-sensor-log">
-              <div>[SYSTEM] Connected to Gateway #GW-5G-RAJS-98. Receiving 50Hz sensor packets...</div>
-            </div>
           </div>
         </div>
       </div>
@@ -256,67 +192,7 @@
         window.NIRMAAN_CHARTS.renderProjectVelocityChart('project-velocity-canvas', project);
       }
 
-      // Initialize Live IoT Sensor Telemetry Stream
-      initIoTSensorStream(project);
     });
-
-    function initIoTSensorStream(project) {
-      const logContainer = document.getElementById('iot-sensor-log');
-      const tiltVal = document.getElementById('iot-tilt-val');
-      const tempVal = document.getElementById('iot-temp-val');
-      const strainVal = document.getElementById('iot-strain-val');
-      const safetyVal = document.getElementById('iot-safety-val');
-      const anomalyBtn = document.getElementById('btn-simulate-iot-anomaly');
-
-      if (!logContainer) return;
-
-      const appendLog = (msg, color = '#38bdf8') => {
-        const timeStr = new Date().toLocaleTimeString('en-GB');
-        const logLine = document.createElement('div');
-        logLine.style.color = color;
-        logLine.innerHTML = `[${timeStr}] ${msg}`;
-        logContainer.appendChild(logLine);
-        logContainer.scrollTop = logContainer.scrollHeight;
-      };
-
-      // Periodic Telemetry Feed (every 3.5s)
-      setInterval(() => {
-        const randTilt = (0.01 + Math.random() * 0.02).toFixed(2);
-        const randTemp = (32 + Math.random() * 3).toFixed(1);
-        const randStrain = (1.1 + Math.random() * 0.3).toFixed(1);
-
-        if (tiltVal && !tiltVal.style.color.includes('ef4444')) tiltVal.innerText = `${randTilt}°`;
-        if (tempVal) tempVal.innerText = `${randTemp}°C`;
-        if (strainVal) strainVal.innerText = `${randStrain} µε`;
-
-        const sampleMsgs = [
-          `Node #TILT-01: Micro-incline tilt ${randTilt}° within tolerance.`,
-          `Node #TEMP-03: Pier 14 concrete core temp ${randTemp}°C optimal.`,
-          `Node #SAFETY-02: 124 RFID smart helmets active on site.`,
-          `Node #STRAIN-05: Bridge girder deck strain ${randStrain} µε stable.`
-        ];
-        const chosen = sampleMsgs[Math.floor(Math.random() * sampleMsgs.length)];
-        appendLog(chosen, '#38bdf8');
-      }, 3500);
-
-      // Simulate Anomaly Button
-      if (anomalyBtn) {
-        anomalyBtn.addEventListener('click', () => {
-          if (tiltVal) {
-            tiltVal.innerText = '0.18°';
-            tiltVal.style.color = '#ef4444';
-          }
-          const tiltStatus = document.getElementById('iot-tilt-status');
-          if (tiltStatus) {
-            tiltStatus.innerText = 'CRITICAL TILT EXCEEDED';
-            tiltStatus.style.color = '#ef4444';
-          }
-
-          appendLog('🚨 [CRITICAL ANOMALY ALERT] Sensor #TILT-01 detected structural tilt 0.18° on Pier 9! Threshold 0.10° exceeded!', '#ef4444');
-          if (window.showGlobalToast) window.showGlobalToast('🚨 CRITICAL IoT ALERT: Structural Tilt Anomaly (0.18°) on Pier 9! Safety protocol triggered.', 'danger');
-        });
-      }
-    }
   </script>
 </body>
 </html>
