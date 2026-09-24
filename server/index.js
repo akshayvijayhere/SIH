@@ -223,7 +223,8 @@ app.get('/api/alerts', async (req, res) => {
       else if (tab === 'warning') filter.type = 'warning';
       else if (tab === 'delay') filter = { category: 'delay', type: { $ne: 'resolved' } };
       else if (tab === 'cost') filter = { category: 'cost', type: { $ne: 'resolved' } };
-      else if (tab === 'resolved') filter.type = 'resolved';
+      else if (tab === 'resolved') filter = { type: 'resolved' };
+      else filter = { type: { $ne: 'resolved' } };
 
       if (state && state !== 'all') filter.state = state;
 
@@ -232,13 +233,14 @@ app.get('/api/alerts', async (req, res) => {
     }
 
     let list = memoryStore.alerts.filter(item => {
-      if (tab && tab !== 'all') {
-        if (tab === 'critical' && item.type !== 'critical') return false;
-        if (tab === 'warning' && item.type !== 'warning') return false;
-        if (tab === 'delay' && (item.category !== 'delay' || item.type === 'resolved')) return false;
-        if (tab === 'cost' && (item.category !== 'cost' || item.type === 'resolved')) return false;
-        if (tab === 'resolved' && item.type !== 'resolved') return false;
-      }
+      if (tab === 'resolved') return item.type === 'resolved';
+      if (item.type === 'resolved') return false;
+
+      if (tab === 'critical' && item.type !== 'critical') return false;
+      if (tab === 'warning' && item.type !== 'warning') return false;
+      if (tab === 'delay' && item.category !== 'delay') return false;
+      if (tab === 'cost' && item.category !== 'cost') return false;
+
       if (state && state !== 'all' && item.state !== state) return false;
       return true;
     });

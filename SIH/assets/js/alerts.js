@@ -65,7 +65,7 @@ function updateBadgeCounts() {
 
   // Update tab text labels with counts
   const tabAll = document.querySelector('.tab-btn[data-tab="all"]');
-  if (tabAll) tabAll.innerHTML = `All Alerts (${data.alerts.length})`;
+  if (tabAll) tabAll.innerHTML = `Active Alerts (${activeAlerts.length})`;
 
   const tabCritical = document.querySelector('.tab-btn[data-tab="critical"]');
   if (tabCritical) tabCritical.innerHTML = `<i class="fa-solid fa-triangle-exclamation"></i> Critical (${criticalAlerts.length})`;
@@ -90,12 +90,15 @@ function filterAlerts() {
   const stateQuick = document.getElementById('state-quick-filter')?.value || 'all';
 
   let filtered = data.alerts.filter(item => {
-    if (activeAlertTab !== 'all') {
+    if (activeAlertTab === 'resolved') {
+      if (item.type !== 'resolved') return false;
+    } else {
+      // For all active tabs (all active, critical, warning, delay, cost), hide audited/resolved alerts
+      if (item.type === 'resolved') return false;
       if (activeAlertTab === 'critical' && item.type !== 'critical') return false;
       if (activeAlertTab === 'warning' && item.type !== 'warning') return false;
-      if (activeAlertTab === 'delay' && (item.category !== 'delay' || item.type === 'resolved')) return false;
-      if (activeAlertTab === 'cost' && (item.category !== 'cost' || item.type === 'resolved')) return false;
-      if (activeAlertTab === 'resolved' && item.type !== 'resolved') return false;
+      if (activeAlertTab === 'delay' && item.category !== 'delay') return false;
+      if (activeAlertTab === 'cost' && item.category !== 'cost') return false;
     }
 
     if (stateQuick !== 'all' && item.state !== stateQuick) return false;
@@ -248,7 +251,7 @@ async function resolveAlert(alertId) {
 
   item.type = 'resolved';
   item.riskPercentage = Math.round(item.riskPercentage * 0.4);
-  showToast(`Audit Completed for "${item.title}". Status set to Audited & Resolved.`, 'success');
+  showToast(`Audit Completed for "${item.title}". Moved to Audited & Resolved.`, 'success');
   updateBadgeCounts();
   filterAlerts();
 }
