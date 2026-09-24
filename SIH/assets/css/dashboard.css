@@ -187,6 +187,13 @@
   color: #ffffff;
 }
 
+.gis-marker-pin.drone {
+  background: linear-gradient(135deg, #0284c7, #0f172a);
+  color: #38bdf8;
+  border: 1.5px solid #38bdf8;
+  box-shadow: 0 0 15px rgba(56, 189, 248, 0.7);
+}
+
 .marker-score-label {
   font-size: 0.65rem;
   font-weight: 800;
@@ -212,6 +219,15 @@
 }
 .gis-marker-pin.low .marker-pulse-ring {
   background: rgba(16, 185, 129, 0.3);
+}
+.gis-marker-pin.drone .marker-pulse-ring {
+  background: rgba(56, 189, 248, 0.5);
+  animation: drone-radar-pulse 1.4s infinite ease-out;
+}
+
+@keyframes drone-radar-pulse {
+  0% { transform: scale(1); opacity: 0.9; }
+  100% { transform: scale(2.6); opacity: 0; }
 }
 
 @keyframes pulse-aura {
