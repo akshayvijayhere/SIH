@@ -163,6 +163,9 @@ function renderAlerts(alertsList) {
         <span class="btn-action-sm" style="background: #fee2e2; color: #dc2626; border: 1px solid #fca5a5; font-weight: 800; font-size: 0.72rem; display: inline-flex; align-items: center; gap: 4px;">
           <i class="fa-solid fa-landmark"></i> Escalated to Cabinet (Level 3)
         </span>
+        <button class="btn-action-sm" onclick="exportCabinetMemo('${item.id}')" style="background-color: #1e293b; color: white;">
+          <i class="fa-solid fa-file-pdf"></i> Cabinet Memo
+        </button>
       `;
     }
 
@@ -291,6 +294,122 @@ function notifyOfficer(alertId) {
 
     showToast(`Urgent MoSPI Notice & SMS dispatched to ${recipient} for "${item.title}".`, 'info');
   }
+}
+
+function exportCabinetMemo(alertId) {
+  const data = window.NIRMAAN_DATA;
+  if (!data) return;
+
+  const alertItem = data.alerts.find(a => a.id === alertId);
+  if (!alertItem) return;
+
+  const proj = (data.projects || []).find(p => p.name === alertItem.title) || {
+    approvedBudget: '₹2,450 Cr',
+    spentBudget: '₹1,680 Cr',
+    agency: 'NHAI',
+    contractor: 'M/s InfraTech Pvt Ltd'
+  };
+
+  const modalDiv = document.createElement('div');
+  modalDiv.className = 'cabinet-memo-modal-overlay';
+  modalDiv.id = 'cabinet-memo-modal';
+  modalDiv.innerHTML = `
+    <div class="cabinet-memo-paper">
+      <div class="no-print" style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #e2e8f0; padding-bottom: 1rem; margin-bottom: 1.5rem;">
+        <span style="font-size: 0.82rem; font-weight: 800; color: #dc2626;"><i class="fa-solid fa-file-pdf"></i> Official Government Document Preview</span>
+        <div style="display: flex; gap: 0.5rem;">
+          <button onclick="window.print()" style="background: #0284c7; color: white; border: none; padding: 0.45rem 1rem; border-radius: 6px; font-weight: 700; font-size: 0.8rem; cursor: pointer;">
+            <i class="fa-solid fa-print"></i> Print / Save PDF
+          </button>
+          <button onclick="document.getElementById('cabinet-memo-modal').remove()" style="background: #64748b; color: white; border: none; padding: 0.45rem 0.85rem; border-radius: 6px; font-weight: 700; font-size: 0.8rem; cursor: pointer;">
+            <i class="fa-solid fa-xmark"></i> Close
+          </button>
+        </div>
+      </div>
+
+      <div style="text-align: center; border-bottom: 2px solid #0f172a; padding-bottom: 1.25rem; margin-bottom: 1.5rem;">
+        <div style="font-size: 1.5rem; margin-bottom: 4px;"><i class="fa-solid fa-landmark"></i></div>
+        <h2 style="font-size: 1.15rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; margin: 0;">Government of India</h2>
+        <h3 style="font-size: 0.95rem; font-weight: 700; color: #334155; margin: 2px 0;">Ministry of Statistics & Programme Implementation (MoSPI)</h3>
+        <p style="font-size: 0.78rem; color: #64748b; margin: 0;">Infrastructure & Project Monitoring Division (IPMD) | Sardar Patel Bhawan, New Delhi</p>
+      </div>
+
+      <div style="display: flex; justify-content: space-between; font-size: 0.78rem; font-weight: 700; color: #475569; margin-bottom: 1.25rem;">
+        <span>Ref No: MoSPI/IPMD/CCI-NOTE/2026/${alertItem.id}</span>
+        <span>Date: 24 September 2026</span>
+      </div>
+
+      <div style="background: #fef2f2; border: 1px solid #fecaca; color: #991b1b; padding: 0.6rem 1rem; border-radius: 6px; text-align: center; font-size: 0.85rem; font-weight: 800; margin-bottom: 1.5rem;">
+        SECRET / CONFIDENTIAL — FOR CABINET COMMITTEE ON INFRASTRUCTURE (CCI) ONLY
+      </div>
+
+      <div style="margin-bottom: 1.25rem;">
+        <h4 style="font-size: 0.95rem; font-weight: 800; border-bottom: 1px solid #cbd5e1; padding-bottom: 4px; margin-bottom: 0.5rem;">1. SUBJECT</h4>
+        <p style="font-size: 0.85rem; line-height: 1.5; color: #1e293b;">
+          Urgent Cabinet Intervention required regarding Level 3 Milestone Delays & Risk Escalation for <strong>${alertItem.title} (${alertItem.state})</strong>.
+        </p>
+      </div>
+
+      <div style="margin-bottom: 1.25rem;">
+        <h4 style="font-size: 0.95rem; font-weight: 800; border-bottom: 1px solid #cbd5e1; padding-bottom: 4px; margin-bottom: 0.75rem;">2. PROJECT SANCTION & PERFORMANCE METRICS</h4>
+        <table style="width: 100%; border-collapse: collapse; font-size: 0.82rem; text-align: left;">
+          <tr style="border-bottom: 1px solid #e2e8f0; background: #f8fafc;">
+            <th style="padding: 6px 10px;">Parameter</th>
+            <th style="padding: 6px 10px;">Sanctioned Value</th>
+          </tr>
+          <tr style="border-bottom: 1px solid #e2e8f0;">
+            <td style="padding: 6px 10px; font-weight: 600;">Implementing Nodal Agency</td>
+            <td style="padding: 6px 10px;">${proj.agency || 'NHAI'}</td>
+          </tr>
+          <tr style="border-bottom: 1px solid #e2e8f0;">
+            <td style="padding: 6px 10px; font-weight: 600;">Primary Contractor</td>
+            <td style="padding: 6px 10px;">${proj.contractor || 'M/s InfraTech Pvt Ltd'}</td>
+          </tr>
+          <tr style="border-bottom: 1px solid #e2e8f0;">
+            <td style="padding: 6px 10px; font-weight: 600;">Approved Financial Budget</td>
+            <td style="padding: 6px 10px;">${proj.approvedBudget || '₹2,450 Cr'}</td>
+          </tr>
+          <tr style="border-bottom: 1px solid #e2e8f0;">
+            <td style="padding: 6px 10px; font-weight: 600;">Actual Expenditure Disbursed</td>
+            <td style="padding: 6px 10px;">${proj.spentBudget || '₹1,680 Cr'}</td>
+          </tr>
+          <tr style="border-bottom: 1px solid #e2e8f0;">
+            <td style="padding: 6px 10px; font-weight: 600;">Evaluated Project Risk Score</td>
+            <td style="padding: 6px 10px; font-weight: 800; color: #dc2626;">${alertItem.riskPercentage}% (HIGH RISK)</td>
+          </tr>
+        </table>
+      </div>
+
+      <div style="margin-bottom: 1.25rem;">
+        <h4 style="font-size: 0.95rem; font-weight: 800; border-bottom: 1px solid #cbd5e1; padding-bottom: 4px; margin-bottom: 0.5rem;">3. AI ROOT CAUSE & BOTTLENECK FINDINGS</h4>
+        <p style="font-size: 0.85rem; line-height: 1.5; color: #334155;">
+          ${alertItem.issue} Physical progress is severely bottlenecked due to inter-departmental clearance delays and land acquisition section handovers.
+        </p>
+      </div>
+
+      <div style="margin-bottom: 2rem;">
+        <h4 style="font-size: 0.95rem; font-weight: 800; border-bottom: 1px solid #cbd5e1; padding-bottom: 4px; margin-bottom: 0.5rem;">4. RECOMMENDED CABINET DIRECTIVES</h4>
+        <ul style="font-size: 0.83rem; line-height: 1.6; color: #1e293b; padding-left: 1.25rem; margin: 0;">
+          <li>Issue direct Cabinet mandate to State Administration (${alertItem.state}) to expedite Right of Way (RoW) clearances within 15 days.</li>
+          <li>Instruct Ministry Nodal Agency (${proj.agency || 'NHAI'}) to invoke contract Liquidated Damages (LD) clause for non-performance.</li>
+          <li>Release supplementary escrow funds contingent on Milestone 4 completion.</li>
+        </ul>
+      </div>
+
+      <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-top: 3rem; pt: 1rem; border-top: 1px dashed #cbd5e1;">
+        <div style="font-size: 0.75rem; color: #64748b;">
+          <div>Verified & Dispatched via NIRMAAN AI Platform</div>
+          <div>Digital Signature: SHA256-MOSPI-IPMD-2026-OK8</div>
+        </div>
+        <div style="text-align: center; font-size: 0.8rem; font-weight: 700;">
+          <div style="margin-bottom: 2rem; color: #94a3b8;">[ Signed Digitally ]</div>
+          <div>( Nodal Officer )</div>
+          <div style="font-size: 0.72rem; color: #64748b; font-weight: 500;">Cabinet Secretariat & MoSPI IPMD Desk</div>
+        </div>
+      </div>
+    </div>
+  `;
+  document.body.appendChild(modalDiv);
 }
 
 function showToast(msg, type = 'info') {

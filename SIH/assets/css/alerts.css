@@ -149,3 +149,66 @@
   color: #059669;
   border: 1px solid #6ee7b7;
 }
+
+/* Cabinet Memo Modal & Print Styling */
+.cabinet-memo-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(15, 23, 42, 0.75);
+  backdrop-filter: blur(4px);
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+}
+
+.cabinet-memo-paper {
+  background: #ffffff;
+  color: #0f172a;
+  width: 100%;
+  max-width: 780px;
+  max-height: 90vh;
+  overflow-y: auto;
+  border-radius: 12px;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.35);
+  border: 1px solid #cbd5e1;
+  padding: 2.5rem;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  position: relative;
+}
+
+.cabinet-memo-paper * {
+  color: #0f172a;
+}
+
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  .cabinet-memo-modal-overlay,
+  .cabinet-memo-paper,
+  .cabinet-memo-paper * {
+    visibility: visible;
+  }
+  .cabinet-memo-modal-overlay {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    background: transparent;
+    padding: 0;
+  }
+  .cabinet-memo-paper {
+    box-shadow: none;
+    border: none;
+    max-width: 100%;
+    padding: 0;
+  }
+  .no-print {
+    display: none !important;
+  }
+}
