@@ -31,20 +31,11 @@ window.NIRMAAN_MAP = {
       scrollWheelZoom: false
     });
 
-    // Official open-source OpenStreetMap Tile Layer
-    this.streetLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-      maxZoom: 19
-    });
-
-    // High-Resolution Esri World Imagery Satellite Tile Layer
+    // High-Resolution Esri World Imagery Satellite Tile Layer (Default)
     this.satelliteLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
       attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community',
       maxZoom: 19
-    });
-
-    // Default to Street Layer
-    this.streetLayer.addTo(this.mapInstance);
+    }).addTo(this.mapInstance);
 
     this.markersGroup = L.layerGroup().addTo(this.mapInstance);
     this.footprintGroup = L.layerGroup().addTo(this.mapInstance);
@@ -169,36 +160,6 @@ window.NIRMAAN_MAP = {
         this.renderMarkers(filterVal);
       });
     });
-
-    const satelliteToggleBtn = document.getElementById('toggle-satellite-btn');
-    if (satelliteToggleBtn) {
-      satelliteToggleBtn.addEventListener('click', () => {
-        this.isSatelliteView = !this.isSatelliteView;
-        if (this.isSatelliteView) {
-          if (this.streetLayer && this.mapInstance.hasLayer(this.streetLayer)) {
-            this.mapInstance.removeLayer(this.streetLayer);
-          }
-          if (this.satelliteLayer) {
-            this.mapInstance.addLayer(this.satelliteLayer);
-          }
-          satelliteToggleBtn.style.background = 'linear-gradient(135deg, #059669, #064e3b)';
-          satelliteToggleBtn.style.borderColor = '#34d399';
-          satelliteToggleBtn.innerHTML = '<i class="fa-solid fa-earth-asia"></i> 🛰️ Satellite View (Esri High-Res)';
-          if (window.showGlobalToast) window.showGlobalToast('🛰️ High-Resolution Esri World Satellite Imagery Activated', 'success');
-        } else {
-          if (this.satelliteLayer && this.mapInstance.hasLayer(this.satelliteLayer)) {
-            this.mapInstance.removeLayer(this.satelliteLayer);
-          }
-          if (this.streetLayer) {
-            this.mapInstance.addLayer(this.streetLayer);
-          }
-          satelliteToggleBtn.style.background = 'linear-gradient(135deg, #334155, #0f172a)';
-          satelliteToggleBtn.style.borderColor = '#64748b';
-          satelliteToggleBtn.innerHTML = '<i class="fa-solid fa-map"></i> 🗺️ Street Vector View';
-          if (window.showGlobalToast) window.showGlobalToast('🗺️ Standard GIS Vector Layer Activated', 'info');
-        }
-      });
-    }
   },
 
   setup4DTimelineControls() {
