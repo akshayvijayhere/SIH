@@ -428,11 +428,29 @@
           </div>
         </div>
 
+        <!-- Engine Mode Switcher Tabs -->
+        <div style="display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; background: rgba(255,255,255,0.04); padding: 0.4rem; border-radius: 10px; border: 1px solid rgba(255,255,255,0.08);">
+          <div style="display: flex; gap: 0.5rem;">
+            <button id="tab-btn-gee-leaflet" style="background: linear-gradient(135deg, #2563eb, #1d4ed8); color: white; border: none; padding: 0.45rem 0.85rem; border-radius: 8px; font-size: 0.78rem; font-weight: 800; cursor: pointer; display: flex; align-items: center; gap: 6px;">
+              <i class="fa-solid fa-satellite"></i> Historical Satellite Tile Sync (1984 ➔ 2026)
+            </button>
+            <button id="tab-btn-gee-iframe" style="background: rgba(255,255,255,0.08); color: #94a3b8; border: 1px solid rgba(255,255,255,0.1); padding: 0.45rem 0.85rem; border-radius: 8px; font-size: 0.78rem; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 6px;">
+              <i class="fa-solid fa-earth-americas"></i> Official Google Earth Engine Player
+            </button>
+          </div>
+          <span style="font-size: 0.7rem; color: #10b981; font-weight: 700;"><i class="fa-solid fa-sync fa-spin"></i> Synchronized Engine</span>
+        </div>
+
         <!-- Live Embedded Satellite Time-Lapse Viewport Container -->
-        <div style="position: relative; width: 100%; height: 340px; border-radius: 14px; overflow: hidden; border: 1px solid rgba(56, 189, 248, 0.4); background: #0f172a; box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
+        <div style="position: relative; width: 100%; height: 350px; border-radius: 14px; overflow: hidden; border: 1px solid rgba(56, 189, 248, 0.4); background: #0f172a; box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
           <!-- In-App Embedded Leaflet / GEE Satellite Canvas -->
           <div id="gee-modal-map-viewport" style="width: 100%; height: 100%; z-index: 1;"></div>
           
+          <!-- Embedded Official Google Earth Engine Frame (Hidden by default) -->
+          <div id="gee-modal-iframe-container" style="display: none; width: 100%; height: 100%; position: absolute; inset: 0; z-index: 2; background: #0f172a;">
+            <iframe id="gee-official-iframe" src="https://earthengine.google.com/timelapse/" style="width: 100%; height: 100%; border: none;"></iframe>
+          </div>
+
           <!-- Overlay Floating Telemetry Badge -->
           <div style="position: absolute; top: 12px; left: 12px; z-index: 10; background: rgba(15, 23, 42, 0.85); backdrop-filter: blur(8px); border: 1px solid rgba(56, 189, 248, 0.4); padding: 6px 12px; border-radius: 20px; font-size: 0.72rem; color: white; display: flex; align-items: center; gap: 8px;">
             <i class="fa-solid fa-satellite-dish" style="color: #38bdf8;"></i>

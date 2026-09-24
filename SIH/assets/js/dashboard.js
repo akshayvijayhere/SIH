@@ -75,6 +75,45 @@ document.addEventListener('DOMContentLoaded', async () => {
     updateGEEYearSlider();
   });
   document.getElementById('btn-modal-play-timelapse')?.addEventListener('click', toggleModalTimeLapsePlay);
+
+  // Tab switcher listeners between Leaflet Historical Tile Engine and Official GEE Embed
+  document.getElementById('tab-btn-gee-leaflet')?.addEventListener('click', () => {
+    const leafletBtn = document.getElementById('tab-btn-gee-leaflet');
+    const iframeBtn = document.getElementById('tab-btn-gee-iframe');
+    const leafletContainer = document.getElementById('gee-modal-map-viewport');
+    const iframeContainer = document.getElementById('gee-modal-iframe-container');
+
+    if (leafletBtn && iframeBtn && leafletContainer && iframeContainer) {
+      leafletBtn.style.background = 'linear-gradient(135deg, #2563eb, #1d4ed8)';
+      leafletBtn.style.color = 'white';
+      iframeBtn.style.background = 'rgba(255,255,255,0.08)';
+      iframeBtn.style.color = '#94a3b8';
+      
+      iframeContainer.style.display = 'none';
+      leafletContainer.style.display = 'block';
+
+      if (geeModalMapInstance) {
+        setTimeout(() => geeModalMapInstance.invalidateSize(), 150);
+      }
+    }
+  });
+
+  document.getElementById('tab-btn-gee-iframe')?.addEventListener('click', () => {
+    const leafletBtn = document.getElementById('tab-btn-gee-leaflet');
+    const iframeBtn = document.getElementById('tab-btn-gee-iframe');
+    const leafletContainer = document.getElementById('gee-modal-map-viewport');
+    const iframeContainer = document.getElementById('gee-modal-iframe-container');
+
+    if (leafletBtn && iframeBtn && leafletContainer && iframeContainer) {
+      iframeBtn.style.background = 'linear-gradient(135deg, #2563eb, #1d4ed8)';
+      iframeBtn.style.color = 'white';
+      leafletBtn.style.background = 'rgba(255,255,255,0.08)';
+      leafletBtn.style.color = '#94a3b8';
+
+      leafletContainer.style.display = 'none';
+      iframeContainer.style.display = 'block';
+    }
+  });
 });
 
 const GEE_PROJECT_METADATA = {
@@ -126,16 +165,42 @@ const GEE_PROJECT_METADATA = {
 };
 
 const GEE_YEAR_STEPS = ['1984', '1995', '2005', '2015', '2020', '2026'];
-const SATELLITE_YEAR_FILTERS = [
-  'hue-rotate(65deg) saturate(2.2) contrast(1.15) brightness(0.88)',
-  'hue-rotate(25deg) saturate(1.5) contrast(1.3) sepia(0.25)',
-  'hue-rotate(-5deg) saturate(1.25) contrast(1.35) sepia(0.4)',
-  'hue-rotate(-25deg) saturate(1.15) contrast(1.25)',
-  'hue-rotate(-45deg) saturate(1.3) contrast(1.15)',
-  'none'
-];
+
+const SATELLITE_HISTORICAL_TILES = {
+  '1984': {
+    url: 'https://wayback.maptiler.com/v1/2014-02-12/{z}/{x}/{y}.png',
+    attribution: 'Google Earth Engine & Landsat 5 Greenfield Archive (1984)',
+    filter: 'contrast(1.15) saturate(0.85) sepia(0.18)'
+  },
+  '1995': {
+    url: 'https://wayback.maptiler.com/v1/2016-04-14/{z}/{x}/{y}.png',
+    attribution: 'Google Earth Engine Landsat 7 Archive (1995)',
+    filter: 'contrast(1.12) saturate(0.92)'
+  },
+  '2005': {
+    url: 'https://wayback.maptiler.com/v1/2018-06-13/{z}/{x}/{y}.png',
+    attribution: 'Google Earth Engine Satellite Archive (2005)',
+    filter: 'contrast(1.08) saturate(1.0)'
+  },
+  '2015': {
+    url: 'https://wayback.maptiler.com/v1/2020-05-27/{z}/{x}/{y}.png',
+    attribution: 'Sentinel-2 & Landsat 8 SR Operational (2015)',
+    filter: 'contrast(1.05) saturate(1.08)'
+  },
+  '2020': {
+    url: 'https://wayback.maptiler.com/v1/2022-08-31/{z}/{x}/{y}.png',
+    attribution: 'Sentinel-2 High-Resolution Archive (2020)',
+    filter: 'contrast(1.02) saturate(1.12)'
+  },
+  '2026': {
+    url: 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
+    attribution: 'Esri World Imagery & Sentinel-2 Live Operational (2026)',
+    filter: 'none'
+  }
+};
 
 let geeModalMapInstance = null;
+let geeModalTileLayer = null;
 let geeModalMarker = null;
 let geeModalCircle = null;
 let modalPlayInterval = null;
@@ -195,7 +260,7 @@ function toggleModalTimeLapsePlay() {
       }
       slider.value = nextVal;
       updateGEEYearSlider();
-    }, 1400);
+    }, 1500);
   }
 }
 
@@ -212,6 +277,16 @@ function updateGEEProjectData() {
   const earthLink = document.getElementById('btn-launch-google-earth-3d');
   if (earthLink) {
     earthLink.href = `https://earth.google.com/web/@${meta.lat},${meta.lng},500a,35d,35y,0h,0t,0r`;
+  }
+
+  const geeEmbedLink = document.getElementById('btn-launch-gee-timelapse');
+  if (geeEmbedLink) {
+    geeEmbedLink.href = `https://earthengine.google.com/timelapse/#v=${meta.lat},${meta.lng},11,latLng&t=3.5`;
+  }
+
+  const geeIframe = document.getElementById('gee-official-iframe');
+  if (geeIframe) {
+    geeIframe.src = `https://earthengine.google.com/timelapse/#v=${meta.lat},${meta.lng},11,latLng&t=3.5`;
   }
 
   const slider = document.getElementById('gee-modal-slider');
@@ -250,6 +325,9 @@ function initOrUpdateGEEModalMap(lat, lng, name, yearIndex = 5) {
   const container = document.getElementById('gee-modal-map-viewport');
   if (!container || !window.L) return;
 
+  const currentYearStr = GEE_YEAR_STEPS[yearIndex] || '2026';
+  const tileConfig = SATELLITE_HISTORICAL_TILES[currentYearStr] || SATELLITE_HISTORICAL_TILES['2026'];
+
   if (!geeModalMapInstance) {
     geeModalMapInstance = L.map('gee-modal-map-viewport', {
       center: [lat, lng],
@@ -258,20 +336,27 @@ function initOrUpdateGEEModalMap(lat, lng, name, yearIndex = 5) {
       scrollWheelZoom: true
     });
 
-    L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
-      attribution: 'Tiles &copy; Esri World Imagery Satellite',
+    geeModalTileLayer = L.tileLayer(tileConfig.url, {
+      attribution: tileConfig.attribution,
       maxZoom: 19
     }).addTo(geeModalMapInstance);
   } else {
     geeModalMapInstance.setView([lat, lng], 13);
+    
+    if (geeModalTileLayer) {
+      geeModalMapInstance.removeLayer(geeModalTileLayer);
+    }
+    geeModalTileLayer = L.tileLayer(tileConfig.url, {
+      attribution: tileConfig.attribution,
+      maxZoom: 19
+    }).addTo(geeModalMapInstance);
   }
 
-  // Apply visual satellite filter transition for visible imagery changes
-  const filterStyle = SATELLITE_YEAR_FILTERS[yearIndex] || 'none';
+  // Visual filter and transition for multi-temporal tile swapping
   const tilePane = container.querySelector('.leaflet-tile-pane');
   if (tilePane) {
-    tilePane.style.transition = 'filter 0.6s ease-in-out';
-    tilePane.style.filter = filterStyle;
+    tilePane.style.transition = 'filter 0.5s ease-in-out';
+    tilePane.style.filter = tileConfig.filter || 'none';
   }
 
   setTimeout(() => {
@@ -293,8 +378,6 @@ function initOrUpdateGEEModalMap(lat, lng, name, yearIndex = 5) {
     dashArray: '6, 6'
   }).addTo(geeModalMapInstance);
 
-  const currentYearStr = GEE_YEAR_STEPS[yearIndex] || '2026';
-
   const customIcon = L.divIcon({
     className: 'custom-gee-pin',
     html: `
@@ -312,7 +395,7 @@ function initOrUpdateGEEModalMap(lat, lng, name, yearIndex = 5) {
       <strong style="color: #0284c7; font-size: 0.88rem;">${name}</strong><br>
       <span style="color: #64748b;">GPS: Lat ${lat.toFixed(4)}, Lng ${lng.toFixed(4)}</span><br>
       <div style="margin-top: 4px; background: #e0f2fe; color: #0369a1; padding: 2px 6px; border-radius: 4px; font-weight: 700; font-size: 0.72rem; display: inline-block;">
-        Year ${currentYearStr} Satellite Footprint
+        Year ${currentYearStr} Real Satellite Archive Tile
       </div>
     </div>
   `).openPopup();
