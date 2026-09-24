@@ -503,16 +503,21 @@
         <!-- 40-Year Time Slider -->
         <div style="background: rgba(255,255,255,0.05); padding: 1rem 1.25rem; border-radius: 12px; border: 1px solid rgba(255,255,255,0.08);">
           <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-            <span style="font-size: 0.78rem; font-weight: 800; color: #60a5fa;"><i class="fa-solid fa-sliders"></i> GOOGLE EARTH ENGINE 40-YEAR HISTORICAL TIMELINE SLIDER:</span>
-            <span id="gee-active-year-label" style="font-size: 0.8rem; font-weight: 800; color: #10b981;">Active Snapshot: 2026</span>
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <button id="btn-modal-play-timelapse" style="width: 34px; height: 34px; border-radius: 50%; background: linear-gradient(135deg, #2563eb, #1d4ed8); color: white; border: 1px solid #60a5fa; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 0.9rem; transition: all 0.2s; box-shadow: 0 0 10px rgba(37,99,235,0.4);" title="Play Automated 40-Year Time-Lapse">
+                <i class="fa-solid fa-play"></i>
+              </button>
+              <span style="font-size: 0.78rem; font-weight: 800; color: #60a5fa;"><i class="fa-solid fa-film"></i> AUTOMATED SATELLITE TIME-LAPSE PLAYER:</span>
+            </div>
+            <span id="gee-active-year-label" style="font-size: 0.8rem; font-weight: 800; color: #10b981;">Active Snapshot: Year 2026</span>
           </div>
           <div style="display: flex; justify-content: space-between; font-size: 0.7rem; font-weight: 700; color: #64748b; margin-bottom: 4px;">
-            <span>1984</span>
-            <span>1995</span>
-            <span>2005</span>
-            <span>2015</span>
-            <span>2020</span>
-            <span style="color: #38bdf8;">2026 (NOW)</span>
+            <span>1984 (Greenfield)</span>
+            <span>1995 (Land ROW)</span>
+            <span>2005 (Clearing)</span>
+            <span>2015 (Foundations)</span>
+            <span>2020 (Superstructure)</span>
+            <span style="color: #38bdf8;">2026 (Live Operational)</span>
           </div>
           <input type="range" id="gee-modal-slider" min="0" max="5" value="5" step="1" style="width: 100%; accent-color: #60a5fa; cursor: pointer;">
         </div>
