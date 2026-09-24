@@ -137,50 +137,6 @@
             </div>
           </div>
 
-          <!-- AI Predictive Forecast Engine Card -->
-          <div class="dashboard-card" style="background: linear-gradient(135deg, #0f172a, #1e293b); color: white; border-radius: 16px; padding: 1.35rem; margin-top: 1.25rem; box-shadow: 0 10px 25px rgba(15,23,42,0.3);">
-            <div style="display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 0.75rem; margin-bottom: 1rem;">
-              <div style="display: flex; align-items: center; gap: 0.6rem;">
-                <i class="fa-solid fa-wand-magic-sparkles" style="font-size: 1.2rem; color: #38bdf8;"></i>
-                <h3 style="font-size: 1rem; font-weight: 800; color: white; margin: 0;">NIRMAAN AI Predictive Velocity & Cost Forecast</h3>
-              </div>
-              <span style="font-size: 0.7rem; font-weight: 800; background: rgba(56, 189, 248, 0.15); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.3); padding: 3px 9px; border-radius: 20px;">
-                <i class="fa-solid fa-microchip"></i> Real-time AI Forecast Model
-              </span>
-            </div>
-
-            <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-bottom: 1.25rem;">
-              <div style="background: rgba(255,255,255,0.05); padding: 0.85rem; border-radius: 12px; border: 1px solid rgba(255,255,255,0.08);">
-                <div style="font-size: 0.72rem; color: #94a3b8; font-weight: 600;">Sanctioned Target Date</div>
-                <div id="forecast-target-date" style="font-size: 1.05rem; font-weight: 800; color: #e2e8f0; margin-top: 4px;">--</div>
-                <div style="font-size: 0.68rem; color: #94a3b8; margin-top: 2px;">Approved baseline schedule</div>
-              </div>
-
-              <div style="background: rgba(239, 68, 68, 0.1); padding: 0.85rem; border-radius: 12px; border: 1px solid rgba(239, 68, 68, 0.25);">
-                <div style="font-size: 0.72rem; color: #fca5a5; font-weight: 600;">AI Forecasted Completion</div>
-                <div id="forecast-predicted-date" style="font-size: 1.05rem; font-weight: 800; color: #f87171; margin-top: 4px;">--</div>
-                <div id="forecast-delay-slippage" style="font-size: 0.68rem; font-weight: 800; color: #ef4444; margin-top: 2px;">--</div>
-              </div>
-
-              <div style="background: rgba(255,255,255,0.05); padding: 0.85rem; border-radius: 12px; border: 1px solid rgba(255,255,255,0.08);">
-                <div style="font-size: 0.72rem; color: #94a3b8; font-weight: 600;">Sanctioned Budget</div>
-                <div id="forecast-approved-budget" style="font-size: 1.05rem; font-weight: 800; color: #e2e8f0; margin-top: 4px;">--</div>
-                <div style="font-size: 0.68rem; color: #94a3b8; margin-top: 2px;">Original sanction</div>
-              </div>
-
-              <div style="background: rgba(245, 158, 11, 0.1); padding: 0.85rem; border-radius: 12px; border: 1px solid rgba(245, 158, 11, 0.25);">
-                <div style="font-size: 0.72rem; color: #fde68a; font-weight: 600;">AI Forecasted Final Cost (EAC)</div>
-                <div id="forecast-eac-cost" style="font-size: 1.05rem; font-weight: 800; color: #fbbf24; margin-top: 4px;">--</div>
-                <div id="forecast-cost-variance" style="font-size: 0.68rem; font-weight: 800; color: #f59e0b; margin-top: 2px;">--</div>
-              </div>
-            </div>
-
-            <div style="background: rgba(15, 23, 42, 0.6); padding: 0.85rem 1rem; border-radius: 10px; border-left: 4px solid #38bdf8; font-size: 0.8rem; color: #cbd5e1; line-height: 1.5;">
-              <strong style="color: #38bdf8;"><i class="fa-solid fa-lightbulb"></i> AI Mitigation Action Directive:</strong>
-              <span id="forecast-mitigation-directive">Analyzing physical progress velocity...</span>
-            </div>
-          </div>
-
           <!-- Root Cause Factor Analysis -->
           <div class="dashboard-card" style="background: white; border: 1px solid var(--border-color); border-radius: 16px; padding: 1.25rem; margin-top: 1.25rem;">
             <div style="font-size: 0.95rem; font-weight: 700; margin-bottom: 0.5rem;"><i class="fa-solid fa-magnifying-glass-chart"></i> AI Root Cause Analysis & Bottlenecks</div>
@@ -298,53 +254,6 @@
       // Render Velocity Chart
       if (window.NIRMAAN_CHARTS && window.NIRMAAN_CHARTS.renderProjectVelocityChart) {
         window.NIRMAAN_CHARTS.renderProjectVelocityChart('project-velocity-canvas', project);
-      }
-
-      // Populate AI Forecast Calculations
-      const appBudgetNum = parseInt((project.approvedBudget || '2450').replace(/[^0-9]/g, '')) || 2450;
-      const spentBudgetNum = parseInt((project.spentBudget || '1680').replace(/[^0-9]/g, '')) || 1680;
-      
-      const targetDateStr = project.estCompletion || '15 Nov 2026';
-      document.getElementById('forecast-target-date').innerText = targetDateStr;
-      document.getElementById('forecast-approved-budget').innerText = `₹${appBudgetNum.toLocaleString()} Cr`;
-
-      let slippageDays = Math.round((project.riskScore || 50) * 1.6);
-      if (project.riskScore < 40) slippageDays = 0;
-
-      let eacCostNum = appBudgetNum;
-      if (project.riskScore >= 70) {
-        eacCostNum = Math.round(appBudgetNum * 1.20);
-      } else if (project.riskScore >= 50) {
-        eacCostNum = Math.round(appBudgetNum * 1.10);
-      } else {
-        eacCostNum = Math.round(appBudgetNum * 1.02);
-      }
-
-      const costVarianceNum = eacCostNum - appBudgetNum;
-      const costVariancePct = Math.round((costVarianceNum / appBudgetNum) * 100);
-
-      document.getElementById('forecast-eac-cost').innerText = `₹${eacCostNum.toLocaleString()} Cr`;
-
-      if (costVarianceNum > 0) {
-        document.getElementById('forecast-cost-variance').innerText = `+₹${costVarianceNum} Cr (+${costVariancePct}% Overrun)`;
-      } else {
-        document.getElementById('forecast-cost-variance').innerText = `Within Sanctioned Budget`;
-        document.getElementById('forecast-cost-variance').style.color = '#10b981';
-      }
-
-      if (slippageDays > 0) {
-        const baseDate = new Date();
-        baseDate.setDate(baseDate.getDate() + slippageDays + 120);
-        
-        document.getElementById('forecast-predicted-date').innerText = baseDate.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
-        document.getElementById('forecast-delay-slippage').innerText = `+${slippageDays} Days Schedule Slippage`;
-        document.getElementById('forecast-mitigation-directive').innerText = `To prevent schedule slippage of +${slippageDays} days and budget overrun of +₹${costVarianceNum} Cr, the nodal agency (${project.agency || 'NHAI'}) must deploy 2 additional shifts and expedite section clearances within 15 days.`;
-      } else {
-        document.getElementById('forecast-predicted-date').innerText = targetDateStr;
-        document.getElementById('forecast-predicted-date').style.color = '#10b981';
-        document.getElementById('forecast-delay-slippage').innerText = `On Schedule (0 Days Slippage)`;
-        document.getElementById('forecast-delay-slippage').style.color = '#10b981';
-        document.getElementById('forecast-mitigation-directive').innerText = `Physical progress velocity is optimal (${project.progress}% completed). Maintain current milestone monitoring schedule.`;
       }
 
       // Initialize Live IoT Sensor Telemetry Stream
