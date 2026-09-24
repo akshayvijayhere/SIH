@@ -154,7 +154,7 @@
                 <div class="gis-title-icon"><i class="fa-solid fa-map-location-dot"></i></div>
                 <div>
                   <div class="dashboard-card-title">Geospatial Infrastructure Monitoring (GIS)</div>
-                  <div style="font-size: 0.75rem; color: var(--text-muted);">Real-time project location pinpoints & risk levels across India</div>
+                  <div style="font-size: 0.75rem; color: var(--text-muted);">Real-time project location pinpoints, risk levels & 4D Satellite Time-Lapse</div>
                 </div>
               </div>
 
@@ -172,6 +172,44 @@
 
             <!-- Leaflet Map Viewport -->
             <div id="gis-map-container" class="gis-map-viewport"></div>
+
+            <!-- Geospatial 4D Satellite Timeline Controller Bar -->
+            <div class="gis-4d-timeline-bar" style="padding: 0.85rem 1.25rem; background: linear-gradient(135deg, rgba(15, 23, 42, 0.95), rgba(30, 41, 59, 0.95)); border-top: 1px solid rgba(255, 255, 255, 0.1); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem; color: white; border-bottom-left-radius: 16px; border-bottom-right-radius: 16px;">
+              <div style="display: flex; align-items: center; gap: 0.75rem;">
+                <button id="btn-play-4d" style="width: 36px; height: 36px; border-radius: 50%; background: #2563eb; color: white; display: flex; align-items: center; justify-content: center; font-size: 1rem; border: none; cursor: pointer; transition: all 0.2s;" title="Play 4D Historical Time-Lapse">
+                  <i class="fa-solid fa-play"></i>
+                </button>
+                <div>
+                  <div style="font-size: 0.78rem; font-weight: 800; color: #38bdf8; display: flex; align-items: center; gap: 6px;">
+                    <i class="fa-solid fa-satellite"></i> GEOSPATIAL 4D TIME-LAPSE
+                  </div>
+                  <div id="timeline-active-quarter" style="font-size: 0.7rem; color: #94a3b8;">Active Snapshot: Q3 2026 (Live Telemetry)</div>
+                </div>
+              </div>
+
+              <!-- Timeline Slider Control -->
+              <div style="flex: 1; max-width: 420px; display: flex; flex-direction: column; gap: 4px;">
+                <div style="display: flex; justify-content: space-between; font-size: 0.68rem; font-weight: 700; color: #64748b;">
+                  <span>Q1 '24</span>
+                  <span>Q3 '24</span>
+                  <span>Q1 '25</span>
+                  <span>Q3 '25</span>
+                  <span>Q1 '26</span>
+                  <span style="color: #38bdf8;">Q3 '26 (NOW)</span>
+                </div>
+                <input type="range" id="gis-4d-slider" min="0" max="5" value="5" step="1" style="width: 100%; accent-color: #38bdf8; cursor: pointer;">
+              </div>
+
+              <!-- Telemetry Overlay Stats -->
+              <div style="display: flex; align-items: center; gap: 0.75rem; font-size: 0.73rem;">
+                <div style="background: rgba(255,255,255,0.05); padding: 4px 10px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1);">
+                  <span style="color: #94a3b8;">Vegetation Index (NDVI):</span> <strong id="timeline-ndvi-val" style="color: #10b981;">0.42 (Cleared)</strong>
+                </div>
+                <div style="background: rgba(255,255,255,0.05); padding: 4px 10px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1);">
+                  <span style="color: #94a3b8;">Avg Completion:</span> <strong id="timeline-avg-progress" style="color: #38bdf8;">68.4%</strong>
+                </div>
+              </div>
+            </div>
           </div>
 
           <!-- Charts Row -->
