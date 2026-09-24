@@ -139,6 +139,7 @@
 
               <!-- Export Button Group -->
               <div style="display: flex; align-items: center; gap: 0.5rem;">
+                <button class="btn-action-sm" id="btn-compare-projects" style="background-color: #3b82f6; color: white; opacity: 0.6; cursor: not-allowed;" disabled><i class="fa-solid fa-code-compare"></i> Compare (0)</button>
                 <button class="btn-action-sm" id="btn-export-csv" style="background-color: #059669; color: white;"><i class="fa-solid fa-file-csv"></i> Export CSV</button>
                 <button class="btn-action-sm" id="btn-export-pdf" style="background-color: var(--color-primary); color: white;"><i class="fa-solid fa-print"></i> Print Report</button>
               </div>
@@ -154,6 +155,7 @@
             <table class="data-table">
               <thead>
                 <tr>
+                  <th style="width: 36px; text-align: center;"><input type="checkbox" id="select-all-compare" style="cursor: pointer;" title="Select all projects for comparison"></th>
                   <th>#</th>
                   <th>Project Name & Location</th>
                   <th>State</th>
@@ -171,6 +173,52 @@
         </div>
       </div>
     </main>
+  </div>
+
+  <!-- Multi-Project Side-by-Side Comparison Modal -->
+  <div id="compare-modal" class="modal-overlay" style="display: none; position: fixed; inset: 0; background: rgba(15, 23, 42, 0.75); backdrop-filter: blur(8px); z-index: 9999; justify-content: center; align-items: center; padding: 1.5rem;">
+    <div class="modal-card" style="background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: 20px; width: 100%; max-width: 1180px; max-height: 90vh; display: flex; flex-direction: column; overflow: hidden; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.35);">
+      
+      <!-- Modal Header -->
+      <div style="padding: 1.25rem 1.75rem; border-bottom: 1px solid var(--border-color); display: flex; align-items: center; justify-content: space-between; background: linear-gradient(135deg, rgba(59, 130, 246, 0.08) 0%, rgba(37, 99, 235, 0.02) 100%);">
+        <div style="display: flex; align-items: center; gap: 0.85rem;">
+          <div style="width: 42px; height: 42px; border-radius: 12px; background: rgba(59, 130, 246, 0.15); color: #2563eb; display: flex; align-items: center; justify-content: center; font-size: 1.25rem;">
+            <i class="fa-solid fa-code-compare"></i>
+          </div>
+          <div>
+            <h2 style="font-size: 1.25rem; font-weight: 800; color: var(--text-main); margin: 0;">MoSPI Multi-Project Side-by-Side Comparison Matrix</h2>
+            <p style="font-size: 0.8rem; color: var(--text-muted); margin: 0;">Comparative analysis of physical progress, risk scores, budget overruns, and contractor performance</p>
+          </div>
+        </div>
+        <button id="close-compare-modal" style="background: transparent; border: none; font-size: 1.3rem; color: var(--text-muted); cursor: pointer; padding: 0.5rem;"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+
+      <!-- Modal Body -->
+      <div style="padding: 1.5rem; overflow-y: auto; flex: 1; display: flex; flex-direction: column; gap: 1.5rem;">
+        <!-- Comparison Grid Container -->
+        <div id="compare-grid-container"></div>
+
+        <!-- AI Divergence & Synthesis Card -->
+        <div id="compare-ai-summary" style="background: linear-gradient(135deg, rgba(16, 185, 129, 0.08) 0%, rgba(59, 130, 246, 0.08) 100%); border: 1px solid rgba(59, 130, 246, 0.2); border-radius: 14px; padding: 1.25rem; display: flex; gap: 1rem; align-items: flex-start;">
+          <div style="background: #2563eb; color: white; width: 38px; height: 38px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; flex-shrink: 0; margin-top: 2px;">
+            <i class="fa-solid fa-wand-magic-sparkles"></i>
+          </div>
+          <div>
+            <h4 style="font-size: 0.95rem; font-weight: 800; color: var(--text-main); margin-bottom: 0.3rem;">NIRMAAN AI Comparative Synthesis & Variance Analysis</h4>
+            <p id="compare-ai-text" style="font-size: 0.83rem; color: var(--text-main); line-height: 1.5; margin: 0;"></p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Modal Footer -->
+      <div style="padding: 1rem 1.75rem; border-top: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; background: var(--bg-surface);">
+        <span style="font-size: 0.78rem; color: var(--text-muted);"><i class="fa-solid fa-shield-halved"></i> Ministry of Statistics and Programme Implementation • MoSPI IPMD</span>
+        <div style="display: flex; gap: 0.75rem;">
+          <button class="btn-action-sm" id="btn-print-comparison" style="background-color: #3b82f6; color: white;"><i class="fa-solid fa-print"></i> Print Matrix</button>
+          <button class="btn-action-sm" id="btn-close-compare-footer" style="background-color: var(--bg-app); border: 1px solid var(--border-color); color: var(--text-main);">Close</button>
+        </div>
+      </div>
+    </div>
   </div>
 
   <script src="assets/js/data.js"></script>
